@@ -1,0 +1,16 @@
+#!/usr/local/bin ruby
+require 'ripl'
+
+# pull in our src
+require_relative "src/git"
+require_relative "src/brewer"
+
+# Clone the repo
+clone_repo
+
+# Start up a brewer
+brewer = Brewer.new
+
+# Start the ripl shell
+Ripl.start :binding => binding
+# Start brewing
