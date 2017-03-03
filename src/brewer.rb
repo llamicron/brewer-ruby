@@ -1,4 +1,3 @@
-# main brewer operations
 class Brewer
 
   attr_reader :base_path

@@ -1,4 +1,5 @@
 #!/usr/local/bin ruby
+# This script will initialize a Ripl shell with a brewer instantiated
 require 'ripl'
 
 # pull in our src
