@@ -28,6 +28,11 @@ to make it executable and try again.
 # Testing
 Run
 ```shell
-ruby ts_all.rb
+tests/unit
 ```
-**from inside the `tests/` directory**. Running them outside of that directory will screw things up, since it involves cloning git repos, and paths and such.
+from the project root to run all tests. You can also run a specific test case with
+```shell
+ruby tests/tc_brewer.rb
+```
+using `tc_brewer.rb` as an example.
+A code coverage report will be created in `coverage/`, but only if all tests are run, not specific test cases.

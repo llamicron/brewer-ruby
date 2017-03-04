@@ -1,4 +1,3 @@
-# This script is responsible for cloning the adaptibrew repo.
 require 'git'
 require 'fileutils'
 
