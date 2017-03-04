@@ -1,7 +1,8 @@
 require 'git'
 require 'fileutils'
 
-class RepoManager
+# This is the 'manager' for the adaptibrew repo. It handles cloning and such.
+class Adaptibrew
 
   def clone(path=nil)
     if !Dir.exists?('adaptibrew')

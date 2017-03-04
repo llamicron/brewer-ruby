@@ -3,12 +3,12 @@
 require 'ripl'
 
 # pull in our src
-require_relative "src/git"
+require_relative "src/adaptibrew"
 require_relative "src/brewer"
 
 # Clone the repo
-manager = RepoManager.new
-manager.clone
+adaptibrew = Adaptibrew.new
+adaptibrew.clone
 
 # Start up a brewer
 brewer = Brewer.new

@@ -7,5 +7,5 @@ SimpleCov.start
 require 'test/unit'
 
 # Test Cases
-require_relative 'tc_git'
+require_relative 'tc_adaptibrew'
 require_relative 'tc_brewer'

@@ -1,12 +1,12 @@
 require 'test/unit'
 require_relative '../src/brewer'
-require_relative '../src/git'
+require_relative '../src/adaptibrew'
 
 class TestBrewer < Test::Unit::TestCase
 
   def setup
     @brewer = Brewer.new
-    @manager = RepoManager.new.refresh
+    @adaptibrew = Adaptibrew.new.refresh
   end
 
   def test_base_path
