@@ -8,7 +8,7 @@ class RepoManager
     if !Dir.exists?('adaptibrew')
       Git.clone('https://github.com/adaptiman/adaptibrew.git', 'adaptibrew', :path => path)
     else
-      return "Adaptibrew is already there. Cloning skipped."
+      "Adaptibrew is already there. Cloning skipped."
     end
     true
   end
