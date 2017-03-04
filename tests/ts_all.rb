@@ -1,5 +1,6 @@
 # Code Coverage
 require 'simplecov'
+SimpleCov.command_name 'Unit Tests'
 SimpleCov.start
 
 # Test Framework
