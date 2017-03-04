@@ -1,21 +1,26 @@
 require 'test/unit'
-require 'fileutils'
 require_relative '../src/git'
 
-
-
 class TestGit < Test::Unit::TestCase
+
   def setup
-    if Dir.exists?('../adaptibrew')
-      FileUtils.rm_rf('../adaptibrew')
-      puts "Adaptibrew directory deleted for git testing"
-    end
+    @manager = RepoManager.new
   end
 
-  def test_clone_repo
-    raise "Error! Adaptibrew directory is already there! \nThis won't be a problem at run time, but there may be issues with testing." unless !Dir.exists?('../adaptibrew')
-    clone_repo('/Users/Luke/Desktop/ruby_brewer/')
-    assert_true(Dir.exists?('../adaptibrew'))
+  # `refresh` calls both `clone` and `clear`. oh that sweet, sweet code coverage
+  def test_refresh
+    @manager.refresh
+    assert_true(Dir.exists?('adaptibrew'))
+  end
+
+  # Testing a not-so-failed case of cloning
+  def test_clone_will_skip_if_repo_present
+    @manager.refresh
+    assert_equal("Adaptibrew is already there. Cloning skipped.", @manager.clone)
+  end
+
+  def teardown
+    @manager.refresh
   end
 
 end
