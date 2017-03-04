@@ -20,7 +20,7 @@ class Brewer
 
   # Short for `manual script`
   def manual(script, params=nil)
-    @out[current_time] = `python Adaptibrew/#{script}.py #{params}`.chomp
+    @out[current_time] = `python adaptibrew/#{script}.py #{params}`.chomp
     self
   end
 
