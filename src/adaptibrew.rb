@@ -14,9 +14,9 @@ class Adaptibrew
   end
 
   # Danger zone...
-  def clear(path='adaptibrew')
+  def clear(dir='adaptibrew')
     raise 'Warning! This will delete a directory other than the `adaptibrew` directory' unless path.include? 'adaptibrew'
-    FileUtils.rm_rf(path)
+    FileUtils.rm_rf(dir)
     true
   end
 
