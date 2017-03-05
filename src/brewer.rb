@@ -18,8 +18,8 @@ class Brewer
     self
   end
 
-  # Short for `manual script`
-  def manual(script, params=nil)
+  # Runs an adaptibrew script
+  def script(script, params=nil)
     @out[current_time] = `python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp
     self
   end

@@ -19,8 +19,8 @@ class TestBrewer < Test::Unit::TestCase
     assert_true(true)
   end
 
-  def test_manual_script
-    @brewer.manual('python_tester')
+  def test_script
+    @brewer.script('python_tester')
     assert_equal("it worked", @brewer.out.first[1])
   end
 
