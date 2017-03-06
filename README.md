@@ -26,9 +26,30 @@ sudo chmod +x brewer
 ```
 to make it executable and try again.
 
-# Testing
+# Testing & Rake
 Run
 ```shell
 rake test
 ```
-A code coverage report will be created in `coverage/`.
+to run all tests. You can run a specific test case with
+```shell
+rake test['adaptibrew']
+```
+This will run `tests/tc_adaptibrew.rb`. You can of course change `adaptibrew` to another `tc_*.rb` in order to run specific test cases.
+
+A code coverage report will be created in `coverage/` upon testing. Checkout `coverage/index.html` to view the report.
+
+## Other rake commands
+
+
+Clear the coverage report with
+```shell
+rake clear_coverage
+```
+
+Delete, clone, or refresh (delete and re-clone), with
+```shell
+rake adaptibrew['clear']
+rake adaptibrew['clone']
+rake adaptibrew['refresh']
+```

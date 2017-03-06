@@ -18,15 +18,14 @@ task :clear_coverage do
 end
 
 # Adaptibrew tasks
-task :clear_repo do
-  rm_rf 'adaptibrew/'
-end
-
-task :clone_repo do
-  Git.clone('https://github.com/adaptiman/adaptibrew.git', 'adaptibrew')
-end
-
-task :refresh_repo do
-  Rake::Task["clear_repo"].invoke
-  Rake::Task["clone_repo"].invoke
+task :adaptibrew, [:method] do |t, method|
+  case method.to_a.first
+  when 'clear'
+    rm_rf 'adaptibrew/'
+  when 'clone'
+    Git.clone('https://github.com/adaptiman/adaptibrew.git', 'adaptibrew')
+  when 'refresh'
+    rm_rf 'adaptibrew/'
+    Git.clone('https://github.com/adaptiman/adaptibrew.git', 'adaptibrew')
+  end
 end
