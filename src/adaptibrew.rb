@@ -10,20 +10,20 @@ class Adaptibrew
     else
       return "Adaptibrew is already there. Cloning skipped."
     end
-    true
+    self
   end
 
   # Danger zone...
   def clear(dir='adaptibrew')
     raise 'Warning! This will delete a directory other than the `adaptibrew` directory' unless dir.include? 'adaptibrew'
     FileUtils.rm_rf(dir)
-    true
+    self
   end
 
   # This can also serve as an update method
   def refresh
     clear
     clone
-    true
+    self
   end
 end
