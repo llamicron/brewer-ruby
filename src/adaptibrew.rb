@@ -24,4 +24,5 @@ class Adaptibrew
     clone
     self
   end
+
 end

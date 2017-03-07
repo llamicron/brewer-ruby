@@ -35,6 +35,7 @@ class Brewer
 
   # Clears the @out array, which is adaptibrew output
   def clear
+    # Write current @out to log, then set it to an empty array
     write_log(@log, @out)
     @out = []
     self
