@@ -5,21 +5,19 @@ require 'date'
 
 class Brewer
 
-  attr_reader :base_path, :out
+  attr_reader :base_path
+  attr_accessor :out
 
   def initialize
-    # Path of the package
-    @base_path = Dir.pwd
-    # Output from adaptibrew
-    @out = []
-    # Log file for python output
-    @log = @base_path + '/logs/output'
-    File.open(@log, 'w')
+    @base_path = Dir.pwd                  # Path of the package
+    @out = []                             # Output from adaptibrew
+    @log = @base_path + '/logs/output'    # Log file for @out. Everything in the log file will be from @out.
   end
 
   public
 
-  def wait(time=60)
+  # Waits. Pretty simple stuff. `time` is seconds.
+  def wait(time=30)
     puts "Waiting for #{time} seconds"
     sleep(time)
     self
@@ -32,24 +30,31 @@ class Brewer
     self
   end
 
-  def clear
-    @out = []
-    self
-  end
-
+  # Gets the current date and time
+  # Formatted as: 03/07/2017 14:26
   def time
-    Time.now.strftime("%d/%m/%Y %H:%M")
+    Time.now.strftime("%m/%d/%Y %H:%M")
   end
 
+  # Writes contents of @out to `logs/output` with a timestamp. Example:
+  # [03/07/2017 14:27]: it worked
   def write_log
     File.open(@log, 'a') do |file|
       @out.each do |out|
-        file.puts "#{time}: #{out}"
+        file.puts "[#{time}]: #{out}"
       end
     end
     self
   end
 
+  # Clears the @out array, which is adaptibrew output
+  def clear
+    write_log
+    @out = []
+    self
+  end
+
+  # Truncates the entire log
   def clear_log
     File.truncate(@log, 0)
     self
