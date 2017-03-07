@@ -52,10 +52,6 @@ class TestBrewer < Test::Unit::TestCase
     # Write output
     @brewer.write_log
     assert_true(!File.zero?(@log))
-
-    # Read output log
-    @brewer.read_log
-    assert_true(@brewer.out.first.include?("it worked"))
   end
 
 end

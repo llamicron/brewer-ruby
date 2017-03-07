@@ -14,6 +14,7 @@ class Brewer
     @out = []
     # Log file for python output
     @log = @base_path + '/logs/output'
+    File.open(@log, 'w')
   end
 
   public
@@ -51,16 +52,6 @@ class Brewer
 
   def clear_log
     File.truncate(@log, 0)
-    self
-  end
-
-  def read_log
-    File.open(@log, 'r') do |file|
-      clear
-      file.each_line do |line|
-        @out.push(line)
-      end
-    end
     self
   end
 
