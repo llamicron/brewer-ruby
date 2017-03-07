@@ -12,6 +12,8 @@ class Brewer
     @base_path = Dir.pwd
     # Output from adaptibrew
     @out = []
+    # Log file for python output
+    @log = @base_path + '/logs/output'
   end
 
   public
@@ -31,6 +33,34 @@ class Brewer
 
   def clear
     @out = []
+    self
+  end
+
+  def time
+    Time.now.strftime("%d/%m/%Y %H:%M")
+  end
+
+  def write_log
+    File.open(@log, 'a') do |file|
+      @out.each do |out|
+        file.puts "#{time}: #{out}"
+      end
+    end
+    self
+  end
+
+  def clear_log
+    File.truncate(@log, 0)
+    self
+  end
+
+  def read_log
+    File.open(@log, 'r') do |file|
+      clear
+      file.each_line do |line|
+        @out.push(line)
+      end
+    end
     self
   end
 

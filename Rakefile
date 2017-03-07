@@ -18,6 +18,11 @@ task :coverage do
   Launchy.open(Dir.pwd + '/coverage/index.html')
 end
 
+# Clears coverage report
+task :clear_coverage do
+  rm_rf('coverage/')
+end
+
 # Adaptibrew tasks
 task :adaptibrew, [:method] do |t, method|
   case method.to_a.first
