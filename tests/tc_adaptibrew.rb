@@ -16,7 +16,7 @@ class TestGit < Test::Unit::TestCase
   # Testing a not-so-failed case of cloning
   def test_clone_will_skip_if_repo_present
     @adaptibrew.refresh
-    assert_equal("Adaptibrew is already there. Cloning skipped.", @adaptibrew.clone)
+    assert_equal(@adaptibrew, @adaptibrew.clone)
   end
 
   def teardown

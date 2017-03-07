@@ -14,6 +14,7 @@ class TestBrewer < Test::Unit::TestCase
   end
 
   # Don't really know how to test this one...
+  # Just running the code for coverage and to pick up any stray errors
   def test_wait
     @brewer.wait(0.1)
     assert_true(true)
@@ -21,7 +22,14 @@ class TestBrewer < Test::Unit::TestCase
 
   def test_script
     @brewer.script('python_tester')
-    assert_equal("it worked", @brewer.out.first[1])
+    assert_equal("it worked", @brewer.out.first)
+  end
+
+  def test_clear_output
+    @brewer.script('python_tester')
+    assert_equal("it worked", @brewer.out.first)
+    @brewer.clear
+    assert_equal(nil, @brewer.out.first)
   end
 
 end

@@ -7,8 +7,6 @@ class Adaptibrew
   def clone(path=nil)
     if !Dir.exists?('adaptibrew')
       Git.clone('https://github.com/adaptiman/adaptibrew.git', 'adaptibrew', :path => path)
-    else
-      return "Adaptibrew is already there. Cloning skipped."
     end
     self
   end

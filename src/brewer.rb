@@ -1,13 +1,17 @@
 require 'date'
 
+# NOTE: Most public methods return `self` so they can be chained together.
+# This is one of the core concepts of this package.
+
 class Brewer
 
   attr_reader :base_path, :out
 
   def initialize
+    # Path of the package
     @base_path = Dir.pwd
     # Output from adaptibrew
-    @out = {}
+    @out = []
   end
 
   public
@@ -19,15 +23,15 @@ class Brewer
   end
 
   # Runs an adaptibrew script
+  # Output will be stored in `@out'
   def script(script, params=nil)
-    @out[current_time] = `python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp
+    @out.unshift(`python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp)
     self
   end
 
-  private
-
-  def current_time
-    Time.now.strftime("%d/%m/%y %H:%M")
+  def clear
+    @out = []
+    self
   end
 
 end
