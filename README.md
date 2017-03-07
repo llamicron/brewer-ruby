@@ -37,15 +37,13 @@ rake test['adaptibrew']
 ```
 This will run `tests/tc_adaptibrew.rb`. You can of course change `adaptibrew` to another `tc_*.rb` in order to run specific test cases.
 
-A code coverage report will be created in `coverage/` upon testing. Checkout `coverage/index.html` to view the report.
+A code coverage report will be created in `coverage/` upon testing. Checkout `coverage/index.html` to view the report. You can also run
+```shell
+rake coverage
+```
+to see the coverage report. 
 
 ## Other rake commands
-
-
-Clear the coverage report with
-```shell
-rake clear_coverage
-```
 
 Delete, clone, or refresh (delete and re-clone), with
 ```shell

@@ -8,6 +8,7 @@ gem 'git'
 group :test do
   gem 'rake'
   gem 'test-unit'
+  gem 'launchy'
   gem 'simplecov'
   gem 'simplecov-html'
 end

@@ -1,4 +1,5 @@
 require 'git'
+require 'launchy'
 
 task default: %w[test]
 
@@ -12,9 +13,9 @@ task :test, [:tc] do |t, tc|
   end
 end
 
-# Clears code coverage reports
-task :clear_coverage do
-  rm_rf 'coverage/'
+# Opens code coverage in your browser
+task :coverage do
+  Launchy.open(Dir.pwd + '/coverage/index.html')
 end
 
 # Adaptibrew tasks
