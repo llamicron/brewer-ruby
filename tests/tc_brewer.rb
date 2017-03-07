@@ -41,7 +41,7 @@ class TestBrewer < Test::Unit::TestCase
     assert_true(!@brewer.out.any?)
 
     # Clear log
-    @brewer.clear_log
+    clear_log
     assert_true(File.zero?(@log))
 
     # Get some output
@@ -50,7 +50,7 @@ class TestBrewer < Test::Unit::TestCase
     assert_true(@brewer.out.any?)
 
     # Write output
-    @brewer.write_log
+    write_log(@brewer.out)
     assert_true(!File.zero?(@log))
   end
 

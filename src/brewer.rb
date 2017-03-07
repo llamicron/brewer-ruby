@@ -1,4 +1,7 @@
 require 'date'
+require_relative 'helpers'
+
+include Helpers
 
 # NOTE: Most public methods return `self` so they can be chained together.
 # This is one of the core concepts of this package.
@@ -30,33 +33,10 @@ class Brewer
     self
   end
 
-  # Gets the current date and time
-  # Formatted as: 03/07/2017 14:26
-  def time
-    Time.now.strftime("%m/%d/%Y %H:%M")
-  end
-
-  # Writes contents of @out to `logs/output` with a timestamp. Example:
-  # [03/07/2017 14:27]: it worked
-  def write_log
-    File.open(@log, 'a') do |file|
-      @out.each do |out|
-        file.puts "[#{time}]: #{out}"
-      end
-    end
-    self
-  end
-
   # Clears the @out array, which is adaptibrew output
   def clear
-    write_log
+    write_log(@out)
     @out = []
-    self
-  end
-
-  # Truncates the entire log
-  def clear_log
-    File.truncate(@log, 0)
     self
   end
 
