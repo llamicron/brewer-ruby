@@ -3,6 +3,9 @@ require 'simplecov'
 SimpleCov.command_name 'Unit Tests'
 SimpleCov.start
 
+require_relative '../src/helpers'
+include Helpers
+
 # Test Framework
 require 'test/unit'
 

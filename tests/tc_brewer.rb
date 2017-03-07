@@ -8,9 +8,11 @@ class TestBrewer < Test::Unit::TestCase
     @brewer = Brewer.new
     @adaptibrew = Adaptibrew.new.refresh
     # This is used for log testing, not logging tests see `test_log_methods`
-    @log = @brewer.base_path + '/logs/output'
+    @log = @brewer.base_path + '/logs/test_output'
   end
 
+  # Make sure that the path is correct. I hate working with paths.
+  # TODO: Test this on windows
   def test_base_path
     assert_equal(Dir.pwd, @brewer.base_path)
   end
@@ -27,6 +29,8 @@ class TestBrewer < Test::Unit::TestCase
     assert_equal("it worked", @brewer.out.first)
   end
 
+  # Tests if the adaptibrew output (@brewer.out) can be cleared.
+  # This invloves writing to the log file
   def test_clear_output
     @brewer.script('python_tester')
     assert_equal("it worked", @brewer.out.first)
@@ -41,16 +45,16 @@ class TestBrewer < Test::Unit::TestCase
     assert_true(!@brewer.out.any?)
 
     # Clear log
-    clear_log
+    clear_log(@log)
     assert_true(File.zero?(@log))
 
     # Get some output
+    # (Output of the 'python_tester.py' file is "it worked")
     @brewer.script('python_tester')
-    # (Output should be "it worked")
     assert_true(@brewer.out.any?)
 
     # Write output
-    write_log(@brewer.out)
+    write_log(@log, @brewer.out)
     assert_true(!File.zero?(@log))
   end
 
