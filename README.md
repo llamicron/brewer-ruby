@@ -18,7 +18,10 @@ To initialize, run
 ```shell
 brewer
 ```
-from inside the root directory. This will open up a Ripl shell.
+from inside the root directory. This will open up a Ripl shell. It looks like this:
+```shell
+>>
+```
 
 **If that doesn't work**, the `brewer` file might not be executable. Run
 ```shell
@@ -41,7 +44,7 @@ A code coverage report will be created in `coverage/` upon testing. Checkout `co
 ```shell
 rake coverage
 ```
-to see the coverage report. 
+to see the coverage report.
 
 ## Other rake commands
 
