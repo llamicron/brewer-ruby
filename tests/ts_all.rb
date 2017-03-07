@@ -12,3 +12,4 @@ require 'test/unit'
 # Test Cases
 require_relative 'tc_adaptibrew'
 require_relative 'tc_brewer'
+require_relative 'tc_helpers'

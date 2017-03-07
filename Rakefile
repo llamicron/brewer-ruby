@@ -15,7 +15,7 @@ end
 
 # Opens code coverage in your browser
 # This may be a bit shaky. Only tested on Mac.
-# You can just open 'coverage/index.html' in your browser. 
+# You can just open 'coverage/index.html' in your browser.
 task :coverage do
   Launchy.open(Dir.pwd + '/coverage/index.html')
 end

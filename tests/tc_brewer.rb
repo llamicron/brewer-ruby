@@ -38,24 +38,4 @@ class TestBrewer < Test::Unit::TestCase
     assert_equal(nil, @brewer.out.first)
   end
 
-  # Kind of a beefy test. This covers all of the log functions.
-  def test_log_methods
-    # Clear output
-    @brewer.clear
-    assert_true(!@brewer.out.any?)
-
-    # Clear log
-    clear_log(@log)
-    assert_true(File.zero?(@log))
-
-    # Get some output
-    # (Output of the 'python_tester.py' file is "it worked")
-    @brewer.script('python_tester')
-    assert_true(@brewer.out.any?)
-
-    # Write output
-    write_log(@log, @brewer.out)
-    assert_true(!File.zero?(@log))
-  end
-
 end
