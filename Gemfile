@@ -4,6 +4,7 @@ gem 'ripl'
 gem 'ripl-play'
 gem 'ripl-multi_line'
 gem 'git'
+gem 'rdoc'
 
 group :test do
   gem 'rake'

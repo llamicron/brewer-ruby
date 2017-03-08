@@ -20,6 +20,10 @@ task :coverage do
   Launchy.open(Dir.pwd + '/coverage/index.html')
 end
 
+task :docs do
+  Launchy.open(Dir.pwd + '/doc/index.html')
+end
+
 # Clears coverage report
 task :clear_coverage do
   rm_rf('coverage/')
