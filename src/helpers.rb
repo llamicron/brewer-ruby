@@ -1,5 +1,7 @@
 module Helpers
 
+  # Returns the default location for the log file.
+  # A different log file is used for testing
   def log
     Dir.pwd + '/logs/output'
   end
