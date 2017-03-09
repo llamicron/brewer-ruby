@@ -4,7 +4,6 @@ gem 'ripl'
 gem 'ripl-play'
 gem 'ripl-multi_line'
 gem 'git'
-gem 'rdoc'
 
 group :test do
   gem 'rake'
@@ -12,4 +11,5 @@ group :test do
   gem 'launchy'
   gem 'simplecov'
   gem 'simplecov-html'
+  gem 'rdoc'
 end
