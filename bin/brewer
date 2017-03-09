@@ -12,6 +12,10 @@ adaptibrew.clone
 # Start up a brewer
 brewer = Brewer.new
 
+# Warning
+puts "Warning: Adaptibrew will be cloned into the directory you executed 'brewer'"
+puts "You may wish to delete it when you are finished. Do that with `adaptibrew.clear`"
+
 # Start the ripl shell
 Ripl.start :binding => binding
 # Start brewing
