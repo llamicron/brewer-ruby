@@ -3,12 +3,15 @@ require_relative 'helpers'
 
 include Helpers
 
-# NOTE: Most public methods return `self` so they can be chained together.
-# This is one of the core concepts of this package.
-
+# This is the main brewer class.
+# This contains all the methods needed to control a brew rig
+# setup with adaptiman/adaptibrew.
 class Brewer
 
+  # Path to the gem root
   attr_reader :base_path
+
+  # Output of adaptibrew
   attr_accessor :out
 
   def initialize
@@ -19,7 +22,7 @@ class Brewer
 
   public
 
-  # Waits. Pretty simple stuff. `time` is seconds.
+  # Waits for `time` seconds. Pretty simple stuff.
   def wait(time=30)
     puts "Waiting for #{time} seconds"
     sleep(time)
@@ -33,9 +36,9 @@ class Brewer
     self
   end
 
-  # Clears the @out array, which is adaptibrew output
+  # Clears the `@out` array
   def clear
-    # Write current @out to log, then set it to an empty array
+    # Write current `@out` to log
     write_log(@log, @out)
     @out = []
     self
