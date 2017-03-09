@@ -2,9 +2,9 @@
 # This script will initialize a Ripl shell with a brewer instantiated
 require 'ripl'
 
-# pull in our src
-require_relative "src/adaptibrew"
-require_relative "src/brewer"
+# pull in our lib
+require_relative "lib/adaptibrew"
+require_relative "lib/brewer"
 
 # Clone the repo
 adaptibrew = Adaptibrew.new

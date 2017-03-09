@@ -1,6 +1,6 @@
 require 'test/unit'
 
-require_relative '../src/helpers'
+require_relative '../lib/helpers'
 
 class TestHelpers < Test::Unit::TestCase
 
