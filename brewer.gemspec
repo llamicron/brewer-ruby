@@ -1,6 +1,8 @@
+require 'rake'
+
 Gem::Specification.new do |s|
   s.name               = "brewer"
-  s.version            = "0.0.1"
+  s.version            = "0.0.2"
   s.default_executable = "brewer"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
@@ -8,11 +10,11 @@ Gem::Specification.new do |s|
   s.date = %q{2017-03-08}
   s.description = %q{A Ruby API for adaptiman/adaptibrew}
   s.email = %q{luke@thesweeneys.org}
-  spec.files = FileList['lib/*.rb', 'bin/*', '[A-Z]*', 'tests/*'].to_a
-  spec.bindir = 'bin'
-  s.test_files = ["tests/*"]
+  s.files = FileList.new(['lib/*.rb', 'bin/*', '[A-Z]*', 'tests/*.rb']).to_a
+  s.bindir = 'bin'
+  s.test_files = FileList.new(["tests/*.rb"]).to_a
   s.homepage = %q{http://github.com/llamicron/ruby_brewer}
-  s.require_paths = ["lib"]
+  s.require_paths = ["lib", "lib/brewer"]
   s.rubygems_version = %q{1.6.2}
   s.summary = %q{A shell interface for adaptibrew}
   s.license = 'MIT'

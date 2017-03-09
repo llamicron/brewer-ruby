@@ -3,8 +3,8 @@
 require 'ripl'
 
 # pull in our lib
-require_relative "../lib/adaptibrew"
-require_relative "../lib/brewer"
+require_relative "../lib/brewer/adaptibrew"
+require_relative "../lib/brewer/brewer"
 
 # Clone the repo
 adaptibrew = Adaptibrew.new

@@ -1,6 +1,6 @@
 require 'test/unit'
-require_relative '../lib/brewer'
-require_relative '../lib/adaptibrew'
+require_relative '../lib/brewer/brewer'
+require_relative '../lib/brewer/adaptibrew'
 
 class TestBrewer < Test::Unit::TestCase
 

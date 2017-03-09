@@ -1,5 +1,5 @@
 require 'test/unit'
-require_relative '../lib/adaptibrew'
+require_relative '../lib/brewer/adaptibrew'
 
 class TestGit < Test::Unit::TestCase
 
