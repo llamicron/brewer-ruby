@@ -1,10 +1,12 @@
 require 'git'
 require 'launchy'
+require 'rdoc/task'
 
 task default: %w[test]
 
 # Unit testing
-# Travis CI uses this
+# You can specify a specific test case to use
+# Ex: rake test['brewer']
 task :test, [:tc] do |t, tc|
   if tc.to_a.any?
     ruby "tests/tc_#{tc.to_a[0]}.rb"
@@ -13,15 +15,22 @@ task :test, [:tc] do |t, tc|
   end
 end
 
-##
 # Opens code coverage in your browser
 # This may be a bit shaky. Only tested on Mac.
+# TODO: test on windows
 # You can just open 'coverage/index.html' in your browser.
 task :coverage do
   Launchy.open(Dir.pwd + '/coverage/index.html')
 end
 
-# Opens documentation
+# Generate or update documentation
+# Generates in `doc/`
+RDoc::Task.new do |rdoc|
+  rdoc.rdoc_dir = 'doc/'
+  rdoc.rdoc_files.include("**/*.rb")
+end
+
+# Opens documentation.
 task :docs do
   Launchy.open(Dir.pwd + '/doc/index.html')
 end
@@ -32,6 +41,7 @@ task :clear_coverage do
 end
 
 # Adaptibrew tasks
+# Clear, Clone, and Refresh
 task :adaptibrew, [:method] do |t, method|
   case method.to_a.first
   when 'clear'

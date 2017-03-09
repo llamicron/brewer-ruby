@@ -91,8 +91,8 @@
 
   <section class="description">
     
-<p>NOTE: Most public methods return `self` so they can be chained together.
-This is one of the core concepts of this package.</p>
+<p>This is the main brewer class. This contains all the methods needed to
+control a brew rig setup with adaptiman/adaptibrew.</p>
 
   </section>
 
@@ -121,7 +121,7 @@ This is one of the core concepts of this package.</p>
 
         <div class="method-description">
         
-        
+        <p>Path to the gem root</p>
         
         </div>
       </div>
@@ -134,7 +134,7 @@ This is one of the core concepts of this package.</p>
 
         <div class="method-description">
         
-        
+        <p>Output of adaptibrew</p>
         
         </div>
       </div>
@@ -168,7 +168,7 @@ This is one of the core concepts of this package.</p>
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File src/brewer.rb, line 14</span>
+            <pre><span class="ruby-comment"># File src/brewer.rb, line 17</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>
   <span class="ruby-ivar">@base_path</span> = <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>                  <span class="ruby-comment"># Path of the package</span>
   <span class="ruby-ivar">@out</span> = []                             <span class="ruby-comment"># Output from adaptibrew</span>
@@ -205,15 +205,15 @@ This is one of the core concepts of this package.</p>
 
         <div class="method-description">
           
-          <p>Clears the @out array, which is adaptibrew output</p>
+          <p>Clears the `@out` array</p>
           
           
 
           
           <div class="method-source-code" id="clear-source">
-            <pre><span class="ruby-comment"># File src/brewer.rb, line 37</span>
+            <pre><span class="ruby-comment"># File src/brewer.rb, line 40</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">clear</span>
-  <span class="ruby-comment"># Write current @out to log, then set it to an empty array</span>
+  <span class="ruby-comment"># Write current `@out` to log</span>
   <span class="ruby-identifier">write_log</span>(<span class="ruby-ivar">@log</span>, <span class="ruby-ivar">@out</span>)
   <span class="ruby-ivar">@out</span> = []
   <span class="ruby-keyword">self</span>
@@ -247,7 +247,7 @@ This is one of the core concepts of this package.</p>
 
           
           <div class="method-source-code" id="script-source">
-            <pre><span class="ruby-comment"># File src/brewer.rb, line 31</span>
+            <pre><span class="ruby-comment"># File src/brewer.rb, line 34</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">script</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">params</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-ivar">@out</span>.<span class="ruby-identifier">unshift</span>(<span class="ruby-node">%x`python #{@base_path}/adaptibrew/#{script}.py #{params}`</span>.<span class="ruby-identifier">chomp</span>)
   <span class="ruby-keyword">self</span>
@@ -275,13 +275,13 @@ This is one of the core concepts of this package.</p>
 
         <div class="method-description">
           
-          <p>Waits. Pretty simple stuff. `time` is seconds.</p>
+          <p>Waits for `time` seconds. Pretty simple stuff.</p>
           
           
 
           
           <div class="method-source-code" id="wait-source">
-            <pre><span class="ruby-comment"># File src/brewer.rb, line 23</span>
+            <pre><span class="ruby-comment"># File src/brewer.rb, line 26</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">wait</span>(<span class="ruby-identifier">time</span>=<span class="ruby-value">30</span>)
   <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Waiting for #{time} seconds&quot;</span>
   <span class="ruby-identifier">sleep</span>(<span class="ruby-identifier">time</span>)

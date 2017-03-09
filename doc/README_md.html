@@ -61,6 +61,7 @@
     <li><a href="#label-Running">Running</a>
     <li><a href="#label-Testing+-26+Rake">Testing &amp; Rake</a>
     <li><a href="#label-Other+rake+commands">Other rake commands</a>
+    <li><a href="#label-Documentation">Documentation</a>
   </ul>
 </div>
 
@@ -140,6 +141,16 @@ can also run <code>shell rake coverage </code> to see the coverage report.</p>
 <p>Delete, clone, or refresh (delete and re-clone), with <code>shell rake
 adaptibrew['clear'] rake adaptibrew['clone'] rake adaptibrew['refresh']
 </code></p>
+
+<h1 id="label-Documentation">Documentation<span><a href="#label-Documentation">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p><strong>Warning: RDoc have a seizure when encountering Gemfiles, Rakefiles,
+etc. Basically files that don&#39;t end in <code>.rb</code> but have ruby
+syntax. Docs will be a bit weird on those files. I suggest just reading the
+comments in source.</strong></p>
+
+<p>Run <code>shell rdoc </code> to generate/update documentation, and run
+<code>shell rake docs </code> to open documentation.</p>
 </main>
 
 

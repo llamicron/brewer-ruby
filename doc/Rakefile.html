@@ -78,7 +78,7 @@
 
 <main role="main" aria-label="Page Rakefile">
 
-<p>require &#39;git&#39; require &#39;launchy&#39;</p>
+<p>require &#39;git&#39; require &#39;launchy&#39; require &#39;rdoc/task&#39;</p>
 
 <p>task default: %<a href="test">w</a></p>
 
@@ -98,6 +98,14 @@ tested on Mac. # You can just open &#39;coverage/index.html&#39; in your
 browser. task :coverage do</p>
 
 <pre class="ruby"><span class="ruby-constant">Launchy</span>.<span class="ruby-identifier">open</span>(<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span> <span class="ruby-operator">+</span> <span class="ruby-string">&#39;/coverage/index.html&#39;</span>)
+</pre>
+
+<p>end</p>
+
+<p>RDoc::Task.new do |rdoc|</p>
+
+<pre class="ruby"><span class="ruby-identifier">rdoc</span>.<span class="ruby-identifier">rdoc_dir</span> = <span class="ruby-string">&#39;doc/&#39;</span>
+<span class="ruby-identifier">rdoc</span>.<span class="ruby-identifier">rdoc_files</span>.<span class="ruby-identifier">include</span>(<span class="ruby-string">&quot;**/*.rb&quot;</span>)
 </pre>
 
 <p>end</p>
