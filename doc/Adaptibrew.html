@@ -132,7 +132,7 @@ and such.</p>
 
           
           <div class="method-source-code" id="clear-source">
-            <pre><span class="ruby-comment"># File src/adaptibrew.rb, line 15</span>
+            <pre><span class="ruby-comment"># File lib/adaptibrew.rb, line 15</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">clear</span>(<span class="ruby-identifier">dir</span>=<span class="ruby-string">&#39;adaptibrew&#39;</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-string">&#39;Warning! This will delete a directory other than the `adaptibrew` directory&#39;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">dir</span>.<span class="ruby-identifier">include?</span> <span class="ruby-string">&#39;adaptibrew&#39;</span>
   <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_rf</span>(<span class="ruby-identifier">dir</span>)
@@ -167,7 +167,7 @@ and such.</p>
 
           
           <div class="method-source-code" id="clone-source">
-            <pre><span class="ruby-comment"># File src/adaptibrew.rb, line 7</span>
+            <pre><span class="ruby-comment"># File lib/adaptibrew.rb, line 7</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">clone</span>(<span class="ruby-identifier">path</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-constant">Dir</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-string">&#39;adaptibrew&#39;</span>)
     <span class="ruby-constant">Git</span>.<span class="ruby-identifier">clone</span>(<span class="ruby-string">&#39;https://github.com/adaptiman/adaptibrew.git&#39;</span>, <span class="ruby-string">&#39;adaptibrew&#39;</span>, <span class="ruby-value">:path</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">path</span>)
@@ -203,7 +203,7 @@ and such.</p>
 
           
           <div class="method-source-code" id="refresh-source">
-            <pre><span class="ruby-comment"># File src/adaptibrew.rb, line 22</span>
+            <pre><span class="ruby-comment"># File lib/adaptibrew.rb, line 22</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">refresh</span>
   <span class="ruby-identifier">clear</span>
   <span class="ruby-identifier">clone</span>

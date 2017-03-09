@@ -168,7 +168,7 @@ control a brew rig setup with adaptiman/adaptibrew.</p>
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File src/brewer.rb, line 17</span>
+            <pre><span class="ruby-comment"># File lib/brewer.rb, line 18</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>
   <span class="ruby-ivar">@base_path</span> = <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>                  <span class="ruby-comment"># Path of the package</span>
   <span class="ruby-ivar">@out</span> = []                             <span class="ruby-comment"># Output from adaptibrew</span>
@@ -211,7 +211,7 @@ control a brew rig setup with adaptiman/adaptibrew.</p>
 
           
           <div class="method-source-code" id="clear-source">
-            <pre><span class="ruby-comment"># File src/brewer.rb, line 40</span>
+            <pre><span class="ruby-comment"># File lib/brewer.rb, line 41</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">clear</span>
   <span class="ruby-comment"># Write current `@out` to log</span>
   <span class="ruby-identifier">write_log</span>(<span class="ruby-ivar">@log</span>, <span class="ruby-ivar">@out</span>)
@@ -247,7 +247,7 @@ control a brew rig setup with adaptiman/adaptibrew.</p>
 
           
           <div class="method-source-code" id="script-source">
-            <pre><span class="ruby-comment"># File src/brewer.rb, line 34</span>
+            <pre><span class="ruby-comment"># File lib/brewer.rb, line 35</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">script</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">params</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-ivar">@out</span>.<span class="ruby-identifier">unshift</span>(<span class="ruby-node">%x`python #{@base_path}/adaptibrew/#{script}.py #{params}`</span>.<span class="ruby-identifier">chomp</span>)
   <span class="ruby-keyword">self</span>
@@ -281,7 +281,7 @@ control a brew rig setup with adaptiman/adaptibrew.</p>
 
           
           <div class="method-source-code" id="wait-source">
-            <pre><span class="ruby-comment"># File src/brewer.rb, line 26</span>
+            <pre><span class="ruby-comment"># File lib/brewer.rb, line 27</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">wait</span>(<span class="ruby-identifier">time</span>=<span class="ruby-value">30</span>)
   <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Waiting for #{time} seconds&quot;</span>
   <span class="ruby-identifier">sleep</span>(<span class="ruby-identifier">time</span>)

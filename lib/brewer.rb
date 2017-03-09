@@ -1,5 +1,6 @@
 require 'date'
 require_relative 'helpers'
+require_relative 'adaptibrew'
 
 include Helpers
 
