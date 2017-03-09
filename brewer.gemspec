@@ -24,8 +24,6 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'git', '>=0.0.0'
   s.add_runtime_dependency 'ripl', '>=0.0.0'
-  s.add_runtime_dependency 'ripl-play', '>=0.0.0'
-  s.add_runtime_dependency 'ripl-multi-line', '>=0.0.0'
 
   s.add_development_dependency 'rake', '>=0.0.0'
   s.add_development_dependency 'test-unit', '>=0.0.0'

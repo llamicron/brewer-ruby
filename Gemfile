@@ -6,8 +6,6 @@ source "https://rubygems.org"
 gemspec
 
 gem 'ripl'
-gem 'ripl-play'
-gem 'ripl-multi_line'
 gem 'git'
 
 group :test do
