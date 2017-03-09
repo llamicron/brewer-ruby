@@ -124,7 +124,7 @@
 
           
           <div class="method-source-code" id="clear_log-source">
-            <pre><span class="ruby-comment"># File src/helpers.rb, line 16</span>
+            <pre><span class="ruby-comment"># File lib/helpers.rb, line 16</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">clear_log</span>(<span class="ruby-identifier">log</span>)
   <span class="ruby-constant">File</span>.<span class="ruby-identifier">truncate</span>(<span class="ruby-identifier">log</span>, <span class="ruby-value">0</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -158,7 +158,7 @@ for testing</p>
 
           
           <div class="method-source-code" id="log-source">
-            <pre><span class="ruby-comment"># File src/helpers.rb, line 5</span>
+            <pre><span class="ruby-comment"># File lib/helpers.rb, line 5</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log</span>
   <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span> <span class="ruby-operator">+</span> <span class="ruby-string">&#39;/logs/output&#39;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -191,7 +191,7 @@ for testing</p>
 
           
           <div class="method-source-code" id="time-source">
-            <pre><span class="ruby-comment"># File src/helpers.rb, line 11</span>
+            <pre><span class="ruby-comment"># File lib/helpers.rb, line 11</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">time</span>
   <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">strftime</span>(<span class="ruby-string">&quot;%m/%d/%Y %H:%M&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -225,7 +225,7 @@ for testing</p>
 
           
           <div class="method-source-code" id="write_log-source">
-            <pre><span class="ruby-comment"># File src/helpers.rb, line 22</span>
+            <pre><span class="ruby-comment"># File lib/helpers.rb, line 22</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">write_log</span>(<span class="ruby-identifier">log</span>, <span class="ruby-identifier">lines</span>)
   <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">log</span>, <span class="ruby-string">&#39;a&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">lines</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
