@@ -1,0 +1,8 @@
+Wed, 08 Mar 2017 22:04:52 -0600
+lib/adaptibrew.rb	Wed, 08 Mar 2017 17:00:32 -0600
+lib/brewer.rb	Wed, 08 Mar 2017 21:38:33 -0600
+lib/helpers.rb	Wed, 08 Mar 2017 18:26:27 -0600
+tests/tc_adaptibrew.rb	Wed, 08 Mar 2017 21:33:19 -0600
+tests/tc_brewer.rb	Wed, 08 Mar 2017 21:33:19 -0600
+tests/tc_helpers.rb	Wed, 08 Mar 2017 21:33:19 -0600
+tests/ts_all.rb	Wed, 08 Mar 2017 21:33:19 -0600
