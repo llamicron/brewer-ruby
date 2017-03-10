@@ -1,13 +1,15 @@
 require 'test/unit'
+
 require_relative '../lib/brewer'
 require_relative '../lib/adaptibrew'
 
+# Test the brewer class
 class TestBrewer < Test::Unit::TestCase
 
   def setup
     @brewer = Brewer.new
-    @adaptibrew = Adaptibrew.new.refresh
-    # This is used for log testing, not logging tests see `test_log_methods`
+    Adaptibrew.new.refresh
+    # This is used for log testing, not logging tests. see `test_log_methods`
     @log = @brewer.base_path + '/logs/test_output'
   end
 
@@ -24,6 +26,8 @@ class TestBrewer < Test::Unit::TestCase
     assert_true(true)
   end
 
+  # Runs the 'python_tester.py' which print "it worked".
+  # Ensures that ruby can run python without errors.
   def test_script_and_output
     @brewer.script('python_tester')
     assert_equal("it worked", @brewer.out.first)
