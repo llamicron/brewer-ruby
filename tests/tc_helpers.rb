@@ -8,20 +8,19 @@ class TestHelpers < Test::Unit::TestCase
     @brewer = Brewer.new
     # See comment on `test_log`
     @log = @brewer.base_path + '/logs/test_output'
-
     clear_log(@log)
   end
 
+  # Test that Helpers#time will rturn a string
+  # Not sure how to test the format, since that would require knowing the actual
+  # time. Might get messy.
   def test_time
     assert_equal(String, time.class)
   end
 
   def test_log
-    # This will give us the actual log i.e. '/logs/output'
-    # For tests we use 'logs/test_output', which is why we have the
-    # @log = @brewer.base_path + '/logs/test_output'
-    # line
-    assert_equal(String, log.class)
+    # This will give us the actual log i.e. '/logs/output', not the test log
+    assert_equal(Dir.pwd + "/logs/output", log)
   end
 
   def test_log_methods
