@@ -1,4 +1,3 @@
-require 'date'
 require_relative 'helpers'
 require_relative 'adaptibrew'
 
@@ -16,9 +15,12 @@ class Brewer
   attr_accessor :out
 
   def initialize
-    @base_path = Dir.pwd                  # Path of the package
-    @out = []                             # Output from adaptibrew
-    @log = @base_path + '/logs/output'    # Log file for @out. Everything in the log file will be from @out.
+    # Path of the package
+    @base_path = Dir.pwd
+    # Output from adaptibrew
+    @out = []
+    # Log file for @out. Everything in the log file will be from @out.
+    @log = @base_path + '/logs/output'
   end
 
   public
@@ -38,8 +40,9 @@ class Brewer
   end
 
   # Clears the `@out` array
+  # Writes current `@out` to log
+  # This is why the prod log is changed when tests are run
   def clear
-    # Write current `@out` to log
     write_log(@log, @out)
     @out = []
     self
