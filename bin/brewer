@@ -2,18 +2,17 @@
 # This script will initialize a Ripl shell with a brewer instantiated
 require 'ripl'
 
-# pull in our lib
+# pull in our source
 require_relative "../lib/brewer"
 
-# Clone the repo
-adaptibrew = Adaptibrew.new
-adaptibrew.clone
+# Get an adaptibrew instance and refresh the repo
+adaptibrew = Adaptibrew.new.refresh
 
 # Start up a brewer
 brewer = Brewer.new
 
 # Warning
-puts "Warning: Adaptibrew will be cloned into the directory you executed 'brewer'"
+puts "Warning: Adaptibrew has been cloned into the directory you executed 'brewer'"
 puts "You may wish to delete it when you are finished. Do that with `adaptibrew.clear`"
 
 # Start the ripl shell
