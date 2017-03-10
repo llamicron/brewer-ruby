@@ -3,6 +3,7 @@ require 'simplecov'
 SimpleCov.command_name 'Unit Tests'
 SimpleCov.start
 
+# Require helper methods
 require_relative '../lib/helpers'
 include Helpers
 
