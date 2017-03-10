@@ -22,13 +22,13 @@ Gem::Specification.new do |s|
 
   # TODO: update these versions
 
-  s.add_runtime_dependency 'git', '>=1.3.0'
-  s.add_runtime_dependency 'ripl', '>=0.7.0'
+  s.add_runtime_dependency 'git', '~>1.3.0'
+  s.add_runtime_dependency 'ripl', '~>?0.7.0'
 
-  s.add_development_dependency 'rake', '>=12.0.0'
-  s.add_development_dependency 'test-unit', '>=3.2.0'
-  s.add_development_dependency 'launchy', '>=2.4.0'
-  s.add_development_dependency 'simplecov', '>=0.13.0'
-  s.add_development_dependency 'simplecov-html', '>=0.10.0'
-  s.add_development_dependency 'rdoc', '>=5.1.0'
+  s.add_development_dependency 'rake', '~>12.0.0'
+  s.add_development_dependency 'test-unit', '~>3.2.0'
+  s.add_development_dependency 'launchy', '~>2.4.0'
+  s.add_development_dependency 'simplecov', '~>0.13.0'
+  s.add_development_dependency 'simplecov-html', '~>0.10.0'
+  s.add_development_dependency 'rdoc', '~>5.1.0'
 end
