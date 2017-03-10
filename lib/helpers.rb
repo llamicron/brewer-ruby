@@ -1,3 +1,6 @@
+# Helpers Module.
+# For methods that don't quite fit anywhere else,
+# or that I need globally
 module Helpers
 
   # Returns the default location for the log file.
@@ -12,7 +15,7 @@ module Helpers
     Time.now.strftime("%m/%d/%Y %H:%M")
   end
 
-  # Truncates the entire log
+  # Truncates (deletes) the entire log
   def clear_log(log)
     File.truncate(log, 0)
   end
