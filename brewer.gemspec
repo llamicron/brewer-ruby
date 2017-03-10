@@ -2,7 +2,7 @@ require 'rake'
 
 Gem::Specification.new do |s|
   s.name               = "brewer"
-  s.version            = "0.0.7"
+  s.version            = "0.0.9"
   s.default_executable = "brewer"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.executables = ['brewer']
   s.bindir = 'bin'
   s.test_files = FileList.new(["tests/*.rb"]).to_a
-  s.homepage = %q{http://github.com/llamicron/ruby_brewer}
+  s.homepage = %q{http://github.com/llamicron/brewer}
   s.require_paths = ["lib", "lib"]
   s.rubygems_version = %q{1.6.2}
   s.summary = %q{A shell interface for adaptibrew}
