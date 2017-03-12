@@ -1,20 +1,18 @@
 #!/usr/bin/env ruby
-# This script will initialize a Ripl shell with a brewer instantiated
+# This executable will start a Ripl shell with a 'brewer' and 'adaptibrew' objects
+
 require 'ripl'
 
-# pull in our source
 require_relative "../lib/brewer"
 
-# Get an adaptibrew instance and refresh the repo
+# Refresh to make sure we have the lastest version of adaptibrew
 adaptibrew = Adaptibrew.new.refresh
 
-# Start up a brewer
 brewer = Brewer.new
 
-# Warning
 puts "Warning: Adaptibrew has been cloned into the directory you executed 'brewer'"
 puts "You may wish to delete it when you are finished. Do that with `adaptibrew.clear`"
 
-# Start the ripl shell
 Ripl.start :binding => binding
-# Start brewing
+
+# Start brewing 🍺🍺🍺

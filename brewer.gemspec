@@ -5,7 +5,6 @@ Gem::Specification.new do |s|
   s.version            = "0.0.10"
   s.default_executable = "brewer"
 
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Luke Sweeney"]
   s.date = %q{2017-03-08}
   s.description = %q{A Ruby API for adaptiman/adaptibrew}
@@ -20,11 +19,11 @@ Gem::Specification.new do |s|
   s.summary = %q{A shell interface for adaptibrew}
   s.license = 'MIT'
 
-  # TODO: update these versions
-
+  # Runtime dependencies
   s.add_runtime_dependency 'git', '~> 1.3', '>= 1.3.0'
   s.add_runtime_dependency 'ripl', '~> 0.7.0'
 
+  # Dev dependencies
   s.add_development_dependency 'rake', '~> 12.0', '>= 12.0.0'
   s.add_development_dependency 'test-unit', '~> 3.2', '>= 3.2.0'
   s.add_development_dependency 'launchy', '~> 2.4', '>= 2.4.0'
