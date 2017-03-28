@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
 
   # Dev dependencies
   s.add_development_dependency 'rake', '~> 12.0', '>= 12.0.0'
+  s.add_development_dependency 'rspec', '~> 3.5.0', '>= 3.5.0'
   s.add_development_dependency 'test-unit', '~> 3.2', '>= 3.2.0'
   s.add_development_dependency 'launchy', '~> 2.4', '>= 2.4.0'
   s.add_development_dependency 'simplecov', '~> 0.13.0'
