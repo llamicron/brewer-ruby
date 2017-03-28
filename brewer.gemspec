@@ -9,10 +9,10 @@ Gem::Specification.new do |s|
   s.date = %q{2017-03-08}
   s.description = %q{A Ruby API for adaptiman/adaptibrew}
   s.email = %q{luke@thesweeneys.org}
-  s.files = FileList.new(['lib/*.rb', 'bin/*', '[A-Z]*', 'tests/*.rb']).to_a
+  s.files = FileList.new(['lib/*.rb', 'bin/*', '[A-Z]*', 'spec/*.rb']).to_a
   s.executables = ['brewer']
   s.bindir = 'bin'
-  s.test_files = FileList.new(["tests/*.rb"]).to_a
+  s.test_files = FileList.new(["spec/*.rb"]).to_a
   s.homepage = %q{http://github.com/llamicron/brewer}
   s.require_paths = ["lib", "lib"]
   s.rubygems_version = %q{1.6.2}
@@ -26,7 +26,6 @@ Gem::Specification.new do |s|
   # Dev dependencies
   s.add_development_dependency 'rake', '~> 12.0', '>= 12.0.0'
   s.add_development_dependency 'rspec', '~> 3.5.0', '>= 3.5.0'
-  s.add_development_dependency 'test-unit', '~> 3.2', '>= 3.2.0'
   s.add_development_dependency 'launchy', '~> 2.4', '>= 2.4.0'
   s.add_development_dependency 'simplecov', '~> 0.13.0'
   s.add_development_dependency 'simplecov-html', '~> 0.10.0'

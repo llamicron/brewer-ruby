@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# 🍺🍺🍺
 # This executable will start a Ripl shell with a 'brewer' and 'adaptibrew' objects
 
 require 'ripl'
@@ -12,7 +13,8 @@ brewer = Brewer.new
 
 puts "Warning: Adaptibrew has been cloned into the directory you executed 'brewer'"
 puts "You may wish to delete it when you are finished. Do that with `adaptibrew.clear`"
+puts "🍺  have fun 🍺"
 
+# 🍺🍺🍺
 Ripl.start :binding => binding
-
-# Start brewing 🍺🍺🍺
+# 🍺🍺🍺
