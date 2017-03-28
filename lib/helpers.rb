@@ -28,8 +28,7 @@ module Helpers
     end
   end
 
-  def confirm
-    input = gets.chomp
+  def confirm(input=gets.chomp)
     if ["y", "Y", "yes", "Yes", "YES", "k"].include? input
       true
     end

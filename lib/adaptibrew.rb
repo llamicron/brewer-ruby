@@ -17,13 +17,16 @@ class Adaptibrew
   end
 
   # Danger zone...
-  def clear()
+  def clear
+    # :nocov: since this requires network to be off
     if !network?
       print "Warning: you have no network connection. If you clear, you will not be able to clone again, and you'll be stuck without the adaptibrew source. Are you sure? "
-      if confirm
-        FileUtils.rm_rf('adaptibrew')
+      if !confirm
+        exit
       end
     end
+    # :nocov:
+    FileUtils.rm_rf('adaptibrew')
     self
   end
 
