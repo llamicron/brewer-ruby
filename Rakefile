@@ -9,11 +9,6 @@ task default: %w[spec]
 # You can specify a specific test case to use
 # Ex: rake test['brewer']
 task :spec, [:tc] do |t, tc|
-  # if tc.to_a.any?
-  #   ruby "tests/tc_#{tc.to_a[0]}.rb"
-  # else
-  #   ruby "tests/ts_all.rb"
-  # end
   RSpec::Core::RakeTask.new(:spec)
 end
 
