@@ -18,7 +18,6 @@ class Brewer
   public
 
   def wait(time=30)
-    puts "Waiting for #{time} seconds"
     sleep(time)
     self
   end
