@@ -1,18 +1,15 @@
 require 'git'
 require 'launchy'
 require 'rdoc/task'
+require 'rspec/core/rake_task'
 
-task default: %w[test]
+task default: %w[spec]
 
 # Unit testing
 # You can specify a specific test case to use
 # Ex: rake test['brewer']
-task :test, [:tc] do |t, tc|
-  if tc.to_a.any?
-    ruby "tests/tc_#{tc.to_a[0]}.rb"
-  else
-    ruby "tests/ts_all.rb"
-  end
+task :spec, [:tc] do |t, tc|
+  RSpec::Core::RakeTask.new(:spec)
 end
 
 # Opens code coverage in your browser

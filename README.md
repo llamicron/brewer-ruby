@@ -18,3 +18,7 @@ to open an interactive shell to control your brew rig in realtime. Fancy.
 # Documentation
 **Warning: RDoc may have a seizure when encountering Gemfiles, Rakefiles, etc. Basically files that don't end in `.rb` but have ruby syntax. Docs will be a bit weird on those files. I suggest just reading the comments in source.**
 Documentation is in `doc/` or on rubygems.org
+
+
+
+for build triggers, please ignore
