@@ -8,12 +8,13 @@ Gem::Specification.new do |s|
   s.authors = ["Luke Sweeney"]
   s.date = %q{2017-03-08}
   s.description = %q{A Ruby API for adaptiman/adaptibrew}
+  s.post_install_message = "🍺  have fun 🍺"
   s.email = %q{luke@thesweeneys.org}
   s.files = FileList.new(['lib/*.rb', 'bin/*', '[A-Z]*', 'spec/*.rb']).to_a
   s.executables = ['brewer']
   s.bindir = 'bin'
   s.test_files = FileList.new(["spec/*.rb"]).to_a
-  s.homepage = %q{http://github.com/llamicron/brewer}
+  s.homepage = %q{https://rubygems.org/gems/brewer}
   s.require_paths = ["lib", "lib"]
   s.rubygems_version = %q{1.6.2}
   s.summary = %q{A shell interface for adaptibrew}
