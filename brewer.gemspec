@@ -2,7 +2,7 @@ require 'rake'
 
 Gem::Specification.new do |s|
   s.name               = "brewer"
-  s.version            = "0.0.21"
+  s.version            = "0.0.23"
   s.default_executable = "brewer"
 
   s.authors = ["Luke Sweeney"]
@@ -22,6 +22,8 @@ Gem::Specification.new do |s|
   # Runtime dependencies
   s.add_runtime_dependency 'git', '~> 1.3', '>= 1.3.0'
   s.add_runtime_dependency 'ripl', '~> 0.7.0'
+  s.add_runtime_dependency 'net-ping', '~> 1.7.0'
+
 
   # Dev dependencies
   s.add_development_dependency 'rake', '~> 12.0', '>= 12.0.0'

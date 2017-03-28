@@ -1,20 +1,28 @@
 #!/usr/bin/env ruby
-# 🍺🍺🍺
 # This executable will start a Ripl shell with a 'brewer' and 'adaptibrew' objects
 
 require 'ripl'
 
 require_relative "../lib/brewer"
+require_relative "../lib/helpers"
+
+include Helpers
+
+if !network?
+  puts "Warning: You have no network connection. If you delete the adaptibrew directory, you will not be able to clone it back."
+  print "Are you sure you want to continue? "
+  confirm ? nil : abort
+end
 
 # Refresh to make sure we have the lastest version of adaptibrew
-adaptibrew = Adaptibrew.new.refresh
-
+adaptibrew = Adaptibrew.new
+if network?
+  adaptibrew.refresh
+end
 brewer = Brewer.new
 
-puts "Warning: Adaptibrew has been cloned into the directory you executed 'brewer'"
-puts "You may wish to delete it when you are finished. Do that with `adaptibrew.clear`"
-puts "🍺  have fun 🍺"
 
 # 🍺🍺🍺
+puts "🍺  have fun 🍺"
 Ripl.start :binding => binding
 # 🍺🍺🍺
