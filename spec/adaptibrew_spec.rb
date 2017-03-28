@@ -3,7 +3,7 @@ require_relative 'spec_helper'
 describe Adaptibrew do
 
   before :each do
-    @adaptibrew = Adaptibrew.new
+    @adaptibrew = Adaptibrew.new.refresh
   end
 
   describe "#new" do
