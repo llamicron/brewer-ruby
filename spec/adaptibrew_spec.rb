@@ -3,12 +3,11 @@ require_relative 'spec_helper'
 describe Adaptibrew do
 
   before :each do
-    @adaptibrew = Adaptibrew.new.refresh
+    @adaptibrew = Adaptibrew.new
   end
 
   describe "#new" do
-    let(:adaptibrew) { Adaptibrew.new }
-    specify { expect(adaptibrew).to be_an_instance_of Adaptibrew }
+    specify { expect(@adaptibrew).to be_an_instance_of Adaptibrew }
   end
 
   describe ".clear" do
@@ -27,7 +26,7 @@ describe Adaptibrew do
       specify { expect(Dir.exists?('adaptibrew')).to be false }
 
       it "does nothing" do
-        adaptibrew.clear
+        @adaptibrew.clear
         expect(Dir.exists?('adaptibrew')).to be false
       end
     end
@@ -41,7 +40,7 @@ describe Adaptibrew do
       specify { expect(Dir.exists?('adaptibrew')).to be false }
 
       it "clones the repo" do
-        adaptibrew.clone
+        @adaptibrew.clone
         expect(Dir.exists?('adaptibrew')).to be true
       end
     end
@@ -52,11 +51,21 @@ describe Adaptibrew do
       specify { expect(Dir.exists?('adaptibrew')).to be true }
 
       it "does nothing" do
-        adaptibrew.clone
+        @adaptibrew.clone
         expect(Dir.exists?('adaptibrew')).to be true
       end
     end
 
+  end
+
+  describe ".refresh" do
+    let(:adaptibrew) { Adaptibrew.new }
+    before { adaptibrew.refresh }
+    it "clears and clones the repo" do # regardless of wether or not it's there
+      expect(Dir.exists?('adaptibrew')).to be true
+      @adaptibrew.refresh
+      expect(Dir.exists?('adaptibrew')).to be true
+    end
   end
 
 end
