@@ -25,6 +25,7 @@ class Brewer
     self
   end
 
+  # Sends a slack message in #brewing
   def ping(message="ping at #{Time.now}")
     $slack.ping(message)
   end
@@ -50,7 +51,6 @@ class Brewer
 
 
   # Adaptibrew methods
-
 
   def pump(state=0)
     if state == 1

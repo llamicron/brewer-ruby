@@ -5,7 +5,7 @@ require 'yaml/store'
 if !File.file?('slack.yml')
   store = YAML::Store.new 'slack.yml'
 
-  print "Enter your webhook url: "
+  print "Enter your Slack webhook url: "
   webhook_url = gets.chomp
 
   store.transaction do
