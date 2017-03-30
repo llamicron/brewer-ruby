@@ -43,7 +43,7 @@ class Brewer
   # Adaptibrew methods
 
   def set_pump(state=0)
-    if state = 1
+    if state == 1
       state_string = "on"
     else
       state_string = "off"
@@ -58,7 +58,7 @@ class Brewer
   end
 
   def set_pid(state=0)
-    if state = 1
+    if state == 1
       state_string = "on"
     else
       state_string = "off"
