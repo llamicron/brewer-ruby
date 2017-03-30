@@ -24,6 +24,10 @@ class Brewer
     self
   end
 
+  def say(message="done")
+    system("say #{message}")
+  end
+
   # Runs an adaptibrew script
   # Output will be stored in @out
   def script(script, params=nil)
@@ -42,14 +46,6 @@ class Brewer
 
   # Adaptibrew methods
 
-  # This should be run on system power on
-  def boot
-    pid(0)
-    pump(0)
-    relay(2, 1)
-    all_relays_status
-    relay_status(2)
-  end
 
   def pump(state=0)
     if state == 1
@@ -84,6 +80,37 @@ class Brewer
   def relay_status(relay)
     script("get_relay_status", "#{relay}")
     puts @out.first
+  end
+
+  # Procedures
+
+  def boot
+    pid(0)
+    pump(0)
+    relay(2, 1)
+    all_relays_status
+    relay_status(2)
+  end
+
+  def heat_strike_water
+    print "Is the strike water in the mash tun? "
+    confirm ? nil : abort
+
+    print "Is the return manifold in the mash tun? "
+    confirm ? nil : abort
+
+    relay(2, 1)
+    puts "RIMS relay is on"
+
+    pump(1)
+    puts "Pump is on"
+
+    brewer.wait(30)
+    puts "Waiting for 30 seconds"
+
+    print "Is the strike water circulating well? "
+    confirm ? nil : abort
+
   end
 
 end
