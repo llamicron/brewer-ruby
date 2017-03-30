@@ -80,6 +80,7 @@ class Brewer
   def all_relays_status
     script("get_relay_status_test")
     puts @out.first.split('\n')
+    @out.shift
   end
 
   def relay_status(relay)
