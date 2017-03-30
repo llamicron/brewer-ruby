@@ -22,7 +22,7 @@ end
 brewer = Brewer.new
 
 
-# 🍺🍺🍺
+
 puts "🍺  have fun 🍺"
 Ripl.start :binding => binding
 # 🍺🍺🍺

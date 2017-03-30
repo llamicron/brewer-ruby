@@ -1,6 +1,5 @@
 require_relative 'helpers'
 require_relative 'adaptibrew'
-require_relative 'slacker'
 
 include Helpers
 
@@ -27,6 +26,7 @@ class Brewer
 
   # Sends a slack message in #brewing
   def ping(message="ping at #{Time.now}")
+    require_relative 'slacker'
     $slack.ping(message)
   end
 
