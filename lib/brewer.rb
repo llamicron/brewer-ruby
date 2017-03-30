@@ -45,12 +45,5 @@ class Brewer
   def set_pump(state="off")
     script("set_pump_#{state}")
   end
-
-  # def turnPumpOn
-  #   script('set_pump_on')
-  # end
-  #
-  # def turnPumpOff
-  #   script('set_pump_off')
-  # end
+  
 end
