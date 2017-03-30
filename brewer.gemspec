@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'git', '~> 1.3', '>= 1.3.0'
   s.add_runtime_dependency 'ripl', '~> 0.7.0'
   s.add_runtime_dependency 'net-ping', '~> 1.7'
-
+  s.add_runtime_dependency 'slack-notifier'
 
   # Dev dependencies
   s.add_development_dependency 'rake', '~> 12.0', '>= 12.0.0'
