@@ -12,6 +12,7 @@ describe Brewer do
 
   after :all do
     # in case something goes wrong, everything needs to be reset
+    @brewer = Brewer.new
     @brewer.set_pump(0)
     @brewer.set_pid(0)
   end
@@ -74,11 +75,13 @@ describe Brewer do
   describe ".set_relay" do
     it "turns the relay on" do
       @brewer.set_relay(2, 1)
+      @brewer.wait(7)
       expect(@brewer.out.include?("relay 2 on"))
     end
 
     it "turns the relay off" do
       @brewer.set_relay(2, 0)
+      @brewer.wait(7)
       expect(@brewer.out.include?("relay 2 off"))
     end
   end
@@ -86,7 +89,6 @@ describe Brewer do
   describe ".set_pid" do
     it "turns the pid on" do
       @brewer.set_pid(1)
-      @brewer.wait(2)
       expect(@brewer.out.include?("PID on")).to be true
     end
 
