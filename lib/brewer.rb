@@ -1,5 +1,6 @@
 require_relative 'helpers'
 require_relative 'adaptibrew'
+require_relative 'slacker'
 
 include Helpers
 
@@ -22,6 +23,10 @@ class Brewer
   def wait(time=30)
     sleep(time)
     self
+  end
+
+  def ping(message="ping at #{Time.now}")
+    $slack.ping(message)
   end
 
   def say(message="done")
