@@ -76,7 +76,7 @@ class Brewer
 
   def get_relays_status
     script("get_relay_status_test")
-    @out.select{ |i| i[/\relay status bytestring$/] }.split('\n')
+    puts @out.first.split('\n')
   end
 
 end
