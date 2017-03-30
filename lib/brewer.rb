@@ -30,6 +30,7 @@ class Brewer
     $slack.ping(message)
   end
 
+  # Only works on Mac :(
   def say(message="done")
     system("say #{message}")
   end
@@ -109,12 +110,12 @@ class Brewer
     confirm ? nil : abort
 
     relay(2, 1)
-    puts "RIMS relay is on"
+    puts "RIMS relay is now on"
 
     pump(1)
-    puts "Pump is on"
+    puts "Pump is now on"
 
-    brewer.wait(30)
+    wait(30)
     puts "Waiting for 30 seconds"
 
     print "Is the strike water circulating well? "
