@@ -15,13 +15,14 @@ if !File.file?('.slack.yml')
   store.transaction do
     store['webhook_url'] = webhook_url
   end
+
+  # Here's a comment in .slack.yml so if you find it by accident you'll know what it does
+  File.open(".slack.yml", 'a') do |file|
+    file.puts "# This is the slack configuration file for the brewer gem"
+    file.puts "# You can delete this file and brewer will re-create it on start-up"
+  end
 end
 
-# Here's a commnt in .slack.yml so if you find it by accident you'll know what it does
-File.open(".slack.yml", 'a') do |file|
-  file.puts "# This is the slack configuration file for the brewer gem"
-  file.puts "# You can delete this file and brewer will re-create it on start-up"
-end
 
 # finally, start up a global variable for the brewer class to use
 # A full `Slacker` class is not needed, since this only does one thing
