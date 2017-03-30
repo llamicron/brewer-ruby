@@ -48,7 +48,7 @@ class Brewer
     set_pump(0)
     set_relay(2, 1)
     get_relays_status
-    # get_relay_status(2)
+    get_relay_status(2)
   end
 
   def set_pump(state=0)
