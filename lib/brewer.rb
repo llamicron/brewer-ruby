@@ -31,7 +31,6 @@ class Brewer
 
   # Clears the @out array
   # Writes current @out to log
-  # This is why the prod log is changed when tests are run
   def clear
     write_log(@log, @out)
     @out = []

@@ -7,7 +7,7 @@ task default: %w[spec]
 
 # Unit testing
 # You can specify a specific test case to use
-# Ex: rake test['brewer']
+# rake spec SPEC=spec/adaptibrew_spec.rb SPEC_OPTS="-e \"#new\""
 task :spec, [:tc] do |t, tc|
   RSpec::Core::RakeTask.new(:spec)
 end

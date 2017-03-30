@@ -37,4 +37,11 @@ class Adaptibrew
     self
   end
 
+  def present?
+    if Dir.exists?('adaptibrew')
+      return true
+    end
+    false
+  end
+
 end

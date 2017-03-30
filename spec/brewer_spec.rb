@@ -8,7 +8,10 @@ describe Brewer do
 
   describe "#new" do
     it "returns a brewer object" do
-      expect(@brewer).to be_an_instance_of Brewer
+      expect(Brewer.new).to be_an_instance_of Brewer
+    end
+    it "does not accept args" do
+      expect { Brewer.new('heres an arg') }.to raise_exception(ArgumentError)
     end
   end
 
