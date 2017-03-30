@@ -99,6 +99,7 @@ class Brewer
 
     @out.shift(4)
     @out.unshift("Boot successful")
+    puts @out[0] + "!"
     self
   end
 
@@ -116,7 +117,7 @@ class Brewer
     puts "Pump is now on"
 
     wait(30)
-    puts "Waiting for 30 seconds"
+    puts "Waiting for 30 seconds (ctrl-c to cancel)"
 
     print "Is the strike water circulating well? "
     confirm ? nil : abort
