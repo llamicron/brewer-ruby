@@ -47,8 +47,8 @@ class Brewer
     pid(0)
     pump(0)
     relay(2, 1)
-    relays_status
-    \relay_status(2)
+    all_relays_status
+    relay_status(2)
   end
 
   def pump(state=0)
@@ -76,7 +76,7 @@ class Brewer
     self
   end
 
-  def relays_status
+  def all_relays_status
     script("get_relay_status_test")
     puts @out.first.split('\n')
   end
