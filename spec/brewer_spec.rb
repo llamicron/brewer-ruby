@@ -70,4 +70,16 @@ describe Brewer do
     end
   end
 
+  describe "set_relay" do
+    it "turns the relay on" do
+      @brewer.set_relay(2, 1)
+      expect(@brewer.out.include?("relay 2 on"))
+    end
+
+    it "turns the relay off" do
+      @brewer.set_relay(2, 0)
+      expect(@brewer.out.include?("relay 2 off"))
+    end
+  end
+
 end

@@ -45,5 +45,8 @@ class Brewer
   def set_pump(state="off")
     script("set_pump_#{state}")
   end
-  
+
+  def set_relay(relay, state)
+    script("set_relay", "#{relay} #{state}")
+  end
 end
