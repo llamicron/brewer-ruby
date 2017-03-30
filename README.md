@@ -1,4 +1,4 @@
-# Brewer
+# Brewer [![Build Status](https://travis-ci.org/llamicron/brewer.svg?branch=master)](https://travis-ci.org/llamicron/brewer)
 ### A Ruby gem for [adaptiman/adaptibrew](http://github.com/adaptiman/adaptibrew)
 
 # Disclaimer
