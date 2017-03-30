@@ -58,14 +58,14 @@ describe Brewer do
   describe "set_pump" do
     # If the pump is already on it does nothing
     it "turns the pump on" do
-      @brewer.set_pump('on')
+      @brewer.set_pump(1)
       @brewer.wait(2)
       expect(@brewer.out.include?("pump on")).to be true
     end
 
     # If the pump is already off it does nothing
     it "turns the pump off" do
-      @brewer.set_pump('off')
+      @brewer.set_pump(0)
       expect(@brewer.out.include?("pump off")).to be true
     end
   end

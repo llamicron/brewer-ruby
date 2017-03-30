@@ -54,4 +54,14 @@ class Brewer
   def set_relay(relay, state)
     script("set_relay", "#{relay} #{state}")
   end
+
+  def set_pid(state=0)
+    if state = 1
+      state_string = "on"
+    else
+      state_string = "off"
+    end
+    script("set_pid_#{state_string}")
+  end
+
 end
