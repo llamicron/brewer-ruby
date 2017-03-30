@@ -116,8 +116,8 @@ class Brewer
     pump(1)
     puts "Pump is now on"
 
-    wait(30)
     puts "Waiting for 30 seconds (ctrl-c to cancel)"
+    wait(30)
 
     print "Is the strike water circulating well? "
     confirm ? nil : abort
