@@ -10,6 +10,11 @@ describe Brewer do
     Adaptibrew.new.refresh
   end
 
+  after :all do
+    # in case something goes wrong, everything needs to be reset
+    @brewer.turnPumpOff
+  end
+
   describe "#new" do
     it "returns a brewer object" do
       expect(Brewer.new).to be_an_instance_of Brewer
@@ -50,18 +55,17 @@ describe Brewer do
     end
   end
 
-  describe "turnPumpOn" do
+  describe "set_pump" do
     # If the pump is already on it does nothing
     it "turns the pump on" do
-      @brewer.turnPumpOn
+      @brewer.set_pump('on')
+      @brewer.wait(2)
       expect(@brewer.out.include?("pump on")).to be true
     end
-  end
 
-  describe "turnPumpOff" do
     # If the pump is already off it does nothing
     it "turns the pump off" do
-      @brewer.turnPumpOff
+      @brewer.set_pump('off')
       expect(@brewer.out.include?("pump off")).to be true
     end
   end
