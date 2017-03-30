@@ -44,9 +44,11 @@ class Brewer
 
   # This should be run on system power on
   def power_up
-    # set_pid(0)
-    # set_pump(0)
-    # set_relay(2, 1)
+    set_pid(0)
+    set_pump(0)
+    set_relay(2, 1)
+    get_relays_status
+    # get_relay_status(2)
   end
 
   def set_pump(state=0)
@@ -77,6 +79,11 @@ class Brewer
   def get_relays_status
     script("get_relay_status_test")
     puts @out.first.split('\n')
+  end
+
+  def get_relay_status(relay)
+    script("get_relay_status", "#{relay}")
+    puts @out.first
   end
 
 end
