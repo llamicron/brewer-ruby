@@ -69,4 +69,25 @@ describe Adaptibrew do
 
   end
 
+  describe ".present?" do
+    context "when the repo is present" do
+      let(:adaptibrew) { Adaptibrew.new }
+      before { adaptibrew.refresh }
+      specify { expect(Dir.exists?('adaptibrew')).to be true }
+
+      it "returns true" do
+        expect(@adaptibrew.present?).to be true
+      end
+    end
+
+    context "when the repo is not present" do
+      let(:adaptibrew) { Adaptibrew.new }
+      before { adaptibrew.clear }
+      specify { expect(Dir.exists?('adaptibrew')).to be false }
+      it "returns false" do
+        expect(@adaptibrew.present?).to be false
+      end
+    end
+  end
+
 end
