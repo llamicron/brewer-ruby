@@ -49,10 +49,12 @@ class Brewer
       state_string = "off"
     end
     script("set_pump_#{state_string}")
+    self
   end
 
   def set_relay(relay, state)
     script("set_relay", "#{relay} #{state}")
+    self
   end
 
   def set_pid(state=0)
@@ -62,6 +64,7 @@ class Brewer
       state_string = "off"
     end
     script("set_pid_#{state_string}")
+    self
   end
 
 end
