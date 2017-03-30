@@ -42,8 +42,13 @@ class Brewer
 
   # Adaptibrew methods
 
-  def set_pump(state="off")
-    script("set_pump_#{state}")
+  def set_pump(state=0)
+    if state = 1
+      state_string = "on"
+    else
+      state_string = "off"
+    end
+    script("set_pump_#{state_string}")
   end
 
   def set_relay(relay, state)
