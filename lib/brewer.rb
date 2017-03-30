@@ -17,6 +17,8 @@ class Brewer
 
   public
 
+  # General methods
+
   def wait(time=30)
     sleep(time)
     self
@@ -37,4 +39,14 @@ class Brewer
     self
   end
 
+
+  # Adaptibrew methods
+
+  def turnPumpOn
+    script('set_pump_on')
+  end
+
+  def turnPumpOff
+    script('set_pump_off')
+  end
 end
