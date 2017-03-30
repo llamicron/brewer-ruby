@@ -93,11 +93,11 @@ class Brewer
   # Procedures
 
   def boot
-    pid(0)
-    pump(0)
-    relay(2, 1)
-    all_relays_status
-    relay_status(2)
+    # These are the states required for starting. Should be called on boot.
+    pid(0).pump(0).relay(2, 1).all_relays_status.relay_status(2)
+
+    @out.shift(4)
+    @out.unshift("Boot successful")
     self
   end
 
