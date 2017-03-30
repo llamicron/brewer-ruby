@@ -11,7 +11,7 @@ class Adaptibrew
   def clone(path=nil)
     raise "🛑  Cannot clone, no network connection" unless network?
     if !Dir.exists?('adaptibrew')
-      Git.clone('https://github.com/adaptiman/adaptibrew.git', 'adaptibrew', :path => path)
+      Git.clone('https://github.com/llamicron/adaptibrew.git', 'adaptibrew', :path => path)
     end
     self
   end
