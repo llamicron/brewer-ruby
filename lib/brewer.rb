@@ -42,6 +42,13 @@ class Brewer
 
   # Adaptibrew methods
 
+  # This should be run on system power on
+  def power_up
+    # set_pid(0)
+    # set_pump(0)
+    # set_relay(2, 1)
+  end
+
   def set_pump(state=0)
     if state == 1
       state_string = "on"
@@ -65,6 +72,10 @@ class Brewer
     end
     script("set_pid_#{state_string}")
     self
+  end
+
+  def get_relays_status
+    script("get_relay_status_test")
   end
 
 end
