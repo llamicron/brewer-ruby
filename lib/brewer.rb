@@ -81,11 +81,13 @@ class Brewer
     script("get_relay_status_test")
     puts @out.first.split('\n')
     @out.shift
+    self
   end
 
   def relay_status(relay)
     script("get_relay_status", "#{relay}")
     puts @out.first
+    self
   end
 
   # Procedures
@@ -96,6 +98,7 @@ class Brewer
     relay(2, 1)
     all_relays_status
     relay_status(2)
+    self
   end
 
   def heat_strike_water
@@ -117,6 +120,7 @@ class Brewer
     print "Is the strike water circulating well? "
     confirm ? nil : abort
 
+    self
   end
 
 end
