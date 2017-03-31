@@ -31,7 +31,7 @@ class Brewer
   def ping(message="ping at #{Time.now}")
     require_relative 'slacker'
     $slack.ping(message)
-  end
+  endb
 
   # Only works on Mac :(
   def say(message="done")
@@ -56,9 +56,9 @@ class Brewer
   # This lil' divider is default for large return blocks
   def echo(string=nil)
     if string == nil
-      return @out.first
+      puts @out.first
     end
-    string
+    puts string
   end
 
 
@@ -68,9 +68,15 @@ class Brewer
   def pump(state=0)
     if state == 1
       script("set_pump_on")
+      echo
       return true
     else
+      if pid['pid_running'] == "True"
+        pid(0)
+        echo
+      end
       script("set_pump_off")
+      echo
       return true
     end
   end
@@ -126,13 +132,15 @@ class Brewer
 
   def relay_status(relay)
     raise "Relay number needs to be an integer" unless relay.is_a? Integer
-    return script("get_relay_status", "#{relay}")
+    script("get_relay_status", "#{relay}")
+    return @out.first.split('\n')
   end
 
   def watch
-    until pv.out.first.to_i == sv.out.first.to_i do
+    until pv.to_i == sv.to_i do
       wait(8)
     end
+    true
   end
 
   # WaterVolInQuarts, GrainMassInPounds, GrainTemp, MashTemp
