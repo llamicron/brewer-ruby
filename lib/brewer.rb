@@ -59,10 +59,11 @@ class Brewer
   def echo(string=nil)
     if string == nil
       puts @out.first
+      return @out.first
     else
       puts string
+      return string
     end
-    self
   end
 
 
@@ -161,13 +162,13 @@ class Brewer
     if desired_mash_temp == ""
       desired_mash_temp = 150
     end
-    @temps['mash'] = desired_mash_temp
+    @temps['desired_mash'] = desired_mash_temp
 
     # this is where the magic happens
     script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}")
     @temps['strike_water_temp'] = @out.first.to_i
     sv(@out.first.to_i)
-    puts "SV has been set for #{echo} degrees"
+    puts "SV has been set to #{sv.echo} degrees"
     clear
   end
 
