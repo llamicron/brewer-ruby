@@ -67,17 +67,13 @@ class Brewer
 
   def pump(state=0)
     if state == 1
-      script("set_pump_on")
-      print "pump on"
-      return true
+      return script("set_pump_on")
     elsif state == 0
       if pid['pid_running'] == "True"
         pid(0)
         echo
       end
-      script("set_pump_off")
-      print "pump off"
-      return true
+      return script("set_pump_off")
     end
   end
 
@@ -94,12 +90,9 @@ class Brewer
     if state == 1
       script('set_pid_on')
       pump(1)
-      puts "Pump and PID are now on"
-      return true
+      return "Pump and PID are now on"
     elsif state == 0
-      script("set_pid_off")
-      puts "PID is now off"
-      return true
+      return script("set_pid_off")
     end
 
     true
