@@ -14,9 +14,8 @@ class Adaptibrew
   # If used in IRB, Ripl, etc. it will clone into the directory IRB was started in
   def clone
     raise "🛑  Cannot clone, no network connection" unless network?
-    if !Dir.exists?(@install_dir)
-      # The :path part makes zero sense
-      Git.clone('https://github.com/llamicron/adaptibrew.git', 'adaptibrew', :path => Dir.home + "/.brewer/adaptibrew")
+    if !Dir.exists?(@install_dir + "adaptibrew")
+      Git.clone('https://github.com/llamicron/adaptibrew.git', 'adaptibrew', :path => @install_dir)
     end
     self
   end
@@ -31,7 +30,7 @@ class Adaptibrew
       end
     end
     # :nocov:
-    FileUtils.rm_rf(@install_dir + 'adaptibrew/')
+    FileUtils.rm_rf(@install_dir + 'adaptibrew')
     self
   end
 
