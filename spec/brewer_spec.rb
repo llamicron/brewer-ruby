@@ -77,7 +77,7 @@ describe Brewer do
     end
 
     it "turns the relay off" do
-      expect(@brewer.relay(2, 0))to eq("relay 2 off")
+      expect(@brewer.relay(2, 0)).to eq("relay 2 off")
       @brewer.wait(7)
     end
   end
