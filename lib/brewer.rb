@@ -208,7 +208,7 @@ class Brewer
 
     puts "Waiting for #{time} seconds for strike water to start circulating"
     puts "(ctrl-c to stop now)"
-    wait(time)
+    wait(time.to_i)
 
     print "Is the strike water circulating well? "
     confirm ? nil : abort
