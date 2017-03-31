@@ -200,7 +200,12 @@ class Brewer
     pump(1)
     puts "Pump is now on"
 
-    time = 30
+    print "How long do you want to wait for the water to start circulating? (30) "
+    time = gets.chomp
+    if time == ""
+      time = 30
+    end
+
     puts "Waiting for #{time} seconds for strike water to start circulating"
     puts "(ctrl-c to stop now)"
     wait(time)
