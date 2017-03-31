@@ -112,6 +112,12 @@ class Brewer
     self
   end
 
+  def pv
+    script('get_pv')
+    puts "PV is " + @out.first
+  end
+
+
   # Procedures
 
   def boot
