@@ -72,13 +72,12 @@ class Brewer
   def pid(state=nil)
     case state
     when 1
-      # script("set_pid_on")
-      puts "turning on PID"
+      script("set_pid_on")
     when 0
-      # script("set_pid_off")
-      puts "turning off PID"
+      script("set_pid_off")
     else
-      if script('is_pid_running')
+      script('is_pid_running')
+      if @out.first
         puts "PID is running"
       else
         puts "PID is not running"
@@ -96,6 +95,7 @@ class Brewer
   end
 
   def relay_status(relay)
+    raise "Relay number needs to be an integer" unless relay.is_a? Integer
     script("get_relay_status", "#{relay}")
     puts @out.first
     self
