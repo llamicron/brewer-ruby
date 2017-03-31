@@ -7,14 +7,14 @@ include Helpers
 class Brewer
 
   attr_reader :base_path
-  attr_accessor :out, :log
+  attr_accessor :out, :log, :temps
 
   def initialize
     @base_path = Dir.pwd
     # Output of adaptibrew
     @out = []
     @log = @base_path + '/logs/output'
-    @strike_water_temp = {}
+    @temps = {}
   end
 
   public
@@ -81,7 +81,9 @@ class Brewer
       script("is_pid_running")
       puts "PID is running? " + @out.first
       sv
+      puts @out.first
       pv
+      puts @out.first
     end
 
     if state == 1
@@ -113,34 +115,32 @@ class Brewer
     if temp
       raise "Temperature input needs to be an integer" unless temp.is_a? Integer
       script('set_sv', temp)
-      puts "SV set to #{temp}"
     else
       script('get_sv')
-      puts "SV is " + @out.first
     end
     self
   end
 
   def pv
     script('get_pv')
-    puts "PV is " + @out.first
     self
   end
 
   # WaterVolInQuarts, GrainMassInPounds, GrainTemp, MashTemp
   def get_strike_temp
-    print "Input amount of water in quarts: "
+    print "Input ambount of water in quarts: "
     water = gets.chomp
 
     print "Input amount of grain in lbs: "
     grain = gets.chomp
 
     pv
+    puts @out.first
     print "Input current grain temp (return for default above): "
     grain_temp = gets.chomp
     if grain_temp == ""
-      grain_temp = pv
-      grain_temp = 60
+      pv
+      grain_temp = @out.first.to_i
     end
 
     print "Input desired mash temp (150): "
@@ -148,12 +148,12 @@ class Brewer
     if desired_mash_temp == ""
       desired_mash_temp = 150
     end
+    $temps['mash_temp'] = desired_mash_temp
 
     script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}")
     sv(@out.first.to_i)
     puts @out.first
   end
-
 
   # Procedures
 
@@ -188,12 +188,12 @@ class Brewer
     confirm ? nil : abort
 
 
-
     print "Desired mash temp: "
     sv(gets.chomp)
 
-    @strike_water_temp[Time.now] = pv
-    puts "current strike water temp is #{pv}. Saved."
+    pv
+    @temp['starting_strike_temp'] = @out.first.to_i
+    puts "current strike water temp is #{@out.first}. Saved."
     puts "Warning: if you exit this brewer shell, the strike water temp will be lost"
 
     # calculate strike temp
