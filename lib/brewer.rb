@@ -149,12 +149,14 @@ class Brewer
     if desired_mash_temp == ""
       desired_mash_temp = 150
     end
-    @temps['mash_temp'] = desired_mash_temp
+    @temps['mash'] = desired_mash_temp
 
     # this is where the magic happens
     script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}")
+    @temps['strike_water_temp'] = @out.first.to_i
     sv(@out.first.to_i)
-    echo
+    print "Mash temp should be #{echo} degrees"
+    clear
   end
 
   # Procedures
