@@ -85,10 +85,8 @@ class Brewer
       echo('----------')
       script("is_pid_running")
       puts "PID is running? " + @out.first
-      sv
-      puts @out.first
-      pv
-      puts @out.first
+      sv.echo
+      pv.echo
     end
 
     if state == 1
@@ -139,13 +137,11 @@ class Brewer
     print "Input amount of grain in lbs: "
     grain = gets.chomp
 
-    pv
-    puts @out.first
+    pv.echo
     print "Input current grain temp (return for default above): "
     grain_temp = gets.chomp
     if grain_temp == ""
-      pv
-      grain_temp = @out.first.to_i
+      grain_temp = pv.out.first.to_i
     end
 
     print "Input desired mash temp (150): "
@@ -157,7 +153,7 @@ class Brewer
 
     script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}")
     sv(@out.first.to_i)
-    puts @out.first
+    echo
   end
 
   # Procedures
@@ -196,8 +192,7 @@ class Brewer
     print "Desired mash temp: "
     sv(gets.chomp)
 
-    pv
-    @temp['starting_strike_temp'] = @out.first.to_i
+    @temp['starting_strike_temp'] = pv.out.first.to_i
     puts "current strike water temp is #{@out.first}. Saved."
     puts "Warning: if you exit this brewer shell, the strike water temp will be lost"
 
