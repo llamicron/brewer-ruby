@@ -70,7 +70,7 @@ class Brewer
       script("set_pump_on")
       echo
       return true
-    else
+    elsif state == 0
       if pid['pid_running'] == "True"
         pid(0)
         echo
@@ -151,10 +151,10 @@ class Brewer
     print "Input amount of grain in lbs: "
     grain = gets.chomp
 
-    print "Input current grain temp (#{pv.echo}): "
+    print "Input current grain temp (#{pv}): "
     grain_temp = gets.chomp
     if grain_temp == ""
-      grain_temp = pv.echo.to_i
+      grain_temp = pv.to_i
     end
 
     print "Input desired mash temp (150): "
@@ -165,10 +165,9 @@ class Brewer
     @temps['desired_mash'] = desired_mash_temp
 
     # this is where the magic happens
-    script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}")
-    @temps['strike_water_temp'] = @out.first.to_i
+    @temps['strike_water_temp'] = script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}")
     sv(echo.to_i)
-    puts "SV has been set to #{sv.echo} degrees"
+    puts "SV has been set to #{sv} degrees"
   end
 
   # Master Procedures -----------------------------------------------------
@@ -176,12 +175,16 @@ class Brewer
   def boot
     # These are the states required for starting. Should be called on boot.
     # Print PID status at end
-    pid(0).pump(0).relay($settings['rimsToMashRelay'], 1).all_relays_status.pid
+    pid(0)
+    pump(0)
+    relay($settings['rimsToMashRelay'], 1)
+    all_relays_status
+    pid
 
-    @out.shift(4)
-    @out.unshift("Boot successful")
-    puts @out[0] + "!"
-    self
+    clear
+    puts "Boot successful!"
+    @out.unshift("successful boot")
+    true
   end
 
   def heat_strike_water
@@ -205,23 +208,21 @@ class Brewer
     print "Is the strike water circulating well? "
     confirm ? nil : abort
 
-    @temps['starting_strike_temp'] = pv.out.first.to_i
-    pv
-    puts "current strike water temp is #{echo}. Saved."
+    @temps['starting_strike_temp'] = pv.to_i
+    puts "current strike water temp is #{pv}. Saved."
     puts "Warning: if you exit this brewer shell, the strike water temp will be lost"
     puts ""
     puts "--- Calculate strike temp ---"
     # this sets PID to strike temp
     get_strike_temp
     # turn on pid heater
-    # XXX: This?
     pid(1)
 
     # when strike temp is reached, ping
     watch
     ping("strike water is now at #{pv.echo} degrees")
 
-    self
+    true
   end
 
 end
