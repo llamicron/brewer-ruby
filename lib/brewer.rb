@@ -207,7 +207,7 @@ class Brewer
     end
 
     puts "Waiting for #{time} seconds for strike water to start circulating"
-    puts "(ctrl-c to stop now)"
+    puts "(ctrl-c to exit proccess now)"
     wait(time.to_i)
 
     print "Is the strike water circulating well? "
@@ -215,7 +215,6 @@ class Brewer
 
     @temps['starting_strike_temp'] = pv.to_i
     puts "current strike water temp is #{pv}. Saved."
-    puts "Warning: if you exit this brewer shell, the strike water temp will be lost"
     puts ""
     puts "--- Calculate strike temp ---"
     # this sets PID to strike temp
@@ -225,10 +224,104 @@ class Brewer
 
     # when strike temp is reached, ping
     watch
-    ping("strike water is now at #{pv.echo} degrees")
+    ping("strike water is now at #{pv.echo} degrees. Strike water heated. Maintaining temperature.")
 
     true
   end
   # :nocov:
+
+  def dough_in
+    # this will turn the pid off too
+    pump(0)
+    ping("Ready to dough in")
+  end
+
+  def mash
+    print "Enter mash temperature (#{@temps['desired_mash'].to_s}): "
+    temp = gets.chomp
+
+    if temp != ""
+      @temps['desired_mash'] = temp.to_i
+    end
+
+    sv(@temps['desired_mash'])
+
+    print "Enter mash time (3600 seconds for 1 hour): "
+    mash_time_input = gets.chomp
+
+    if mash_time_input == ""
+      mash_time = 3600
+    else
+      mash_time = mash_time_input.to_i
+    end
+
+    relay($settings['rimsToMashRelay'], 1)
+
+    pid(1)
+    pump(1)
+
+    watch
+    ping("Mash temp reached (#{pv}). Starting timer for #{mash_time} seconds")
+    wait(mash_time)
+    ping("Timer done. Mash complete. Check for starch")
+  end
+
+  def mashout
+    ping("Start heating sparge water")
+
+    print "Enter mashout temp: "
+    mashout_temp = gets.chomp.to_i
+
+    sv(mashout_temp)
+
+    ping("Heating to #{sv}")
+    watch
+    ping("Mashout temperature (#{pv}) reached. Mashout complete.")
+  end
+
+  def sparge
+    print "Is the sparge water heated to the correct temperature? "
+    confirm ? nil : abort
+
+    relay($settings['rimsToMashRelay'], 0)
+    relay($settings['spargeRelay'], 1)
+
+    puts "Waiting for 30 seconds"
+    puts "(ctrl-c to abort proccess)"
+    wait(30)
+
+    relay($settings['rimsToMashRelay'], 0)
+
+    ping("Please check the sparge balance")
+
+    puts "Waiting until intervention (y): "
+    confirm : nil ? abort
+
+    pid(0)
+    pump(0)
+
+    print "Confirm to turn off sparge relay: "
+    confirm : nil ? abort
+
+    relay($settings['spargeRelay'], 0)
+
+    ping("Sparge complete")
+  end
+
+  def top_off
+    # ???
+    relay($settings['???'], 1)
+
+    wait(15)
+
+    relay($settings['spargeRelay'], 1)
+
+    print "waiting for intervention to turn off sparge: "
+    confirm : nil ? abort
+
+    relay($settings['spargeRelay'], 0)
+
+    ping('Topping off completed')
+  end
 
 end
