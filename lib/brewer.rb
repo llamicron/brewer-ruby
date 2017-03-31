@@ -103,9 +103,11 @@ class Brewer
 
   def sv(temp=nil)
     if temp
-      puts script('set_sv', temp)
+      script('set_sv', temp)
+      puts "SV set to #{temp}"
     else
-      puts script('get_sv')
+      script('get_sv')
+      puts @out.first
     end
     self
   end
