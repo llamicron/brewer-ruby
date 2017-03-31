@@ -31,7 +31,7 @@ class Brewer
   def ping(message="ping at #{Time.now}")
     require_relative 'slacker'
     $slack.ping(message)
-  endb
+  end
 
   # Only works on Mac :(
   def say(message="done")
