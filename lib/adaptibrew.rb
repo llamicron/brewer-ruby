@@ -7,11 +7,15 @@ include Helpers
 # This is the 'manager' for the adaptibrew repo. It handles cloning and such.
 class Adaptibrew
 
+  def initialize
+    @install_dir = Dir.home + "/.brewer/"
+  end
+
   # If used in IRB, Ripl, etc. it will clone into the directory IRB was started in
-  def clone(path=nil)
+  def clone
     raise "🛑  Cannot clone, no network connection" unless network?
-    if !Dir.exists?('adaptibrew')
-      Git.clone('https://github.com/llamicron/adaptibrew.git', 'adaptibrew', :path => path)
+    if !Dir.exists?(@install_dir + "adaptibrew")
+      Git.clone('https://github.com/llamicron/adaptibrew.git', 'adaptibrew', :path => @install_dir)
     end
     self
   end
@@ -26,7 +30,7 @@ class Adaptibrew
       end
     end
     # :nocov:
-    FileUtils.rm_rf('adaptibrew')
+    FileUtils.rm_rf(@install_dir + 'adaptibrew')
     self
   end
 
@@ -38,7 +42,7 @@ class Adaptibrew
   end
 
   def present?
-    if Dir.exists?('adaptibrew')
+    if Dir.exists?(@install_dir + 'adaptibrew/')
       return true
     end
     false
