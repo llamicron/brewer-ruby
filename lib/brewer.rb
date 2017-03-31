@@ -103,10 +103,11 @@ class Brewer
 
   def sv(temp=nil)
     if temp
-      script('set_sv', temp)
+      puts script('set_sv', temp)
     else
-      script('get_sv')
+      puts script('get_sv')
     end
+    self
   end
 
   # Procedures
