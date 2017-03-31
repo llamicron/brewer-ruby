@@ -34,9 +34,11 @@ class Brewer
   end
 
   # Only works on Mac :(
+  # :nocov:
   def say(message="done")
     system("say #{message}")
   end
+  # :nocov:
 
   # Runs an adaptibrew script
   # Output will be stored in @out

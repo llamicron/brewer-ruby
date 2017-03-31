@@ -123,4 +123,19 @@ describe Brewer do
     end
   end
 
+  describe ".echo" do
+    context "when there is an argument" do
+      it "prints the arg" do
+        expect(@brewer.echo("just part of a test")).to eq("just part of a test")
+      end
+    end
+
+    context "when there is no argument" do
+      before { @brewer.pv }
+      it "prints the last output" do
+        expect(@brewer.echo).to be_an_instance_of String
+      end
+    end
+  end
+
 end
