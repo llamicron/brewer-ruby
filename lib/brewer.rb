@@ -147,11 +147,10 @@ class Brewer
     print "Input amount of grain in lbs: "
     grain = gets.chomp
 
-    pv.echo
-    print "Input current grain temp (return for default above): "
+    print "Input current grain temp (#{pv.echo}): "
     grain_temp = gets.chomp
     if grain_temp == ""
-      grain_temp = pv.out.first.to_i
+      grain_temp = pv.echo.to_i
     end
 
     print "Input desired mash temp (150): "
@@ -164,9 +163,8 @@ class Brewer
     # this is where the magic happens
     script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}")
     @temps['strike_water_temp'] = @out.first.to_i
-    sv(@out.first.to_i)
+    sv(echo.to_i)
     puts "SV has been set to #{sv.echo} degrees"
-    clear
   end
 
   # Master Procedures -----------------------------------------------------
@@ -195,9 +193,10 @@ class Brewer
     pump(1)
     puts "Pump is now on"
 
-    puts "Waiting for 30 seconds for strike water to start circulating"
+    time = 30
+    puts "Waiting for #{time} seconds for strike water to start circulating"
     puts "(ctrl-c to stop now)"
-    wait(30)
+    wait(time)
 
     print "Is the strike water circulating well? "
     confirm ? nil : abort
