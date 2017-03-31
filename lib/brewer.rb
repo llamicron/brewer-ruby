@@ -50,6 +50,11 @@ class Brewer
     self
   end
 
+  def echo(string="----------")
+    puts string
+    self
+  end
+
 
   # Adaptibrew methods
 
@@ -72,7 +77,7 @@ class Brewer
   def pid(state="status")
     if state == "status"
       script("is_pid_running")
-      puts @out.first
+      puts "PID is running? " + @out.first
     end
 
     if state == 1
@@ -107,7 +112,7 @@ class Brewer
       puts "SV set to #{temp}"
     else
       script('get_sv')
-      puts "SV is currently " + @out.first
+      puts "SV is " + @out.first
     end
     self
   end
