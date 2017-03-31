@@ -50,6 +50,7 @@ class Brewer
     self
   end
 
+  # This lil' divider is default for large return blocks
   def echo(string="----------")
     puts string
     self
@@ -129,7 +130,7 @@ class Brewer
   def boot
     # These are the states required for starting. Should be called on boot.
     # Print PID status at end
-    pid(0).pump(0).relay(2, 1).all_relays_status.pid.sv.pv
+    pid(0).pump(0).relay(2, 1).all_relays_status.echo.pid.sv.pv.echo
 
     @out.shift(4)
     @out.unshift("Boot successful")
