@@ -16,7 +16,7 @@ class Adaptibrew
     raise "🛑  Cannot clone, no network connection" unless network?
     if !Dir.exists?(@install_dir)
       # The :path part makes zero sense
-      Git.clone('https://github.com/llamicron/adaptibrew.git', 'adaptibrew', :path => Dir.home + "/.brewer/")
+      Git.clone('https://github.com/llamicron/adaptibrew.git', 'adaptibrew', :path => Dir.home + "/.brewer/adaptibrew")
     end
     self
   end
