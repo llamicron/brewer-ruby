@@ -204,11 +204,12 @@ class Brewer
     print "Is the strike water circulating well? "
     confirm ? nil : abort
 
-    @temp['starting_strike_temp'] = pv.out.first.to_i
-    puts "current strike water temp is #{pv.echo}. Saved."
+    @temps['starting_strike_temp'] = pv.out.first.to_i
+    pv
+    puts "current strike water temp is #{echo}. Saved."
     puts "Warning: if you exit this brewer shell, the strike water temp will be lost"
-
-    puts "Calculate strike temp: "
+    puts ""
+    puts "--- Calculate strike temp ---"
     # this sets PID to strike temp
     get_strike_temp
     # turn on pid heater
