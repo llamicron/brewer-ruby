@@ -5,7 +5,6 @@ describe "Settings" do
 
   before :all do
     @adaptibrew = Adaptibrew.new
-    @adaptibrew.clear
   end
 
   describe "settings" do
