@@ -141,7 +141,7 @@ class Brewer
 
   # WaterVolInQuarts, GrainMassInPounds, GrainTemp, MashTemp
   def get_strike_temp
-    print "Input ambount of water in quarts: "
+    print "Input amount of water in quarts: "
     water = gets.chomp
 
     print "Input amount of grain in lbs: "
