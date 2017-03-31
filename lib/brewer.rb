@@ -95,7 +95,8 @@ class Brewer
 
   def boot
     # These are the states required for starting. Should be called on boot.
-    pid(0).pump(0).relay(2, 1).all_relays_status.relay_status(2)
+    # Print PID status at end
+    pid(0).pump(0).relay(2, 1).all_relays_status
 
     @out.shift(4)
     @out.unshift("Boot successful")
