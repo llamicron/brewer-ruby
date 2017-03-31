@@ -8,7 +8,7 @@ include Helpers
 class Adaptibrew
 
   def initialize
-    @install_dir = Dir.home + '/.brewer/adaptibrew/'
+    @install_dir = Dir.home + '/.brewer/adaptibrew'
   end
 
   # If used in IRB, Ripl, etc. it will clone into the directory IRB was started in
