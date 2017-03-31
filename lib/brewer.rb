@@ -1,5 +1,6 @@
 require_relative 'helpers'
 require_relative 'adaptibrew'
+require_relative 'settings'
 
 include Helpers
 
@@ -130,7 +131,7 @@ class Brewer
   def boot
     # These are the states required for starting. Should be called on boot.
     # Print PID status at end
-    pid(0).pump(0).relay(2, 1).all_relays_status.echo.pid.sv.pv.echo
+    pid(0).pump(0).relay($settings['rimsToMashRelay'], 1).all_relays_status.echo.pid.sv.pv.echo
 
     @out.shift(4)
     @out.unshift("Boot successful")
