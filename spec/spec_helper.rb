@@ -8,3 +8,4 @@ SimpleCov.start
 require_relative '../lib/adaptibrew.rb'
 require_relative '../lib/brewer.rb'
 require_relative '../lib/helpers.rb'
+require_relative '../lib/settings.rb'
