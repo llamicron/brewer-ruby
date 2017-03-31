@@ -4,12 +4,12 @@ require 'adaptibrew'
 adaptibrew = Adaptibrew.new
 
 # This might not make sense, its for tests
-def get_repo_for_settings
+def get_repo_for_settings(adaptibrew)
   adaptibrew.clone
 end
 
 if !adaptibrew.present?
-  get_repo_for_settings
+  get_repo_for_settings(adaptibrew)
 end
 
 $settings = {}

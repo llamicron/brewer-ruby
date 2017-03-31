@@ -21,7 +21,7 @@ describe "Settings" do
       specify { expect(adaptibrew.present?).to be false }
 
       it "clones the repo" do
-        get_repo_for_settings
+        get_repo_for_settings(@adaptibrew)
         expect(@adaptibrew.present?).to be true
       end
     end
