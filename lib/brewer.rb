@@ -14,6 +14,7 @@ class Brewer
     # Output of adaptibrew
     @out = []
     @log = @base_path + '/logs/output'
+    @strike_water_temp = {}
   end
 
   public
@@ -126,6 +127,31 @@ class Brewer
     self
   end
 
+  # WaterVolInQuarts, GrainMassInPounds, GrainTemp, MashTemp
+  def get_strike_temp
+    print "Input amount of water in quarts: "
+    water = gets.chomp
+
+    print "Input amount of grain in lbs: "
+    grain = gets.chomp
+
+    "Input current grain temp (#{pv}): "
+    grain_temp = gets.chomp
+    if grain_temp == ""
+      grain_temp = pv
+      grain_temp = 60
+    end
+
+    print "Input desired mash temp (150): "
+    desired_mash_temp = gets.chomp
+    if desired_mash_temp == ""
+      desired_mash_temp = 150
+    end
+
+    sv(script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}"))
+    puts @out.first
+  end
+
 
   # Procedures
 
@@ -147,8 +173,8 @@ class Brewer
     print "Is the return manifold in the mash tun? "
     confirm ? nil : abort
 
-    relay(2, 1)
-    puts "RIMS relay is now on"
+    relay($settings['rimsToMashRelay'], 1)
+    puts "RIMS-to-mash relay is now on"
 
     pump(1)
     puts "Pump is now on"
@@ -158,6 +184,21 @@ class Brewer
 
     print "Is the strike water circulating well? "
     confirm ? nil : abort
+
+
+
+    print "Desired mash temp: "
+    sv(gets.chomp)
+
+    @strike_water_temp[Time.now] = pv
+    puts "current strike water temp is #{pv}. Saved."
+    puts "Warning: if you exit this brewer shell, the strike water temp will be lost"
+
+    # calculate strike temp
+
+    # set PID to strike temp
+
+    # when strike temp is reached, ping
 
     self
   end
