@@ -8,7 +8,7 @@ include Helpers
 class Adaptibrew
 
   def initialize
-    @install_dir = Dir.home + '/.brewer/'
+    @install_dir = Dir.home + '/.brewer/adaptibrew/'
   end
 
   # If used in IRB, Ripl, etc. it will clone into the directory IRB was started in
@@ -30,7 +30,7 @@ class Adaptibrew
       end
     end
     # :nocov:
-    FileUtils.rm_rf(@install_dir + "adaptibrew")
+    FileUtils.rm_rf(@install_dir)
     self
   end
 
@@ -42,7 +42,7 @@ class Adaptibrew
   end
 
   def present?
-    if Dir.exists?(@install_dir + "adaptibrew")
+    if Dir.exists?(@install_dir)
       return true
     end
     false
