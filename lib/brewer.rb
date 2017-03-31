@@ -78,7 +78,7 @@ class Brewer
     if state == 1
       script('set_pid_on')
       puts "PID is now on"
-    else
+    elsif state == 0
       script("set_pid_off")
       puts "PID is now off"
     end
