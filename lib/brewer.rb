@@ -58,9 +58,9 @@ class Brewer
   # This lil' divider is default for large return blocks
   def echo(string=nil)
     if string == nil
-      @out.first
+      return @out.first
     end
-    string
+    return string
   end
 
 
