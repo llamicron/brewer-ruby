@@ -53,8 +53,12 @@ class Brewer
   end
 
   # This lil' divider is default for large return blocks
-  def echo(string="----------")
-    puts string
+  def echo(string=nil)
+    if string == nil
+      puts @out.first
+    else
+      puts string
+    end
     self
   end
 
@@ -78,6 +82,7 @@ class Brewer
   # Turns PID on or off, or gets state if no arg is provided
   def pid(state="status")
     if state == "status"
+      echo('----------')
       script("is_pid_running")
       puts "PID is running? " + @out.first
       sv
@@ -160,7 +165,7 @@ class Brewer
   def boot
     # These are the states required for starting. Should be called on boot.
     # Print PID status at end
-    pid(0).pump(0).relay($settings['rimsToMashRelay'], 1).all_relays_status.echo.pid.echo
+    pid(0).pump(0).relay($settings['rimsToMashRelay'], 1).all_relays_status.pid
 
     @out.shift(4)
     @out.unshift("Boot successful")
