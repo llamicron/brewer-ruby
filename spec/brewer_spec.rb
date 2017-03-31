@@ -84,7 +84,7 @@ describe Brewer do
 
   describe ".pid" do
     it "turns the pid on" do
-      expect(@brewer.pid(1)).to eq("PID on")
+      expect(@brewer.pid(1)).to eq("PID and pump are now on")
       @brewer.wait(2)
     end
 
@@ -100,20 +100,20 @@ describe Brewer do
   describe ".sv" do
     context "when there is no argument" do
       it "returns the sv temp" do
-        expect(@brewer.sv).to be_an_instance_of Integer
+        expect(@brewer.sv).to be_an_instance_of String
       end
     end
 
     context "when there is an argument" do
       it "sets the sv temp" do
-        expect(@brewer.sv(150)).to be_an_instance_of Integer
+        expect(@brewer.sv(150)).to be_an_instance_of String
       end
     end
   end
 
   describe ".pv" do
     it "returns the pv" do
-      expect(@brewer.pv).to be_an_instance_of Integer
+      expect(@brewer.pv).to be_an_instance_of String
     end
   end
 
