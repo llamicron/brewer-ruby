@@ -179,7 +179,7 @@ class Brewer
     pump(0)
     relay($settings['rimsToMashRelay'], 1)
     all_relays_status
-    pid
+    puts pid
 
     clear
     puts "Boot successful!"
