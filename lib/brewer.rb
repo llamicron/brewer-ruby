@@ -19,7 +19,8 @@ class Brewer
 
   public
 
-  # General methods
+  # Brewer methods ------------------------------------------------------
+  # general utilities for the brewer class
 
   def wait(time=30)
     sleep(time)
@@ -39,6 +40,8 @@ class Brewer
 
   # Runs an adaptibrew script
   # Output will be stored in @out
+  # you may see @out.first quite a bit. This will almost always be directly after calling a script
+  # It will be set to the output of the last script. I can't just return the output because i need to return self
   def script(script, params=nil)
     @out.unshift(`python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp)
     self
@@ -63,7 +66,8 @@ class Brewer
   end
 
 
-  # Adaptibrew methods
+  # Adaptibrew methods ----------------------------------------------
+  # for working with the rig
 
   def pump(state=0)
     if state == 1
@@ -92,6 +96,8 @@ class Brewer
     if state == 1
       script('set_pid_on')
       puts "PID is now on"
+      pump(1)
+      puts "Pump is now on"
     elsif state == 0
       script("set_pid_off")
       puts "PID is now off"
@@ -129,6 +135,12 @@ class Brewer
     self
   end
 
+  def watch_temp
+    until pv.out.first.to_i == sv.out.first.to_i do
+      wait(8)
+    end
+  end
+
   # WaterVolInQuarts, GrainMassInPounds, GrainTemp, MashTemp
   def get_strike_temp
     print "Input ambount of water in quarts: "
@@ -155,12 +167,12 @@ class Brewer
     script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}")
     @temps['strike_water_temp'] = @out.first.to_i
     sv(@out.first.to_i)
-    print "Mash temp should be #{echo} degrees"
+    puts "SV has been set for #{echo} degrees"
     clear
   end
 
-  # Procedures
-
+  # Master Procedures -----------------------------------------------------
+  # The main steps in the brewing proccess
   def boot
     # These are the states required for starting. Should be called on boot.
     # Print PID status at end
@@ -185,25 +197,27 @@ class Brewer
     pump(1)
     puts "Pump is now on"
 
-    puts "Waiting for 30 seconds (ctrl-c to cancel)"
+    puts "Waiting for 30 seconds for strike water to start circulating"
+    puts "(ctrl-c to stop now)"
     wait(30)
 
     print "Is the strike water circulating well? "
     confirm ? nil : abort
 
-
-    print "Desired mash temp: "
-    sv(gets.chomp)
-
     @temp['starting_strike_temp'] = pv.out.first.to_i
-    puts "current strike water temp is #{@out.first}. Saved."
+    puts "current strike water temp is #{pv.echo}. Saved."
     puts "Warning: if you exit this brewer shell, the strike water temp will be lost"
 
-    # calculate strike temp
-
-    # set PID to strike temp
+    puts "Calculate strike temp: "
+    # this sets PID to strike temp
+    get_strike_temp
+    # turn on pid heater
+    # XXX: This?
+    pid(1)
 
     # when strike temp is reached, ping
+    watch_temp
+    ping("strike water is now at #{pv.echo} degrees")
 
     self
   end
