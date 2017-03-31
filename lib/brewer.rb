@@ -103,11 +103,12 @@ class Brewer
 
   def sv(temp=nil)
     if temp
+      raise "Temperature input needs to be an integer" unless temp.is_a? Integer
       script('set_sv', temp)
       puts "SV set to #{temp}"
     else
       script('get_sv')
-      puts @out.first
+      puts "SV is currently " + @out.first
     end
     self
   end
