@@ -59,8 +59,10 @@ class Brewer
   def echo(string=nil)
     if string == nil
       puts @out.first
+      return @out.first
     end
     puts string
+    return string
   end
 
 
