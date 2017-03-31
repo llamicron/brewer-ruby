@@ -182,47 +182,57 @@ class Brewer
 
     clear
     puts "Boot successful!"
-    @out.unshift("successful boot")
+    @out.unshift("successful boot at #{Time.now}")
     true
   end
 
   # :nocov:
   def heat_strike_water
+    # Confirm strike water is in the mash tun
     print "Is the strike water in the mash tun? "
+    # -> response
     confirm ? nil : abort
 
+    # confirm return manifold is in the mash tun
     print "Is the return manifold in the mash tun? "
+    # -> response
     confirm ? nil : abort
 
+    # confirm RIMS relay is on
     relay($settings['rimsToMashRelay'], 1)
     puts "RIMS-to-mash relay is now on"
 
+    # turn on pump
     pump(1)
     puts "Pump is now on"
 
+    # wait ~30 seconds
     print "How long do you want to wait for the water to start circulating? (30) "
     time = gets.chomp
     if time == ""
       time = 30
     end
-
     puts "Waiting for #{time} seconds for strike water to start circulating"
     puts "(ctrl-c to exit proccess now)"
     wait(time.to_i)
 
+    # confirm that strike water is circulating well
     print "Is the strike water circulating well? "
+    # -> response
     confirm ? nil : abort
 
-    @temps['starting_strike_temp'] = pv.to_i
-    puts "current strike water temp is #{pv}. Saved."
-    puts ""
-    puts "--- Calculate strike temp ---"
-    # this sets PID to strike temp
+
+    # calculate strike temp & set PID to strike temp
+    # this sets PID SV to calculated strike temp automagically
     get_strike_temp
     # turn on pid heater
     pid(1)
 
-    # when strike temp is reached, ping
+    # measure current strike water temp and save
+    @temps['starting_strike_temp'] = pv.to_i
+    puts "current strike water temp is #{pv}. Saved."
+
+    # when strike temp is reached, ping slack
     watch
     ping("strike water is now at #{pv.echo} degrees. Strike water heated. Maintaining temperature.")
 
