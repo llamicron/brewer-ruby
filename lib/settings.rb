@@ -1,6 +1,8 @@
 # This just parses the adaptibrew/settings.py
 require 'adaptibrew'
 
+adaptibrew = Adaptibrew.new
+
 if !adaptibrew.present?
   adaptibrew.clone
 end
