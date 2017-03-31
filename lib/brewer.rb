@@ -151,6 +151,7 @@ class Brewer
     end
     $temps['mash_temp'] = desired_mash_temp
 
+    # this is where the magic happens
     script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}")
     sv(@out.first.to_i)
     echo
