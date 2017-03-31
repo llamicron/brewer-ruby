@@ -2,7 +2,7 @@ require 'rake'
 
 Gem::Specification.new do |s|
   s.name               = "brewer"
-  s.version            = "0.0.45"
+  s.version            = "0.0.46"
   s.default_executable = "brewer"
 
   s.authors = ["Luke Sweeney"]

@@ -76,11 +76,6 @@ class Brewer
     self
   end
 
-  def relay(relay, state)
-    script("set_relay", "#{relay} #{state}")
-    self
-  end
-
   # Turns PID on or off, or gets state if no arg is provided
   def pid(state="status")
     if state == "status"
@@ -104,20 +99,6 @@ class Brewer
     self
   end
 
-  def all_relays_status
-    script("get_relay_status_test")
-    puts @out.first.split('\n')
-    @out.shift
-    self
-  end
-
-  def relay_status(relay)
-    raise "Relay number needs to be an integer" unless relay.is_a? Integer
-    script("get_relay_status", "#{relay}")
-    puts @out.first
-    self
-  end
-
   def sv(temp=nil)
     if temp
       raise "Temperature input needs to be an integer" unless temp.is_a? Integer
@@ -130,6 +111,25 @@ class Brewer
 
   def pv
     script('get_pv')
+    self
+  end
+
+  def relay(relay, state)
+    script("set_relay", "#{relay} #{state}")
+    self
+  end
+
+  def all_relays_status
+    script("get_relay_status_test")
+    puts @out.first.split('\n')
+    @out.shift
+    self
+  end
+
+  def relay_status(relay)
+    raise "Relay number needs to be an integer" unless relay.is_a? Integer
+    script("get_relay_status", "#{relay}")
+    puts @out.first
     self
   end
 
