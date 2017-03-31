@@ -68,6 +68,15 @@ describe Brewer do
     it "turns the pump off" do
       expect(@brewer.pump(0)).to eq("pump off")
     end
+
+    # cant really test this one...
+    context "when the pid is also on" do
+      # This turns on both pump and pid
+      before { @brewer.pid(1) }
+      it "turns the pump and pid off" do
+        expect(@brewer.pump(0)).to eq("pump off")
+      end
+    end
   end
 
   describe ".relay" do
