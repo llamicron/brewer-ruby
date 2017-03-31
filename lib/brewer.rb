@@ -241,9 +241,11 @@ class Brewer
   # :nocov:
 
   def dough_in
-    # this will turn the pid off too
+    # turn pump off
+  	# turn PID off
     pump(0)
     ping("Ready to dough in")
+    # pour in grain
   end
 
   def mash
