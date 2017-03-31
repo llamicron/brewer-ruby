@@ -24,7 +24,7 @@ class Brewer
 
   def wait(time=30)
     sleep(time)
-    self
+    true
   end
 
   # Sends a slack message in #brewing
@@ -44,23 +44,21 @@ class Brewer
   # It will be set to the output of the last script. I can't just return the output because i need to return self
   def script(script, params=nil)
     @out.unshift(`python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp)
-    self
+    @out.first
   end
 
   # Clears the @out array
   # Writes current @out to log
   def clear
-    write_log(@log, @out)
     @out = []
-    self
   end
 
   # This lil' divider is default for large return blocks
   def echo(string=nil)
     if string == nil
-      return @out.first
+      puts @out.first
     end
-    string
+    puts string
   end
 
 
@@ -69,74 +67,73 @@ class Brewer
 
   def pump(state=0)
     if state == 1
-      script("set_pump_on")
-    else
-      script("set_pump_off")
+      return script("set_pump_on")
+    elsif state == 0
+      if pid['pid_running'] == "True"
+        pid(0)
+        echo
+      end
+      return script("set_pump_off")
     end
-    self
   end
 
   # Turns PID on or off, or gets state if no arg is provided
   def pid(state="status")
     if state == "status"
-      echo('----------')
-      script("is_pid_running")
-      puts "PID is running? " + echo
-      sv.echo
-      pv.echo
+      return {
+        'pid_running' => script("is_pid_running"),
+        'sv_temp' => sv,
+        'pv_temp' => pv
+      }
     end
 
     if state == 1
       script('set_pid_on')
-      puts "PID is now on"
       pump(1)
-      puts "Pump is now on"
+      return "Pump and PID are now on"
     elsif state == 0
-      script("set_pid_off")
-      puts "PID is now off"
+      return script("set_pid_off")
     end
 
-    self
+    true
   end
 
   def sv(temp=nil)
     if temp
       raise "Temperature input needs to be an integer" unless temp.is_a? Integer
-      script('set_sv', temp)
+      return script('set_sv', temp)
     else
-      script('get_sv')
+      return script('get_sv')
     end
-    self
+    true
   end
 
   def pv
     script('get_pv')
-    self
   end
 
   def relay(relay, state)
     script("set_relay", "#{relay} #{state}")
-    self
   end
 
   def all_relays_status
     script("get_relay_status_test")
     puts @out.first.split('\n')
     @out.shift
-    self
+    true
   end
 
   def relay_status(relay)
     raise "Relay number needs to be an integer" unless relay.is_a? Integer
     script("get_relay_status", "#{relay}")
-    puts @out.first
-    self
+    return @out.first.split('\n')
   end
 
   def watch
-    until pv.out.first.to_i == sv.out.first.to_i do
+    until pv.to_i == sv.to_i do
       wait(8)
     end
+    true
   end
 
   # WaterVolInQuarts, GrainMassInPounds, GrainTemp, MashTemp
@@ -147,10 +144,10 @@ class Brewer
     print "Input amount of grain in lbs: "
     grain = gets.chomp
 
-    print "Input current grain temp (#{pv.echo}): "
+    print "Input current grain temp (#{pv}): "
     grain_temp = gets.chomp
     if grain_temp == ""
-      grain_temp = pv.echo.to_i
+      grain_temp = pv.to_i
     end
 
     print "Input desired mash temp (150): "
@@ -161,10 +158,9 @@ class Brewer
     @temps['desired_mash'] = desired_mash_temp
 
     # this is where the magic happens
-    script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}")
-    @temps['strike_water_temp'] = @out.first.to_i
+    @temps['strike_water_temp'] = script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}")
     sv(echo.to_i)
-    puts "SV has been set to #{sv.echo} degrees"
+    puts "SV has been set to #{sv} degrees"
   end
 
   # Master Procedures -----------------------------------------------------
@@ -172,12 +168,16 @@ class Brewer
   def boot
     # These are the states required for starting. Should be called on boot.
     # Print PID status at end
-    pid(0).pump(0).relay($settings['rimsToMashRelay'], 1).all_relays_status.pid
+    pid(0)
+    pump(0)
+    relay($settings['rimsToMashRelay'], 1)
+    all_relays_status
+    puts pid
 
-    @out.shift(4)
-    @out.unshift("Boot successful")
-    puts @out[0] + "!"
-    self
+    clear
+    puts "Boot successful!"
+    @out.unshift("successful boot")
+    true
   end
 
   def heat_strike_water
@@ -193,31 +193,34 @@ class Brewer
     pump(1)
     puts "Pump is now on"
 
-    time = 30
+    print "How long do you want to wait for the water to start circulating? (30) "
+    time = gets.chomp
+    if time == ""
+      time = 30
+    end
+
     puts "Waiting for #{time} seconds for strike water to start circulating"
     puts "(ctrl-c to stop now)"
-    wait(time)
+    wait(time.to_i)
 
     print "Is the strike water circulating well? "
     confirm ? nil : abort
 
-    @temps['starting_strike_temp'] = pv.out.first.to_i
-    pv
-    puts "current strike water temp is #{echo}. Saved."
+    @temps['starting_strike_temp'] = pv.to_i
+    puts "current strike water temp is #{pv}. Saved."
     puts "Warning: if you exit this brewer shell, the strike water temp will be lost"
     puts ""
     puts "--- Calculate strike temp ---"
     # this sets PID to strike temp
     get_strike_temp
     # turn on pid heater
-    # XXX: This?
     pid(1)
 
     # when strike temp is reached, ping
     watch
     ping("strike water is now at #{pv.echo} degrees")
 
-    self
+    true
   end
 
 end
