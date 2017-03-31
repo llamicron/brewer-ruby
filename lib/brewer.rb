@@ -24,7 +24,7 @@ class Brewer
 
   def wait(time=30)
     sleep(time)
-    self
+    true
   end
 
   # Sends a slack message in #brewing
@@ -44,15 +44,13 @@ class Brewer
   # It will be set to the output of the last script. I can't just return the output because i need to return self
   def script(script, params=nil)
     @out.unshift(`python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp)
-    self
+    @out.first
   end
 
   # Clears the @out array
   # Writes current @out to log
   def clear
-    write_log(@log, @out)
     @out = []
-    self
   end
 
   # This lil' divider is default for large return blocks
@@ -70,67 +68,65 @@ class Brewer
   def pump(state=0)
     if state == 1
       script("set_pump_on")
+      return true
     else
       script("set_pump_off")
+      return true
     end
-    self
   end
 
   # Turns PID on or off, or gets state if no arg is provided
   def pid(state="status")
     if state == "status"
-      echo('----------')
-      script("is_pid_running")
-      puts "PID is running? " + echo
-      sv.echo
-      pv.echo
+      return {
+        'pid_running' => script("is_pid_running"),
+        'sv_temp' => sv,
+        'pv_temp' => pv
+      }
     end
 
     if state == 1
       script('set_pid_on')
-      puts "PID is now on"
       pump(1)
-      puts "Pump is now on"
+      puts "Pump and PID are now on"
+      return true
     elsif state == 0
       script("set_pid_off")
       puts "PID is now off"
+      return true
     end
 
-    self
+    true
   end
 
   def sv(temp=nil)
     if temp
       raise "Temperature input needs to be an integer" unless temp.is_a? Integer
-      script('set_sv', temp)
+      return script('set_sv', temp)
     else
-      script('get_sv')
+      return script('get_sv')
     end
-    self
+    true
   end
 
   def pv
     script('get_pv')
-    self
   end
 
   def relay(relay, state)
     script("set_relay", "#{relay} #{state}")
-    self
   end
 
   def all_relays_status
     script("get_relay_status_test")
     puts @out.first.split('\n')
     @out.shift
-    self
+    true
   end
 
   def relay_status(relay)
     raise "Relay number needs to be an integer" unless relay.is_a? Integer
-    script("get_relay_status", "#{relay}")
-    puts @out.first
-    self
+    return script("get_relay_status", "#{relay}")
   end
 
   def watch
