@@ -3,8 +3,13 @@ require 'adaptibrew'
 
 adaptibrew = Adaptibrew.new
 
-if !adaptibrew.present?
+# This might not make sense, its for tests
+def get_repo_for_settings
   adaptibrew.clone
+end
+
+if adaptibrew.present?
+  get_repo_for_settings
 end
 
 $settings = {}
