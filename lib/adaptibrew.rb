@@ -8,14 +8,14 @@ include Helpers
 class Adaptibrew
 
   def initialize
-    @install_dir = '/etc/brewer/adaptibrew/'
+    @install_dir = ENV['home'] + '/.brewer/'
   end
 
   # If used in IRB, Ripl, etc. it will clone into the directory IRB was started in
   def clone
     raise "🛑  Cannot clone, no network connection" unless network?
     if !Dir.exists?(@install_dir)
-      Git.clone('https://github.com/llamicron/adaptibrew.git', 'adaptibrew', :path => '/etc/brewer/')
+      Git.clone('https://github.com/llamicron/adaptibrew.git', 'adaptibrew', :path => @install_dir)
     end
     self
   end
@@ -30,7 +30,7 @@ class Adaptibrew
       end
     end
     # :nocov:
-    FileUtils.rm_rf(@install_dir)
+    FileUtils.rm_rf(@install_dir + "adaptibrew")
     self
   end
 
@@ -42,7 +42,7 @@ class Adaptibrew
   end
 
   def present?
-    if Dir.exists?(@install_dir)
+    if Dir.exists?(@install_dir + "adaptibrew")
       return true
     end
     false

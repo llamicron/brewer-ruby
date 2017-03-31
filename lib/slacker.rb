@@ -2,10 +2,10 @@ require 'slack-notifier'
 require 'yaml'
 require 'yaml/store'
 
-if !File.file?('/etc/brewer/.slack.yml')
+if !File.file?(ENV['home'] + '/.slack.yml')
 
   # this will create the file if it doesn't exists, which it doesn't in this context
-  store = YAML::Store.new '.slack.yml'
+  store = YAML::Store.new ENV['home'] + '/.slack.yml'
 
   # you can get this from your slack app integrations page
   print "Enter your Slack webhook url: "
@@ -17,7 +17,7 @@ if !File.file?('/etc/brewer/.slack.yml')
   end
 
   # Here's a comment in .slack.yml so if you find it by accident you'll know what it does
-  File.open("/etc/brewer/.slack.yml", 'a') do |file|
+  File.open(ENV['home'] + "/.slack.yml", 'a') do |file|
     file.puts "# This is the slack configuration file for the brewer gem"
     file.puts "# You can delete this file and brewer will re-create it on start-up"
   end

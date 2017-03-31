@@ -10,7 +10,7 @@ class Brewer
   attr_accessor :out, :log, :temps
 
   def initialize
-    @base_path = '/etc/brewer'
+    @base_path = ENV['home'] + '/.brewer'
     # Output of adaptibrew
     @out = []
     @log = @base_path + '/logs/output'
