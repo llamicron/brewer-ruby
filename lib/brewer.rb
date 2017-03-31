@@ -133,8 +133,8 @@ class Brewer
     self
   end
 
-  def watch(condition="pv.out.first.to_i == sv.out.first.to_i")
-    until condition do
+  def watch
+    until pv.out.first.to_i == sv.out.first.to_i do
       wait(8)
     end
   end
