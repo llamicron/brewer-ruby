@@ -8,7 +8,7 @@ def get_repo_for_settings
   adaptibrew.clone
 end
 
-if adaptibrew.present?
+if !adaptibrew.present?
   get_repo_for_settings
 end
 
