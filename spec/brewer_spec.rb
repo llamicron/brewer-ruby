@@ -15,6 +15,7 @@ describe Brewer do
     @brewer = Brewer.new
     @brewer.pump(0)
     @brewer.pid(0)
+    @brewer.boot
   end
 
   describe "#new" do
@@ -39,8 +40,7 @@ describe Brewer do
 
   describe ".script" do
     it "can run a python script and get output" do
-      @brewer.script('python_tester')
-      expect(@brewer.out.include?("it worked")).to be true
+      expect(@brewer.script('python_tester')).to eq("it worked")
     end
   end
 
@@ -60,41 +60,60 @@ describe Brewer do
   describe ".pump" do
     # If the pump is already on it does nothing
     it "turns the pump on" do
-      @brewer.pump(1)
+      expect(@brewer.pump(1)).to eq("pump on")
       @brewer.wait(2)
-      expect(@brewer.out.include?("pump on")).to be true
     end
 
     # If the pump is already off it does nothing
     it "turns the pump off" do
-      @brewer.pump(0)
-      expect(@brewer.out.include?("pump off")).to be true
+      expect(@brewer.pump(0)).to eq("pump off")
     end
   end
 
   describe ".relay" do
     it "turns the relay on" do
-      @brewer.relay(2, 1)
+      expect(@brewer.relay(2, 1)).to eq("relay 2 on")
       @brewer.wait(7)
-      expect(@brewer.out.include?("relay 2 on"))
     end
 
     it "turns the relay off" do
-      @brewer.relay(2, 0)
+      expect(@brewer.relay(2, 0))to eq("relay 2 off")
       @brewer.wait(7)
-      expect(@brewer.out.include?("relay 2 off"))
     end
   end
 
   describe ".pid" do
     it "turns the pid on" do
-      @brewer.pid(1)
-      expect(@brewer.out.include?("PID on")).to be true
+      expect(@brewer.pid(1)).to eq("PID on")
+      @brewer.wait(2)
     end
 
     it "turns the pid off" do
-      @brewer.pid(0)
-      expect(@brewer.out.include?("PID off")).to be true
+      expect(@brewer.pid(0)).to eq("PID off")
+    end
+
+    it "returns the pid status" do
+      expect(@brewer.pid).to be_an_instance_of Hash
+    end
+  end
+
+  describe ".sv" do
+    context "when there is no argument" do
+      it "returns the sv temp" do
+        expect(@brewer.sv).to be_an_instance_of Integer
+      end
+    end
+
+    context "when there is an argument" do
+      it "sets the sv temp" do
+        expect(@brewer.sv(150)).to be_an_instance_of Integer
+      end
+    end
+  end
+
+  describe ".pv" do
+    it "returns the pv" do
+      expect(@brewer.pv).to be_an_instance_of Integer
     end
   end
 

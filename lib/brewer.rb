@@ -101,15 +101,15 @@ class Brewer
   def sv(temp=nil)
     if temp
       raise "Temperature input needs to be an integer" unless temp.is_a? Integer
-      return script('set_sv', temp)
+      return script('set_sv', temp).to_i
     else
-      return script('get_sv')
+      return script('get_sv').to_i
     end
     true
   end
 
   def pv
-    script('get_pv')
+    return script('get_pv').to_i
   end
 
   def relay(relay, state)
