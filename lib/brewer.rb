@@ -135,7 +135,7 @@ class Brewer
     print "Input amount of grain in lbs: "
     grain = gets.chomp
 
-    "Input current grain temp (#{pv}): "
+    print "Input current grain temp (#{pv}): "
     grain_temp = gets.chomp
     if grain_temp == ""
       grain_temp = pv
@@ -148,7 +148,7 @@ class Brewer
       desired_mash_temp = 150
     end
 
-    sv(script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}"))
+    sv(script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}").to_i)
     puts @out.first
   end
 
