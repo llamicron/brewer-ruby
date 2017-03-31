@@ -307,13 +307,13 @@ class Brewer
     ping("Please check the sparge balance")
 
     puts "Waiting until intervention (y): "
-    confirm : nil ? abort
+    confirm ? nil : abort
 
     pid(0)
     pump(0)
 
     print "Confirm to turn off sparge relay: "
-    confirm : nil ? abort
+    confirm ? nil : abort
 
     relay($settings['spargeRelay'], 0)
 
@@ -329,7 +329,7 @@ class Brewer
     relay($settings['spargeRelay'], 1)
 
     print "waiting for intervention to turn off sparge: "
-    confirm : nil ? abort
+    confirm ? nil : abort
 
     relay($settings['spargeRelay'], 0)
 
