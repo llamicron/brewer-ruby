@@ -3,25 +3,16 @@
 
 require 'ripl'
 
+require_relative "../lib/adaptibrew"
+adaptibrew = Adaptibrew.new.refresh
+# This is a bit out of order. I need the adaptibrew repo *before* i require `lib/brewer`, since it requires settings.py
 require_relative "../lib/brewer"
 require_relative "../lib/helpers"
 
 include Helpers
 
-if !network?
-  puts "Warning: You have no network connection. If you delete the adaptibrew directory, you will not be able to clone it back."
-  print "Are you sure you want to continue? "
-  confirm ? nil : abort
-end
-
 # Refresh to make sure we have the lastest version of adaptibrew
-adaptibrew = Adaptibrew.new
-if network?
-  adaptibrew.clone
-end
 brewer = Brewer.new
-
-
 
 puts "🍺  have fun 🍺"
 Ripl.start :binding => binding
