@@ -7,6 +7,8 @@ include Helpers
 # This is the 'manager' for the adaptibrew repo. It handles cloning and such.
 class Adaptibrew
 
+  attr_accessor :install_dir
+
   def initialize
     @install_dir = Dir.home + "/.brewer/"
   end

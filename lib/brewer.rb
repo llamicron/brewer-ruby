@@ -34,9 +34,11 @@ class Brewer
   end
 
   # Only works on Mac :(
+  # :nocov:
   def say(message="done")
     system("say #{message}")
   end
+  # :nocov:
 
   # Runs an adaptibrew script
   # Output will be stored in @out
@@ -57,8 +59,10 @@ class Brewer
   def echo(string=nil)
     if string == nil
       puts @out.first
+      return @out.first
     end
     puts string
+    return string
   end
 
 
@@ -94,8 +98,6 @@ class Brewer
     elsif state == 0
       return script("set_pid_off")
     end
-
-    true
   end
 
   def sv(temp=nil)
@@ -105,11 +107,10 @@ class Brewer
     else
       return script('get_sv')
     end
-    true
   end
 
   def pv
-    script('get_pv')
+    return script('get_pv')
   end
 
   def relay(relay, state)
@@ -123,20 +124,24 @@ class Brewer
     true
   end
 
+  # TODO: Fix the return value here
   def relay_status(relay)
     raise "Relay number needs to be an integer" unless relay.is_a? Integer
     script("get_relay_status", "#{relay}")
     return @out.first.split('\n')
   end
 
+  # :nocov:
   def watch
     until pv.to_i == sv.to_i do
       wait(8)
     end
     true
   end
+  # :nocov:
 
   # WaterVolInQuarts, GrainMassInPounds, GrainTemp, MashTemp
+  # :nocov:
   def get_strike_temp
     print "Input amount of water in quarts: "
     water = gets.chomp
@@ -162,6 +167,7 @@ class Brewer
     sv(echo.to_i)
     puts "SV has been set to #{sv} degrees"
   end
+  # :nocov:
 
   # Master Procedures -----------------------------------------------------
   # The main steps in the brewing proccess
@@ -180,6 +186,7 @@ class Brewer
     true
   end
 
+  # :nocov:
   def heat_strike_water
     print "Is the strike water in the mash tun? "
     confirm ? nil : abort
@@ -222,5 +229,6 @@ class Brewer
 
     true
   end
+  # :nocov:
 
 end
