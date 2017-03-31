@@ -28,4 +28,4 @@ end
 
 # finally, start up a global variable for the brewer class to use
 # A full `Slacker` class is not needed, since this only does one thing
-$slack = Slack::Notifier.new YAML.load(File.open(install_dir + '.slack.yml'))['webhook_url']
+$slack = Slack::Notifier.new YAML.load(File.open(install_dir + '/.slack.yml'))['webhook_url']
