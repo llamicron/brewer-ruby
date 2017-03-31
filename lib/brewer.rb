@@ -149,7 +149,7 @@ class Brewer
     if desired_mash_temp == ""
       desired_mash_temp = 150
     end
-    $temps['mash_temp'] = desired_mash_temp
+    @temps['mash_temp'] = desired_mash_temp
 
     # this is where the magic happens
     script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}")
