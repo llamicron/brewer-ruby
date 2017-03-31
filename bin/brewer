@@ -17,7 +17,7 @@ end
 # Refresh to make sure we have the lastest version of adaptibrew
 adaptibrew = Adaptibrew.new
 if network?
-  adaptibrew.refresh
+  adaptibrew.clone
 end
 brewer = Brewer.new
 
