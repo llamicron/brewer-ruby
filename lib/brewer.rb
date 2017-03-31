@@ -136,7 +136,7 @@ class Brewer
     grain = gets.chomp
 
     pv
-    print "Input current grain temp (nothing for default above): "
+    print "Input current grain temp (return for default above): "
     grain_temp = gets.chomp
     if grain_temp == ""
       grain_temp = pv
