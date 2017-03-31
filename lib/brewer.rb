@@ -62,11 +62,10 @@ class Brewer
 
   def pump(state=0)
     if state == 1
-      state_string = "on"
+      script("set_pump_on")
     else
-      state_string = "off"
+      script("set_pump_off")
     end
-    script("set_pump_#{state_string}")
     self
   end
 
@@ -80,6 +79,8 @@ class Brewer
     if state == "status"
       script("is_pid_running")
       puts "PID is running? " + @out.first
+      sv
+      pv
     end
 
     if state == 1
@@ -131,7 +132,7 @@ class Brewer
   def boot
     # These are the states required for starting. Should be called on boot.
     # Print PID status at end
-    pid(0).pump(0).relay($settings['rimsToMashRelay'], 1).all_relays_status.echo.pid.sv.pv.echo
+    pid(0).pump(0).relay($settings['rimsToMashRelay'], 1).all_relays_status.echo.pid.echo
 
     @out.shift(4)
     @out.unshift("Boot successful")
