@@ -147,4 +147,10 @@ describe Brewer do
     end
   end
 
+  describe ".relay_status" do
+    it "returns the status of a relay" do
+      expect(@brewer.relay_status($settings['rimsToMashRelay'])).not_to be_empty
+    end
+  end
+
 end
