@@ -40,7 +40,7 @@ class Brewer
 
   # Runs an adaptibrew script
   # Output will be stored in @out
-  # you may see @out.first quite a bit. This will almost always be directly after calling a script
+  # you may see `echo` quite a bit. This will almost always be directly after calling a script
   # It will be set to the output of the last script. I can't just return the output because i need to return self
   def script(script, params=nil)
     @out.unshift(`python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp)
@@ -60,7 +60,7 @@ class Brewer
     if string == nil
       return @out.first
     end
-    return string
+    string
   end
 
 
@@ -86,7 +86,7 @@ class Brewer
     if state == "status"
       echo('----------')
       script("is_pid_running")
-      puts "PID is running? " + @out.first
+      puts "PID is running? " + echo
       sv.echo
       pv.echo
     end
@@ -133,8 +133,8 @@ class Brewer
     self
   end
 
-  def watch_temp
-    until pv.out.first.to_i == sv.out.first.to_i do
+  def watch(condition="pv.out.first.to_i == sv.out.first.to_i")
+    until condition do
       wait(8)
     end
   end
@@ -215,7 +215,7 @@ class Brewer
     pid(1)
 
     # when strike temp is reached, ping
-    watch_temp
+    watch
     ping("strike water is now at #{pv.echo} degrees")
 
     self
