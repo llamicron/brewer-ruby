@@ -84,7 +84,7 @@ describe Brewer do
 
   describe ".pid" do
     it "turns the pid on" do
-      expect(@brewer.pid(1)).to eq("PID and pump are now on")
+      expect(@brewer.pid(1)).to eq("Pump and PID are now on")
       @brewer.wait(2)
     end
 
