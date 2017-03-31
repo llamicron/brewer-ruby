@@ -1,7 +1,13 @@
 # This just parses the adaptibrew/settings.py
+require 'adaptibrew'
+
+if !adaptibrew.present?
+  adaptibrew.clone
+end
+
 $settings = {}
 
-File.open(Dir.home + '/adaptibrew/settings.py') do |file|
+File.open(Dir.home + '/.brewer/adaptibrew/settings.py') do |file|
   file.each_line do |line|
     if line.match(/=/) == nil
       next

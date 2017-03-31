@@ -4,8 +4,6 @@
 require 'ripl'
 
 require_relative "../lib/adaptibrew"
-adaptibrew = Adaptibrew.new.refresh
-# This is a bit out of order. I need the adaptibrew repo *before* i require `lib/brewer`, since it requires settings.py
 require_relative "../lib/brewer"
 require_relative "../lib/helpers"
 
@@ -13,6 +11,7 @@ include Helpers
 
 # Refresh to make sure we have the lastest version of adaptibrew
 brewer = Brewer.new
+adaptibrew = Adaptibrew.new.refresh
 
 puts "🍺  have fun 🍺"
 Ripl.start :binding => binding
