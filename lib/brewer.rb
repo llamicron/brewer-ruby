@@ -69,19 +69,18 @@ class Brewer
   end
 
   # Turns PID on or off, or gets state if no arg is provided
-  def pid(state=nil)
-    case state
-    when 1
-      script("set_pid_on")
-    when 0
-      script("set_pid_off")
+  def pid(state="status")
+    if state == "status"
+      script("is_pid_running")
+      puts @out.first
+    end
+
+    if state == 1
+      script('set_pid_on')
+      puts "PID is now on"
     else
-      script('is_pid_running')
-      if @out.first
-        puts "PID is running"
-      else
-        puts "PID is not running"
-      end
+      script("set_pid_off")
+      puts "PID is now off"
     end
 
     self
