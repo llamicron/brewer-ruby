@@ -144,8 +144,10 @@ class Brewer
 
   def monitor
     while true do
-      ping("#{puts pid}")
-      wait(10)
+      pid.each do |k, v|
+        ping("#{k}: #{v}")
+      end
+      wait(30)
     end
   end
 
