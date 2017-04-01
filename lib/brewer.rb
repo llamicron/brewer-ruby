@@ -205,7 +205,7 @@ class Brewer
     # Print PID status at end
     pid(0)
     pump(0)
-    relay($settings['rimsToMashRelay'], 1)
+    rims_to('mash')
     all_relays_status
     puts pid
 
@@ -228,7 +228,7 @@ class Brewer
     confirm ? nil : abort
 
     # confirm RIMS relay is on
-    relay($settings['rimsToMashRelay'], 1)
+    rims_to('mash')
     puts "RIMS-to-mash relay is now on"
 
     # turn on pump
@@ -296,10 +296,10 @@ class Brewer
       mash_time = mash_time_input.to_i
     end
 
-    relay($settings['rimsToMashRelay'], 1)
+    rims_to('mash')
 
-    pid(1)
     pump(1)
+    pid(1)
 
     watch
     ping("Mash temp reached (#{pv}). Starting timer for #{mash_time} seconds")
@@ -315,7 +315,10 @@ class Brewer
 
     sv(mashout_temp)
 
-    ping("Heating to #{sv}")
+    pump(1)
+    pid(1)
+
+    ping("Heating to #{sv}... this could take a few minutes")
     watch
     ping("Mashout temperature (#{pv}) reached. Mashout complete.")
   end
@@ -324,14 +327,14 @@ class Brewer
     print "Is the sparge water heated to the correct temperature? "
     confirm ? nil : abort
 
-    relay($settings['rimsToMashRelay'], 0)
-    relay($settings['spargeRelay'], 1)
+    hlt_to('mash')
+    hlt('open')
 
     puts "Waiting for 30 seconds"
     puts "(ctrl-c to abort proccess)"
     wait(30)
 
-    relay($settings['rimsToMashRelay'], 0)
+    rims_to('boil')
 
     ping("Please check the sparge balance")
 
@@ -344,7 +347,7 @@ class Brewer
     print "Confirm to turn off sparge relay: "
     confirm ? nil : abort
 
-    relay($settings['spargeRelay'], 0)
+    hlt('close')
 
     ping("Sparge complete")
   end
