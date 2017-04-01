@@ -221,7 +221,6 @@ class Brewer
 
   # :nocov:
   def heat_strike_water
-    ping("heat-strike-water procedure started")
     puts "heat-strike-water procedure started"
     # Confirm strike water is in the mash tun
     print "Is the strike water in the mash tun? "
@@ -268,7 +267,7 @@ class Brewer
     puts "current strike water temp is #{brewer.pv}. Saved."
     puts "Heating to #{brewer.sv}"
 
-    ping("PID heater on. This may take a few minutes.")
+    ping("Strike water beginning to heat. This may take a few minutes.")
 
     # when strike temp is reached, ping slack
     watch
