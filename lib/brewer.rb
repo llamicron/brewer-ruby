@@ -296,6 +296,7 @@ class Brewer
     puts "Next step: mash"
     puts "command: brewer.mash"
     # pour in grain
+    true
   end
 
   def mash
