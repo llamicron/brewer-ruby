@@ -232,6 +232,9 @@ class Brewer
     # -> response
     confirm ? nil : abort
 
+    print "Is the mash tun valve open? "
+    confirm ? nil : abort
+
     # confirm RIMS relay is on
     rims_to('mash')
     puts "RIMS-to-mash relay is now on"
@@ -264,8 +267,8 @@ class Brewer
 
     # measure current strike water temp and save
     @temps['starting_strike_temp'] = pv.to_i
-    puts "current strike water temp is #{brewer.pv}. Saved."
-    puts "Heating to #{brewer.sv}"
+    puts "current strike water temp is #{pv}. Saved."
+    puts "Heating to #{sv}"
 
     ping("Strike water beginning to heat. This may take a few minutes.")
 
