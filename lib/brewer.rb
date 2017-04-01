@@ -147,7 +147,7 @@ class Brewer
       pid.each do |k, v|
         ping("#{k}: #{v}")
       end
-      wait(30)
+      wait(600)
     end
   end
 
