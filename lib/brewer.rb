@@ -169,6 +169,35 @@ class Brewer
   end
   # :nocov:
 
+  # Relays ----------
+  def rims_to(location)
+    if location == "mash"
+      # we ended up swapping this relay, so the name is backwards
+      relay($settings['rimsToMashRelay'], 0)
+    elsif location == "boil"
+      relay($settings['rimsToMashRelay'], 1)
+    end
+    true
+  end
+
+  def sparge_to(location)
+    if location == "mash"
+      relay($settings['spargeToMashRelay'], 0)
+    elsif location == "boil"
+      relay($settings['spargeToMashRelay'], 1)
+    end
+    true
+  end
+
+  def sparge(state)
+    if state == "open"
+      relay($settings['spargeRelay'], 1)
+    elsif state == "close"
+      relay($settings['spargeRelay'], 0)
+    end
+    true
+  end
+
   # Master Procedures -----------------------------------------------------
   # The main steps in the brewing proccess
   def boot
