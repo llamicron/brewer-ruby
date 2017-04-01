@@ -206,6 +206,7 @@ class Brewer
     pid(0)
     pump(0)
     rims_to('mash')
+    hlt_to('mash')
     all_relays_status
     puts pid
 
