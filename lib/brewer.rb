@@ -134,7 +134,7 @@ class Brewer
 
   # :nocov:
   def watch
-    until pv.to_i == sv.to_i do
+    until pv.to_f >= sv.to_f do
       wait(8)
     end
     true
@@ -293,8 +293,10 @@ class Brewer
 
     sv(@temps['desired_mash'])
 
-    print "Enter mash time (3600 seconds for 1 hour): "
+    print "Enter mash time (3600 seconds for 1 hour). This will start once mash temp has been reached: "
     mash_time_input = gets.chomp
+
+    puts "This will take a while. You'll get a slack message next time you need to do something."
 
     if mash_time_input == ""
       mash_time = 3600
@@ -308,7 +310,7 @@ class Brewer
     pid(1)
 
     watch
-    ping("Mash temp reached (#{pv}). Starting timer for #{mash_time} seconds")
+    ping("Mash temp reached (#{brewer.pv}). Starting timer for #{mash_time} seconds")
     wait(mash_time)
     ping("Timer done. Mash complete. Check for starch")
   end
@@ -316,17 +318,23 @@ class Brewer
   def mashout
     ping("Start heating sparge water")
 
-    print "Enter mashout temp: "
-    mashout_temp = gets.chomp.to_i
+    print "Enter mashout temp (172 F): "
+    mashout_temp_input = gets.chomp
+
+    if mashout_temp_input == ""
+      mashout_temp = 172.0
+    else
+      mashout_temp == mashout_temp_input.to_f
+    end
 
     sv(mashout_temp)
 
     pump(1)
     pid(1)
 
-    ping("Heating to #{sv}... this could take a few minutes")
+    ping("Heating to #{brewer.sv}... this could take a few minutes.")
     watch
-    ping("Mashout temperature (#{pv}) reached. Mashout complete.")
+    ping("Mashout temperature (#{brewer.pv}) reached. Mashout complete.")
   end
 
   def sparge
@@ -341,17 +349,15 @@ class Brewer
     wait(30)
 
     rims_to('boil')
+    pump(1)
 
     ping("Please check the sparge balance")
 
-    puts "Waiting until intervention (y): "
+    puts "Waiting until intervention to turn off pump (y): "
     confirm ? nil : abort
 
     pid(0)
     pump(0)
-
-    print "Confirm to turn off sparge relay: "
-    confirm ? nil : abort
 
     hlt('close')
 
@@ -359,17 +365,16 @@ class Brewer
   end
 
   def top_off
-    # ???
-    relay($settings['???'], 1)
+    hlt_to('boil')
 
     wait(15)
 
-    relay($settings['spargeRelay'], 1)
+    hlt('open')
 
-    print "waiting for intervention to turn off sparge: "
+    print "waiting for intervention to turn off sparge (y): "
     confirm ? nil : abort
 
-    relay($settings['spargeRelay'], 0)
+    hlt('close')
 
     ping('Topping off completed')
   end
