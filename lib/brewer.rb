@@ -204,6 +204,7 @@ class Brewer
   def boot
     # These are the states required for starting. Should be called on boot.
     # Print PID status at end
+    ping("booting...")
     pid(0)
     pump(0)
     rims_to('mash')
@@ -214,11 +215,14 @@ class Brewer
     clear
     puts "Boot successful!"
     @out.unshift("successful boot at #{Time.now}")
+    ping("🍺 boot successful 🍺")
     true
   end
 
   # :nocov:
   def heat_strike_water
+    ping("heat-strike-water procedure started")
+    puts "heat-strike-water procedure started"
     # Confirm strike water is in the mash tun
     print "Is the strike water in the mash tun? "
     # -> response
@@ -256,13 +260,15 @@ class Brewer
     # calculate strike temp & set PID to strike temp
     # this sets PID SV to calculated strike temp automagically
     get_strike_temp
-    # turn on pid heater
+    # turn on RIMS heater
     pid(1)
 
     # measure current strike water temp and save
     @temps['starting_strike_temp'] = pv.to_i
     puts "current strike water temp is #{brewer.pv}. Saved."
     puts "Heating to #{brewer.sv}"
+
+    ping("PID heater on. This may take a few minutes.")
 
     # when strike temp is reached, ping slack
     watch
@@ -276,15 +282,23 @@ class Brewer
   # :nocov:
 
   def dough_in
+    ping("dough-in procedure started")
+    puts "dough-in procedure started"
     # turn pump off
   	# turn PID off
     pump(0)
     ping("Ready to dough in")
+    puts "Ready to dough in"
+
+    ping("next step: mash")
+    puts "Next step: mash"
+    puts "command: brewer.mash"
     # pour in grain
   end
 
   def mash
-    print "Enter mash temperature (#{@temps['desired_mash'].to_s}): "
+    ping("mash procedure started")
+    print "Enter mash temperature (#{@temps['desired_mash'].to_s} F): "
     temp = gets.chomp
 
     if temp != ""
@@ -293,10 +307,11 @@ class Brewer
 
     sv(@temps['desired_mash'])
 
-    print "Enter mash time (3600 seconds for 1 hour). This will start once mash temp has been reached: "
+    print "Enter mash time in seconds (3600 seconds for 1 hour). This timer will start once mash temp has been reached: "
     mash_time_input = gets.chomp
 
     puts "This will take a while. You'll get a slack message next time you need to do something."
+    ping("Mash started. This will take a while. You'll get a slack message next time you need to do something.")
 
     if mash_time_input == ""
       mash_time = 3600
@@ -310,12 +325,19 @@ class Brewer
     pid(1)
 
     watch
-    ping("Mash temp reached (#{brewer.pv}). Starting timer for #{mash_time} seconds")
+    ping("Mash temp (#{brewer.pv} F) reached. Starting timer for #{mash_time} seconds. You'll get a slack message next time you need to do something.")
+    puts "Mash temp (#{brewer.pv} F) reached. Starting timer for #{mash_time} seconds. You'll get a slack message next time you need to do something."
     wait(mash_time)
-    ping("Timer done. Mash complete. Check for starch")
+    ping("🍺 Mash complete 🍺. Check for starch. Next step: mashout")
+    puts "Mash complete"
+    puts "Check for starch"
+    puts "next sped: mashout"
+    puts "command: brewer.mashout"
   end
 
   def mashout
+    ping("mashout procedure started")
+    puts "mashout procedure started"
     ping("Start heating sparge water")
 
     print "Enter mashout temp (172 F): "
@@ -344,14 +366,14 @@ class Brewer
     hlt_to('mash')
     hlt('open')
 
-    puts "Waiting for 30 seconds"
+    puts "Waiting for 30 seconds. Regulate sparge balance."
     puts "(ctrl-c to abort proccess)"
     wait(30)
 
     rims_to('boil')
     pump(1)
 
-    ping("Please check the sparge balance")
+    ping("Please check the sparge balance and ignite boil tun burner")
 
     puts "Waiting until intervention to turn off pump (y): "
     confirm ? nil : abort
