@@ -261,7 +261,7 @@ class Brewer
 
     # measure current strike water temp and save
     @temps['starting_strike_temp'] = pv.to_i
-    puts "current strike water temp is #{pv}. Saved."
+    puts "current strike water temp is #{brewer.pv}. Saved."
 
     # when strike temp is reached, ping slack
     watch
