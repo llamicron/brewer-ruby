@@ -24,7 +24,7 @@ class Brewer
   # general utilities for the brewer class
 
   def wait(time=30)
-    sleep(time)
+    sleep(time.to_f)
     true
   end
 
@@ -103,8 +103,8 @@ class Brewer
 
   def sv(temp=nil)
     if temp
-      raise "Temperature input needs to be an integer" unless temp.is_a? Integer
-      return script('set_sv', temp)
+      raise "Temperature input needs to be an Float" unless temp.is_a? Float
+      return script('set_sv', temp.to_f)
     else
       return script('get_sv')
     end
@@ -128,7 +128,7 @@ class Brewer
 
   # TODO: Fix the return value here
   def relay_status(relay)
-    raise "Relay number needs to be an integer" unless relay.is_a? Integer
+    raise "Relay number needs to be an Float" unless relay.is_a? Float
     script("get_relay_status", "#{relay}")
     return @out.first.split('\n')
   end
@@ -320,7 +320,7 @@ class Brewer
       @temps['desired_mash'] = temp.to_i
     end
 
-    sv(@temps['desired_mash'])
+    sv(@temps['desired_mash'].to_f)
 
     print "Enter mash time in seconds (3600 seconds for 1 hour). This timer will start once mash temp has been reached: "
     mash_time_input = gets.chomp
@@ -412,6 +412,17 @@ class Brewer
     hlt('close')
 
     ping('Topping off completed')
+  end
+
+  def boil
+    ping("starting boil procedure")
+    wait(300)
+    ping("Add boil hops")
+    wait(2400)
+    ping("Add flovering hops")
+    wait(780)
+    ping("Add finishing hops")
+    ping("All done")
   end
 
 end
