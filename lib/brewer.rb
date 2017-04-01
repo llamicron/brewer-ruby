@@ -180,7 +180,7 @@ class Brewer
     true
   end
 
-  def sparge_to(location)
+  def hlt_to(location)
     if location == "mash"
       relay($settings['spargeToMashRelay'], 0)
     elsif location == "boil"
@@ -189,7 +189,7 @@ class Brewer
     true
   end
 
-  def set_sparge(state)
+  def hlt(state)
     if state == "open"
       relay($settings['spargeRelay'], 1)
     elsif state == "close"
