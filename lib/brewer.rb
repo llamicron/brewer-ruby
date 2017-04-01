@@ -115,6 +115,7 @@ class Brewer
 
   def relay(relay, state)
     script("set_relay", "#{relay} #{state}")
+    wait(10)
   end
 
   def all_relays_status
