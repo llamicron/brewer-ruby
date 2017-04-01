@@ -141,6 +141,13 @@ class Brewer
   end
   # :nocov:
 
+  def monitor
+    while true do
+      ping("#{puts pid}")
+      wait(10)
+    end
+  end
+
   # WaterVolInQuarts, GrainMassInPounds, GrainTemp, MashTemp
   # :nocov:
   def get_strike_temp
@@ -292,6 +299,9 @@ class Brewer
     ping("Ready to dough in")
     puts "Ready to dough in"
 
+    print "Confirm when you're done with dough-in (y): "
+    confirm ? nil : abort
+
     ping("next step: mash")
     puts "Next step: mash"
     puts "command: brewer.mash"
@@ -300,7 +310,6 @@ class Brewer
   end
 
   def mash
-    ping("mash procedure started")
     print "Enter mash temperature (#{@temps['desired_mash'].to_s} F): "
     temp = gets.chomp
 
@@ -328,23 +337,23 @@ class Brewer
     pid(1)
 
     watch
-    ping("Mash temp (#{brewer.pv} F) reached. Starting timer for #{mash_time} seconds. You'll get a slack message next time you need to do something.")
-    puts "Mash temp (#{brewer.pv} F) reached. Starting timer for #{mash_time} seconds. You'll get a slack message next time you need to do something."
+    ping("Mash temp (#{pv} F) reached. Starting timer for #{mash_time} seconds. You'll get a slack message next time you need to do something.")
+    puts "Mash temp (#{pv} F) reached. Starting timer for #{mash_time} seconds. You'll get a slack message next time you need to do something."
     wait(mash_time)
-    ping("🍺 Mash complete 🍺. Check for starch. Next step: mashout")
+    ping("🍺 Mash complete 🍺. Check for starch conversion. Next step: mashout")
     puts "Mash complete"
-    puts "Check for starch"
-    puts "next sped: mashout"
+    puts "Check for starch conversion"
+    puts "next step: mashout"
     puts "command: brewer.mashout"
   end
 
   def mashout
-    ping("mashout procedure started")
     puts "mashout procedure started"
-    ping("Start heating sparge water")
 
     print "Enter mashout temp (172 F): "
     mashout_temp_input = gets.chomp
+
+    ping("Start heating sparge water")
 
     if mashout_temp_input == ""
       mashout_temp = 172.0
@@ -357,9 +366,9 @@ class Brewer
     pump(1)
     pid(1)
 
-    ping("Heating to #{brewer.sv}... this could take a few minutes.")
+    ping("Heating to #{sv}... this could take a few minutes.")
     watch
-    ping("Mashout temperature (#{brewer.pv}) reached. Mashout complete.")
+    ping("Mashout temperature (#{pv}) reached. Mashout complete.")
   end
 
   def sparge
@@ -392,11 +401,9 @@ class Brewer
   def top_off
     hlt_to('boil')
 
-    wait(15)
-
     hlt('open')
 
-    print "waiting for intervention to turn off sparge (y): "
+    print "waiting for intervention to turn off hlt (y): "
     confirm ? nil : abort
 
     hlt('close')
