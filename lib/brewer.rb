@@ -103,8 +103,7 @@ class Brewer
 
   def sv(temp=nil)
     if temp
-      raise "Temperature input needs to be an Float" unless temp.is_a? Float
-      return script('set_sv', temp.to_f)
+      return script('set_sv', temp)
     else
       return script('get_sv')
     end
@@ -357,6 +356,8 @@ class Brewer
     mashout_temp_input = gets.chomp
 
     ping("Start heating sparge water")
+
+    # error
 
     if mashout_temp_input == ""
       mashout_temp = 172.0
