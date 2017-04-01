@@ -189,7 +189,7 @@ class Brewer
     true
   end
 
-  def sparge(state)
+  def set_sparge(state)
     if state == "open"
       relay($settings['spargeRelay'], 1)
     elsif state == "close"
