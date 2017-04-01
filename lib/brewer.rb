@@ -265,7 +265,9 @@ class Brewer
 
     # when strike temp is reached, ping slack
     watch
-    ping("strike water is now at #{pv.echo} degrees. Strike water heated. Maintaining temperature.")
+    ping("Strike water heated. Maintaining temperature.")
+    puts "Next step: dough in"
+    puts "command: brewer.dough_in"
 
     true
   end
