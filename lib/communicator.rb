@@ -30,10 +30,12 @@ class Communicator
 
   def monitor
     while true do
-      @brewer.pid.each do |k, v|
-        ping("#{k}: #{v}")
-      end
+      before_temp = @brewer.pv.to_i
       @brewer.wait(600)
+      diff = @brewer.pv.to_i - before_temp
+      ping("Current Temperature: #{@brewer.pid['pv_temp']} F")
+      ping("Set Value Temperature: #{@brewer.pid['sv_temp']} F")
+      ping("Current temperature has climed #{diff} F since 10 minutes ago")
     end
     true
   end
