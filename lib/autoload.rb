@@ -7,10 +7,8 @@ require 'yaml/store'
 require 'net/ping'
 require 'ripl'
 require 'wannabe_bool'
-
-
+require 'terminal-table'
 
 require_all 'lib'
-
 
 include Helpers

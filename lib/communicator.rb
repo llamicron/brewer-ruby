@@ -28,11 +28,13 @@ class Communicator
     @slack.ping(message)
   end
 
-  def monitor(delay=10)
+  # TODO: test these methods
+  def slack_monitor(delay=10)
     while true do
       before_temp = @brewer.pv
       @brewer.wait(to_seconds(delay))
       diff = @brewer.pv - before_temp
+
       ping([
         "Current Temperature: #{@brewer.pid['pv_temp']} F",
         "Set Value Temperature: #{@brewer.pid['sv_temp']} F",
@@ -42,6 +44,24 @@ class Communicator
       ])
     end
     true
+  end
+
+  def monitor
+    while true do
+      status_table_rows = [
+        ["Item", "Status"],
+        ["Current Temp", @brewer.pv],
+        ["Set Value Temp", @brewer.sv],
+        ["PID is: ", @brewer.pid['pid_running'].to_b ? "on" : "off"]
+        ["Pump is: ", @brewer.pump]
+      ]
+
+      status_table = Terminal::Table.new :rows => status_table_rows
+
+      clear_screen
+      puts status_table
+      sleep(1)
+    end
   end
 
 end

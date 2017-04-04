@@ -38,8 +38,12 @@ class Brewer
   # Adaptibrew methods ----------------------------------------------
   # for working with the rig
 
-  def pump(state=0)
-    if state.to_b
+  def pump(state="status")
+    if state == "status"
+      return relay_status($settings['pumpRelay'])
+    end
+
+    if state == 1
       return script("set_pump_on")
     else
       if pid['pid_running'].to_b
@@ -60,11 +64,11 @@ class Brewer
       }
     end
 
-    if state.to_b
+    if state == 1
       script('set_pid_on')
       pump(1)
       return "Pump and PID are now on"
-    elsif !state.to_b
+    else
       return script("set_pid_off")
     end
   end
@@ -97,7 +101,6 @@ class Brewer
     true
   end
 
-  # TODO: Fix the return value here
   def relay_status(relay)
     script("get_relay_status", "#{relay}")
     if @out.include? "on"
