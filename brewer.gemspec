@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'slack-notifier'
   s.add_runtime_dependency 'require_all'
   s.add_runtime_dependency 'terminal-table'
+  s.add_runtime_dependency 'rainbow'
 
 
   # Dev dependencies
