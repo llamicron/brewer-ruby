@@ -63,7 +63,7 @@ class Procedures
   end
 
   def boot
-    puts "booting..."
+    puts Rainbow("booting...").yellow
     @brewer.pid(0)
     @brewer.pump(0)
     @brewer.rims_to('mash')
@@ -72,9 +72,9 @@ class Procedures
     puts @brewer.pid
 
     @brewer.clear
-    puts "Boot successful!"
+    puts Rainbow("Boot finished!").green
     @brewer.out.unshift("successful boot at #{Time.now}")
-    @com.ping("🍺 boot successful 🍺")
+    @com.ping("🍺 boot finished 🍺")
     true
   end
 
@@ -83,16 +83,16 @@ class Procedures
     puts "heat-strike-water procedure started"
 
     # Confirm strike water is in the mash tun
-    print "Is the strike water in the mash tun? "
+    print Rainbow("Is the strike water in the mash tun? ").yellow
     # -> response
     confirm ? nil : abort
 
     # confirm return manifold is in the mash tun
-    print "Is the return manifold in the mash tun? "
+    print Rainbow("Is the return manifold in the mash tun? ").yellow
     # -> response
     confirm ? nil : abort
 
-    print "Is the mash tun valve open? "
+    print Rainbow("Is the mash tun valve open? ").yellow
     confirm ? nil : abort
 
     # confirm RIMS relay is on
@@ -103,7 +103,8 @@ class Procedures
     @brewer.pump(1)
     puts "Pump is now on"
 
-    puts "Is the pump running properly? "
+    puts Rainbow("Is the pump running properly? ").yellow
+    # TODO: Test this
     until confirm
       puts "restarting pump"
       @brewer.pump(0)
@@ -112,7 +113,7 @@ class Procedures
     end
 
     # confirm that strike water is circulating well
-    print "Is the strike water circulating well? "
+    print Rainbow("Is the strike water circulating well? ").yellow
     # -> response
     confirm ? nil : abort
 
@@ -134,10 +135,7 @@ class Procedures
     # when strike temp is reached, @com.ping slack
     @brewer.watch
     @com.ping("Strike water heated to #{@brewer.pv}. Maintaining temperature.")
-    @com.ping("Next step: dough in")
-    puts "Next step: dough in"
-    puts "command: brewer.dough_in"
-
+    puts Rainbow("Strike water heated. Maintaining temp.").green
     true
   end
   # :nocov:
@@ -149,11 +147,11 @@ class Procedures
     @brewer.pid(0)
     @brewer.wait(3)
     @com.ping("Ready to dough in")
-    puts "Ready to dough in"
+    puts Rainbow("Ready to dough in").green
 
     # pour in grain
 
-    print "Confirm when you're done with dough-in (y): "
+    print Rainbow("Confirm when you're done with dough-in (y): ").yellow
     confirm ? nil : abort
     true
   end
@@ -161,7 +159,7 @@ class Procedures
   def mash
     @brewer.sv(@recipe['mash_temp'])
 
-    puts "mash stated. This will take a while."
+    puts Rainbow("mash stated. This will take a while.").green
     @com.ping("Mash started. This will take a while.")
 
     @brewer.rims_to('mash')
@@ -173,7 +171,7 @@ class Procedures
     @com.ping("Mash temp (#{@brewer.pv} F) reached. Starting timer for #{@recipe['mash_time']} minutes.")
     @brewer.wait(@recipe['mash_time'])
     @com.ping("🍺 Mash complete 🍺. Check for starch conversion.")
-    puts "Mash complete"
+    puts Rainbow("Mash complete").green
     puts "Check for starch conversion"
   end
 
@@ -191,13 +189,14 @@ class Procedures
   end
 
   def sparge
-    print "Is the sparge water heated to the correct temperature? "
+    print Rainbow("Is the sparge water heated to the correct temperature? ").yellow
     confirm ? nil : abort
 
     @brewer.hlt_to('mash')
     @brewer.hlt(1)
 
-    puts "Waiting for 10 seconds. Regulate sparge balance."
+    print "Waiting for 10 seconds. "
+    puts Rainbow("Regulate sparge balance.").yellow
     puts "(ctrl-c to abort proccess)"
     @brewer.wait(30)
 
@@ -206,7 +205,7 @@ class Procedures
 
     @com.ping("Please check the sparge balance and ignite boil tun burner")
 
-    puts "Waiting until intervention to turn off pump (y): "
+    puts Rainbow("Waiting until intervention to turn off pump (y): ").yellow
     confirm ? nil : abort
 
     @brewer.pid(0)
@@ -220,12 +219,13 @@ class Procedures
 
     @brewer.hlt(1)
 
-    print "waiting for intervention to turn off hlt (y): "
+    print Rainbow("waiting for intervention to turn off hlt (y): ").yellow
     confirm ? nil : abort
 
     @brewer.hlt(0)
 
-    @com.ping('Topping off completed')
+    @com.ping('Topping off complete')
+    puts Rainbow("Topping off complete").green
   end
 
   def boil
@@ -237,7 +237,8 @@ class Procedures
     @brewer.wait(to_seconds(13))
     @com.ping("Add finishing hops")
     @brewer.wait(30)
-    @com.ping("All done")
+    @com.ping("Done.")
+    puts Rainbow("Done.").green
   end
 
 end
