@@ -49,14 +49,13 @@ class Communicator
   def monitor
     while true do
       status_table_rows = [
-        ["Item", "Status"],
         ["Current Temp", @brewer.pv],
         ["Set Value Temp", @brewer.sv],
-        ["PID is: ", @brewer.pid['pid_running'].to_b ? "on" : "off"]
+        ["PID is: ", @brewer.pid['pid_running'].to_b ? "on" : "off"],
         ["Pump is: ", @brewer.pump]
       ]
 
-      status_table = Terminal::Table.new :rows => status_table_rows
+      status_table = Terminal::Table.new :headings ["Item", "Status"], :rows => status_table_rows
 
       clear_screen
       puts status_table

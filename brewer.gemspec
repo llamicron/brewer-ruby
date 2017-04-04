@@ -2,7 +2,7 @@ require 'rake'
 
 Gem::Specification.new do |s|
   s.name               = "brewer"
-  s.version            = "0.0.70"
+  s.version            = "0.0.71"
   s.default_executable = "brewer"
 
   s.authors = ["Luke Sweeney"]
@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'slack-notifier'
   s.add_runtime_dependency 'require_all'
   s.add_runtime_dependency 'terminal-table'
+
 
   # Dev dependencies
   s.add_development_dependency 'rake', '~> 12.0', '>= 12.0.0'
