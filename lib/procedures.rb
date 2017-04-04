@@ -53,6 +53,7 @@ class Procedures
   end
 
   def master
+    get_recipe_vars
     boot
     heat_strike_water
     dough_in
