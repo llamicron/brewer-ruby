@@ -98,7 +98,7 @@ class Brewer
 
   # TODO: Fix the return value here
   def relay_status(relay)
-    raise "Relay number needs to be an Float" unless relay.is_a? Float
+    raise "Relay number needs to be an Integer" unless relay.is_a? integer
     script("get_relay_status", "#{relay}")
     return @out.first.split('\n')
   end
@@ -109,32 +109,6 @@ class Brewer
       wait(2)
     end
     self
-  end
-
-  def get_strike_temp
-    print "Input amount of water in quarts: "
-    water = gets.chomp
-
-    print "Input amount of grain in lbs: "
-    grain = gets.chomp
-
-    print "Input current grain temp (#{pv.to_s} F): "
-    grain_temp = gets.chomp
-    if grain_temp == ""
-      grain_temp = pv
-    end
-
-    print "Input desired mash temp (150 F): "
-    desired_mash_temp = gets.chomp
-    if desired_mash_temp == ""
-      desired_mash_temp = 150
-    end
-    @temps['desired_mash'] = desired_mash_temp
-
-    # this is where the magic happens
-    @temps['strike_water_temp'] = script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}").to_f
-    sv(@temps['strike_water_temp'])
-    puts "SV has been set to #{sv.to_s} degrees"
   end
   # :nocov:
 

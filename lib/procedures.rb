@@ -6,11 +6,50 @@ include Helpers
 
 class Procedures
 
-  attr_accessor :com, :brewer
+  attr_accessor :com, :brewer, :recipe
 
   def initialize
     @brewer = Brewer.new
     @com = Communicator.new
+    @recipe = {}
+  end
+
+  def get_recipe_vars
+    puts "Variables for heating strike water ---"
+    get_strike_temp
+
+    puts "Variables for mash ---"
+    print "Enter mash temperature: "
+    @recipe['mash_temp'] = gets.chomp.to_f
+    print "Enter mash time in minutes: "
+    @recipe['mash_time'] = to_seconds(gets.chomp.to_f)
+
+    puts "Variables for mashout ---"
+    print "Enter mashout temp: "
+    @recipe['mashout_temp'] = gets.chomp.to_f
+  end
+
+  def get_strike_temp
+    print "Input amount of water in quarts: "
+    @recipe['water'] = gets.chomp.to_f
+
+    print "Input amount of grain in lbs: "
+    @recipe['grain'] = gets.chomp.to_f
+
+    print "Input current grain temp (#{pv.to_s} F): "
+    @recipe['grain_temp'] = gets.chomp.to_f
+    if @recipe['grain_temp'] == ""
+      @recipe['grain_temp'] = pv
+    end
+
+    print "Input desired mash temp (150 F): "
+    @recipe['desired_mash_temp'] = gets.chomp
+    if @recipe['desired_mash_temp'] == ""
+      @recipe['desired_mash_temp'] = 150
+    end
+    @recipe['desired_mash_temp']
+
+    @recipe['strike_water_temp'] = script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{@recipe['desired_mash_temp']}").to_f
   end
 
   def master
@@ -65,16 +104,13 @@ class Procedures
     @brewer.pump(1)
     puts "Pump is now on"
 
-    # wait ~30 seconds
-    print "How long do you want to wait for the water to start circulating? (30) "
-    # Helpers#time exists
-    input_time = gets.chomp
-    if input_time == ""
-      input_time = 30
+    puts "Is the pump running properly? "
+    until confirm
+      puts "restarting pump"
+      @brewer.pump(0)
+      @brewer.wait(2)
+      @brewer.pump(1)
     end
-    puts "Waiting for #{input_time} seconds for strike water to start circulating"
-    puts "(ctrl-c to exit proccess now)"
-    @brewer.wait(input_time.to_f)
 
     # confirm that strike water is circulating well
     print "Is the strike water circulating well? "
@@ -84,12 +120,13 @@ class Procedures
 
     # calculate strike temp & set PID to strike temp
     # this sets PID SV to calculated strike temp automagically
-    @brewer.get_strike_temp
+    @brewer.sv(@recipe['strike_water_temp'])
+    puts "SV has been set to calculated strike water temp"
     # turn on RIMS heater
     @brewer.pid(1)
 
     # measure current strike water temp and save
-    @@brewer.temps['starting_strike_temp'] = @brewer.pv
+    @recipe['starting_strike_temp'] = @brewer.pv
     puts "current strike water temp is #{@brewer.pv}. Saved."
     puts "Heating to #{@brewer.sv}"
 
@@ -107,45 +144,26 @@ class Procedures
   # :nocov:
 
   def dough_in
-    @com.ping("dough-in procedure started")
-    puts "dough-in procedure started"
     # turn pump off
-  	# turn PID off
     @brewer.pump(0)
+    # turn PID off
+    @brewer.pid(0)
+    @brewer.wait(3)
     @com.ping("Ready to dough in")
     puts "Ready to dough in"
 
+    # pour in grain
+
     print "Confirm when you're done with dough-in (y): "
     confirm ? nil : abort
-
-    @com.ping("next step: mash")
-    puts "Next step: mash"
-    puts "command: brewer.mash"
-    # pour in grain
     true
   end
 
   def mash
-    print "Enter mash temperature (#{@brewer.temps['desired_mash'].to_s} F): "
-    temp = gets.chomp
+    @brewer.sv(@recipe['mash_temp'])
 
-    if temp != ""
-      @brewer.temps['desired_mash'] = temp.to_f
-    end
-
-    @brewer.sv(@brewer.temps['desired_mash'].to_f)
-
-    print "Enter mash time in seconds (3600 seconds for 1 hour). This timer will start once mash temp has been reached: "
-    mash_time_input = gets.chomp
-
-    puts "This will take a while. You'll get a slack message next time you need to do something."
+    puts "mash stated. This will take a while."
     @com.ping("Mash started. This will take a while.")
-
-    if mash_time_input == ""
-      mash_time = 3600
-    else
-      mash_time = mash_time_input.to_f
-    end
 
     @brewer.rims_to('mash')
 
@@ -153,33 +171,17 @@ class Procedures
     @brewer.pid(1)
 
     @brewer.watch
-    @com.ping("Mash temp (#{@brewer.pv} F) reached. Starting timer for #{mash_time} seconds. You'll get a slack message next time you need to do something.")
-    puts "Mash temp (#{@brewer.pv} F) reached. Starting timer for #{mash_time} seconds. You'll get a slack message next time you need to do something."
-    @brewer.wait(mash_time)
-    @com.ping("🍺 Mash complete 🍺. Check for starch conversion. Next step: mashout")
+    @com.ping("Mash temp (#{@brewer.pv} F) reached. Starting timer for #{@recipe['mash_time']} minutes.")
+    @brewer.wait(@recipe['mash_time'])
+    @com.ping("🍺 Mash complete 🍺. Check for starch conversion.")
     puts "Mash complete"
     puts "Check for starch conversion"
-    puts "next step: mashout"
-    puts "command: brewer.mashout"
   end
 
   def mashout
-    puts "mashout procedure started"
-
-    print "Enter mashout temp (172 F): "
-    mashout_temp_input = gets.chomp
-
     @com.ping("Start heating sparge water")
 
-    # error
-
-    if mashout_temp_input == ""
-      mashout_temp = 172.0
-    else
-      mashout_temp == mashout_temp_input.to_f
-    end
-
-    @brewer.sv(mashout_temp)
+    @brewer.sv(@recipe['mashout_temp'])
 
     @brewer.pump(1)
     @brewer.pid(1)
@@ -196,7 +198,7 @@ class Procedures
     @brewer.hlt_to('mash')
     @brewer.hlt('open')
 
-    puts "Waiting for 30 seconds. Regulate sparge balance."
+    puts "Waiting for 10 seconds. Regulate sparge balance."
     puts "(ctrl-c to abort proccess)"
     @brewer.wait(30)
 
@@ -212,8 +214,6 @@ class Procedures
     @brewer.pump(0)
 
     @brewer.hlt('close')
-
-    @com.ping("Sparge complete")
   end
 
   def top_off
@@ -226,17 +226,18 @@ class Procedures
 
     @brewer.hlt('close')
 
-    @com.ping('Top@com.ping off completed')
+    @com.ping('Topping off completed')
   end
 
   def boil
     @com.ping("starting boil procedure")
-    @brewer.wait(300)
+    @brewer.wait(to_seconds(5))
     @com.ping("Add boil hops")
-    @brewer.wait(2400)
+    @brewer.wait(to_seconds(40))
     @com.ping("Add flovering hops")
-    @brewer.wait(780)
+    @brewer.wait(to_seconds(13))
     @com.ping("Add finishing hops")
+    @brewer.wait(30)
     @com.ping("All done")
   end
 
