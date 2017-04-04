@@ -18,4 +18,12 @@ module Helpers
     end
   end
 
+  def to_minutes(seconds)
+    seconds.to_f / 60
+  end
+
+  def to_seconds(minutes)
+    minutes.to_f * 60
+  end
+
 end

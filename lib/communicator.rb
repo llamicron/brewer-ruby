@@ -1,6 +1,9 @@
 require 'slack-notifier'
 require 'yaml'
 require 'yaml/store'
+require 'helpers'
+
+include Helpers
 
 class Communicator
 
@@ -28,14 +31,14 @@ class Communicator
     @slack.ping(message)
   end
 
-  def monitor
+  def monitor(delay=10)
     while true do
       before_temp = @brewer.pv
-      @brewer.wait(600)
+      @brewer.wait(to_seconds(delay))
       diff = @brewer.pv - before_temp
       ping("Current Temperature: #{@brewer.pid['pv_temp']} F")
       ping("Set Value Temperature: #{@brewer.pid['sv_temp']} F")
-      ping("Current temperature has climed #{diff} F since 10 minutes ago")
+      ping("Current temperature has climed #{diff} F since #{delay} minute(s) ago")
     end
     true
   end
