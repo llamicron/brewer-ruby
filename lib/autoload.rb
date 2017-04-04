@@ -6,6 +6,7 @@ require 'yaml'
 require 'yaml/store'
 require 'net/ping'
 require 'ripl'
+require 'wannabe_bool'
 
 
 

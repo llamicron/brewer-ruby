@@ -81,13 +81,13 @@ class Brewer
   end
 
   def relay(relay, state)
+    # If you try to turn the relay to a state that it is already in, this skips the wait
     if relay_status(relay).to_b == state.to_b
       return true
-    else
-
     end
     script("set_relay", "#{relay} #{state}")
     wait(10)
+    true
   end
 
   def all_relays_status
