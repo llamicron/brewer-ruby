@@ -1,4 +1,4 @@
-require 'net/ping'
+require_relative "autoload"
 
 module Helpers
 

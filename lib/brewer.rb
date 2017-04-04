@@ -1,8 +1,4 @@
-require_relative 'helpers'
-require_relative 'adaptibrew'
-require_relative 'settings'
-
-include Helpers
+require_relative "autoload"
 
 class Brewer
 
@@ -85,6 +81,11 @@ class Brewer
   end
 
   def relay(relay, state)
+    if relay_status(relay).to_b == state.to_b
+      return true
+    else
+
+    end
     script("set_relay", "#{relay} #{state}")
     wait(10)
   end
@@ -98,9 +99,12 @@ class Brewer
 
   # TODO: Fix the return value here
   def relay_status(relay)
-    raise "Relay number needs to be an Integer" unless relay.is_a? integer
     script("get_relay_status", "#{relay}")
-    return @out.first.split('\n')
+    if @out.include? "on"
+      return "on"
+    else
+      return "off"
+    end
   end
 
   # :nocov:

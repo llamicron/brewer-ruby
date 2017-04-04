@@ -1,5 +1,4 @@
 class roles:
-
 Brewer:
   - Directly control each component of the physical brew rig
 

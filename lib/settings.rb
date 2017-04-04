@@ -1,5 +1,4 @@
-# This just parses the adaptibrew/settings.py
-require_relative 'adaptibrew'
+require_relative "autoload"
 
 adaptibrew = Adaptibrew.new
 

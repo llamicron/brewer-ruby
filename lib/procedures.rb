@@ -1,6 +1,4 @@
-require_relative 'brewer'
-require_relative 'helpers'
-require_relative 'communicator'
+require_relative "autoload"
 
 include Helpers
 
@@ -241,6 +239,5 @@ class Procedures
     @brewer.wait(30)
     @com.ping("All done")
   end
-
 
 end

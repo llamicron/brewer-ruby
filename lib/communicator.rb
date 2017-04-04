@@ -1,9 +1,4 @@
-require 'slack-notifier'
-require 'yaml'
-require 'yaml/store'
-require 'helpers'
-
-include Helpers
+require_relative "autoload"
 
 class Communicator
 
