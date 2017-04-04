@@ -39,10 +39,10 @@ class Brewer
   # for working with the rig
 
   def pump(state=0)
-    if state == 1
+    if state.to_b
       return script("set_pump_on")
-    elsif state == 0
-      if pid['pid_running'] == "True"
+    else
+      if pid['pid_running'].to_b
         pid(0)
         echo
       end
@@ -60,11 +60,11 @@ class Brewer
       }
     end
 
-    if state == 1
+    if state.to_b
       script('set_pid_on')
       pump(1)
       return "Pump and PID are now on"
-    elsif state == 0
+    elsif !state.to_b
       return script("set_pid_off")
     end
   end
@@ -136,9 +136,9 @@ class Brewer
   end
 
   def hlt(state)
-    if state == "open"
+    if state.to_b
       relay($settings['spargeRelay'], 1)
-    elsif state == "close"
+    elsif !state.to_b
       relay($settings['spargeRelay'], 0)
     end
     self

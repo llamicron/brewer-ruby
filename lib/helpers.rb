@@ -13,9 +13,10 @@ module Helpers
   end
 
   def confirm(input=gets.chomp)
-    if ["y", "Y", "yes", "Yes", "YES", "k"].include? input
-      true
+    if input.to_b
+      return true
     end
+    false
   end
 
   def to_minutes(seconds)

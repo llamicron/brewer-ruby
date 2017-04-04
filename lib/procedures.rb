@@ -195,7 +195,7 @@ class Procedures
     confirm ? nil : abort
 
     @brewer.hlt_to('mash')
-    @brewer.hlt('open')
+    @brewer.hlt(1)
 
     puts "Waiting for 10 seconds. Regulate sparge balance."
     puts "(ctrl-c to abort proccess)"
@@ -212,18 +212,18 @@ class Procedures
     @brewer.pid(0)
     @brewer.pump(0)
 
-    @brewer.hlt('close')
+    @brewer.hlt(0)
   end
 
   def top_off
     @brewer.hlt_to('boil')
 
-    @brewer.hlt('open')
+    @brewer.hlt(1)
 
     print "waiting for intervention to turn off hlt (y): "
     confirm ? nil : abort
 
-    @brewer.hlt('close')
+    @brewer.hlt(0)
 
     @com.ping('Topping off completed')
   end

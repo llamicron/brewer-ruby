@@ -22,7 +22,8 @@ class Communicator
 
   def ping(message="ping at #{Time.now}")
     if message.is_a? Array
-      @slack.ping(message.join("\n"))
+      final = message.join("\n")
+      @slack.ping(final)
     end
     @slack.ping(message)
   end
@@ -36,7 +37,8 @@ class Communicator
         "Current Temperature: #{@brewer.pid['pv_temp']} F",
         "Set Value Temperature: #{@brewer.pid['sv_temp']} F",
         "Current temperature has climed #{diff} F since #{delay} minute(s) ago",
-        "Sent at #{Time.now.strftime("%H:%M")}"
+        "Sent at #{Time.now.strftime("%H:%M")}",
+        ""
       ])
     end
     true
