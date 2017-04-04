@@ -8,13 +8,12 @@ include Helpers
 class Brewer
 
   attr_reader :base_path
-  attr_accessor :out, :log, :temps
+  attr_accessor :out, :temps
 
   def initialize
     @base_path = Dir.home + '/.brewer'
     # Output of adaptibrew
     @out = []
-    @log = @base_path + '/logs/output'
     @temps = {}
   end
 
@@ -37,8 +36,6 @@ class Brewer
     @out.first
   end
 
-  # Clears the @out array
-  # Writes current @out to log
   def clear
     @out = []
   end
@@ -115,7 +112,7 @@ class Brewer
     end
     true
   end
-  
+
   def get_strike_temp
     print "Input amount of water in quarts: "
     water = gets.chomp
