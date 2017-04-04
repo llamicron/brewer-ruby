@@ -34,11 +34,4 @@ module Helpers
     end
   end
 
-  def ping(message="ping at #{Time.now}")
-    # Required here so that you'll be asked to input webhook only
-    # when you actually use slakc the first time
-    require_relative 'slacker'
-    $slack.ping(message)
-  end
-
 end

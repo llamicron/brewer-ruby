@@ -1,16 +1,31 @@
 require_relative 'brewer'
 require_relative 'helpers'
+require_relative 'communicator'
 
 include Helpers
 
 class Procedures
 
+  attr_accessor :com, :brewer
+
   def initialize
     @brewer = Brewer.new
+    @com = Communicator.new
+  end
+
+  def master
+    boot
+    heat_strike_water
+    dough_in
+    mash
+    mashout
+    sparge
+    top_off
+    boil
   end
 
   def boot
-    ping("booting...")
+    puts "booting..."
     @brewer.pid(0)
     @brewer.pump(0)
     @brewer.rims_to('mash')
@@ -21,13 +36,14 @@ class Procedures
     @brewer.clear
     puts "Boot successful!"
     @brewer.out.unshift("successful boot at #{Time.now}")
-    ping("🍺 boot successful 🍺")
+    @com.ping("🍺 boot successful 🍺")
     true
   end
 
   # :nocov:
   def heat_strike_water
     puts "heat-strike-water procedure started"
+
     # Confirm strike water is in the mash tun
     print "Is the strike water in the mash tun? "
     # -> response
@@ -77,12 +93,12 @@ class Procedures
     puts "current strike water temp is #{@brewer.pv}. Saved."
     puts "Heating to #{@brewer.sv}"
 
-    ping("Strike water beginning to heat. This may take a few minutes.")
+    @com.ping("Strike water beginning to heat. This may take a few minutes.")
 
-    # when strike temp is reached, ping slack
+    # when strike temp is reached, @com.ping slack
     @brewer.watch
-    ping("Strike water heated to #{@brewer.pv}. Maintaining temperature.")
-    ping("Next step: dough in")
+    @com.ping("Strike water heated to #{@brewer.pv}. Maintaining temperature.")
+    @com.ping("Next step: dough in")
     puts "Next step: dough in"
     puts "command: brewer.dough_in"
 
@@ -91,18 +107,18 @@ class Procedures
   # :nocov:
 
   def dough_in
-    ping("dough-in procedure started")
+    @com.ping("dough-in procedure started")
     puts "dough-in procedure started"
     # turn pump off
   	# turn PID off
     @brewer.pump(0)
-    ping("Ready to dough in")
+    @com.ping("Ready to dough in")
     puts "Ready to dough in"
 
     print "Confirm when you're done with dough-in (y): "
     confirm ? nil : abort
 
-    ping("next step: mash")
+    @com.ping("next step: mash")
     puts "Next step: mash"
     puts "command: brewer.mash"
     # pour in grain
@@ -123,7 +139,7 @@ class Procedures
     mash_time_input = gets.chomp
 
     puts "This will take a while. You'll get a slack message next time you need to do something."
-    ping("Mash started. This will take a while.")
+    @com.ping("Mash started. This will take a while.")
 
     if mash_time_input == ""
       mash_time = 3600
@@ -137,10 +153,10 @@ class Procedures
     @brewer.pid(1)
 
     @brewer.watch
-    ping("Mash temp (#{@brewer.pv} F) reached. Starting timer for #{mash_time} seconds. You'll get a slack message next time you need to do something.")
+    @com.ping("Mash temp (#{@brewer.pv} F) reached. Starting timer for #{mash_time} seconds. You'll get a slack message next time you need to do something.")
     puts "Mash temp (#{@brewer.pv} F) reached. Starting timer for #{mash_time} seconds. You'll get a slack message next time you need to do something."
     @brewer.wait(mash_time)
-    ping("🍺 Mash complete 🍺. Check for starch conversion. Next step: mashout")
+    @com.ping("🍺 Mash complete 🍺. Check for starch conversion. Next step: mashout")
     puts "Mash complete"
     puts "Check for starch conversion"
     puts "next step: mashout"
@@ -153,7 +169,7 @@ class Procedures
     print "Enter mashout temp (172 F): "
     mashout_temp_input = gets.chomp
 
-    ping("Start heating sparge water")
+    @com.ping("Start heating sparge water")
 
     # error
 
@@ -168,9 +184,9 @@ class Procedures
     @brewer.pump(1)
     @brewer.pid(1)
 
-    ping("Heating to #{@brewer.sv}... this could take a few minutes.")
+    @com.ping("Heating to #{@brewer.sv}... this could take a few minutes.")
     @brewer.watch
-    ping("Mashout temperature (#{@brewer.pv}) reached. Mashout complete.")
+    @com.ping("Mashout temperature (#{@brewer.pv}) reached. Mashout complete.")
   end
 
   def sparge
@@ -187,7 +203,7 @@ class Procedures
     @brewer.rims_to('boil')
     @brewer.pump(1)
 
-    ping("Please check the sparge balance and ignite boil tun burner")
+    @com.ping("Please check the sparge balance and ignite boil tun burner")
 
     puts "Waiting until intervention to turn off pump (y): "
     confirm ? nil : abort
@@ -197,7 +213,7 @@ class Procedures
 
     @brewer.hlt('close')
 
-    ping("Sparge complete")
+    @com.ping("Sparge complete")
   end
 
   def top_off
@@ -210,18 +226,18 @@ class Procedures
 
     @brewer.hlt('close')
 
-    ping('Topping off completed')
+    @com.ping('Top@com.ping off completed')
   end
 
   def boil
-    ping("starting boil procedure")
+    @com.ping("starting boil procedure")
     @brewer.wait(300)
-    ping("Add boil hops")
+    @com.ping("Add boil hops")
     @brewer.wait(2400)
-    ping("Add flovering hops")
+    @com.ping("Add flovering hops")
     @brewer.wait(780)
-    ping("Add finishing hops")
-    ping("All done")
+    @com.ping("Add finishing hops")
+    @com.ping("All done")
   end
 
 

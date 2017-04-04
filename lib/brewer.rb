@@ -27,7 +27,7 @@ class Brewer
     sleep(time.to_f)
     true
   end
-  
+
   # Runs an adaptibrew script
   # Output will be stored in @out
   # you may see `echo` quite a bit. This will almost always be directly after calling a script
@@ -42,17 +42,6 @@ class Brewer
   def clear
     @out = []
   end
-
-  # This lil' divider is default for large return blocks
-  def echo(string=nil)
-    if string == nil
-      puts @out.first
-      return @out.first
-    end
-    puts string
-    return string
-  end
-
 
   # Adaptibrew methods ----------------------------------------------
   # for working with the rig
@@ -122,23 +111,11 @@ class Brewer
   # :nocov:
   def watch
     until pv.to_f >= sv.to_f do
-      wait(8)
+      wait(2)
     end
     true
   end
-  # :nocov:
-
-  def monitor
-    while true do
-      pid.each do |k, v|
-        ping("#{k}: #{v}")
-      end
-      wait(600)
-    end
-  end
-
-  # WaterVolInQuarts, GrainMassInPounds, GrainTemp, MashTemp
-  # :nocov:
+  
   def get_strike_temp
     print "Input amount of water in quarts: "
     water = gets.chomp
@@ -166,7 +143,6 @@ class Brewer
   end
   # :nocov:
 
-  # Relays ----------
   def rims_to(location)
     if location == "mash"
       # we ended up swapping this relay, so the name is backwards
