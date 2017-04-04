@@ -21,8 +21,9 @@ class Communicator
   end
 
   def ping(message="ping at #{Time.now}")
-    # Required here so that you'll be asked to input webhook only
-    # when you actually use slakc the first time
+    if message.is_a? Array
+      @slack.ping(message.join("\n"))
+    end
     @slack.ping(message)
   end
 
@@ -31,9 +32,12 @@ class Communicator
       before_temp = @brewer.pv
       @brewer.wait(to_seconds(delay))
       diff = @brewer.pv - before_temp
-      ping("Current Temperature: #{@brewer.pid['pv_temp']} F")
-      ping("Set Value Temperature: #{@brewer.pid['sv_temp']} F")
-      ping("Current temperature has climed #{diff} F since #{delay} minute(s) ago")
+      ping([
+        "Current Temperature: #{@brewer.pid['pv_temp']} F",
+        "Set Value Temperature: #{@brewer.pid['sv_temp']} F",
+        "Current temperature has climed #{diff} F since #{delay} minute(s) ago",
+        "Sent at #{Time.now.strftime("%H:%M")}"
+      ])
     end
     true
   end

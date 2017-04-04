@@ -73,11 +73,11 @@ class Brewer
     if temp
       return script('set_sv', temp).to_f
     end
-    return script('get_sv').to_f
+    script('get_sv').to_f
   end
 
   def pv
-    return script('get_pv').to_f
+    script('get_pv').to_f
   end
 
   def relay(relay, state)
@@ -123,7 +123,7 @@ class Brewer
     elsif location == "boil"
       relay($settings['rimsToMashRelay'], 1)
     end
-    true
+    self
   end
 
   def hlt_to(location)
@@ -132,7 +132,7 @@ class Brewer
     elsif location == "boil"
       relay($settings['spargeToMashRelay'], 1)
     end
-    true
+    self
   end
 
   def hlt(state)
@@ -141,7 +141,7 @@ class Brewer
     elsif state == "close"
       relay($settings['spargeRelay'], 0)
     end
-    true
+    self
   end
 
 end

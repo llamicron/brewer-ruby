@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
-
 require_relative "../lib/autoload"
 
 brewer = Brewer.new
 adaptibrew = Adaptibrew.new.refresh
+com = Communicator.new
 procedures = Procedures.new
 
 puts "🍺  have fun 🍺"
