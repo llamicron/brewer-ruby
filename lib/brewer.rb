@@ -103,7 +103,7 @@ class Brewer
 
   def sv(temp=nil)
     if temp
-      return script('set_sv', temp)
+      return script('set_sv', temp.to_i)
     else
       return script('get_sv')
     end
