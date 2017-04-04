@@ -75,14 +75,13 @@ class Brewer
 
   def sv(temp=nil)
     if temp
-      return script('set_sv', temp.to_i)
-    else
-      return script('get_sv')
+      return script('set_sv', temp).to_f
     end
+    return script('get_sv').to_f
   end
 
   def pv
-    return script('get_pv')
+    return script('get_pv').to_f
   end
 
   def relay(relay, state)
@@ -106,10 +105,10 @@ class Brewer
 
   # :nocov:
   def watch
-    until pv.to_f >= sv.to_f do
+    until pv >= sv do
       wait(2)
     end
-    true
+    self
   end
 
   def get_strike_temp
@@ -119,13 +118,13 @@ class Brewer
     print "Input amount of grain in lbs: "
     grain = gets.chomp
 
-    print "Input current grain temp (#{pv}): "
+    print "Input current grain temp (#{pv.to_s} F): "
     grain_temp = gets.chomp
     if grain_temp == ""
-      grain_temp = pv.to_i
+      grain_temp = pv
     end
 
-    print "Input desired mash temp (150): "
+    print "Input desired mash temp (150 F): "
     desired_mash_temp = gets.chomp
     if desired_mash_temp == ""
       desired_mash_temp = 150
@@ -133,9 +132,9 @@ class Brewer
     @temps['desired_mash'] = desired_mash_temp
 
     # this is where the magic happens
-    @temps['strike_water_temp'] = script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}")
-    sv(echo.to_i)
-    puts "SV has been set to #{sv} degrees"
+    @temps['strike_water_temp'] = script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{desired_mash_temp}").to_f
+    sv(@temps['strike_water_temp'])
+    puts "SV has been set to #{sv.to_s} degrees"
   end
   # :nocov:
 

@@ -32,9 +32,9 @@ describe Brewer do
     it "can wait for a number of seconds" do
       #  not using let(:current_time) etc. because
       # the var is created upon the first calling, which is in the expect()
-      current_time = Time.now.to_i
+      current_time = Time.now.to_f
       @brewer.wait(1)
-      expect(current_time + 1).to eq(Time.now.to_i)
+      expect(current_time + 1).to eq(Time.now.to_f)
     end
   end
 

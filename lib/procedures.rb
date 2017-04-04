@@ -74,7 +74,7 @@ class Procedures
     end
     puts "Waiting for #{input_time} seconds for strike water to start circulating"
     puts "(ctrl-c to exit proccess now)"
-    @brewer.wait(input_time.to_i)
+    @brewer.wait(input_time.to_f)
 
     # confirm that strike water is circulating well
     print "Is the strike water circulating well? "
@@ -89,7 +89,7 @@ class Procedures
     @brewer.pid(1)
 
     # measure current strike water temp and save
-    @@brewer.temps['starting_strike_temp'] = @brewer.pv.to_i
+    @@brewer.temps['starting_strike_temp'] = @brewer.pv
     puts "current strike water temp is #{@brewer.pv}. Saved."
     puts "Heating to #{@brewer.sv}"
 
@@ -130,7 +130,7 @@ class Procedures
     temp = gets.chomp
 
     if temp != ""
-      @brewer.temps['desired_mash'] = temp.to_i
+      @brewer.temps['desired_mash'] = temp.to_f
     end
 
     @brewer.sv(@brewer.temps['desired_mash'].to_f)
@@ -144,7 +144,7 @@ class Procedures
     if mash_time_input == ""
       mash_time = 3600
     else
-      mash_time = mash_time_input.to_i
+      mash_time = mash_time_input.to_f
     end
 
     @brewer.rims_to('mash')
