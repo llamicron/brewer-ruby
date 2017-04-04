@@ -1,10 +1,6 @@
-require 'net/ping'
+require_relative "autoload"
 
 module Helpers
-
-  def log
-    Dir.pwd + '/logs/output'
-  end
 
   # Formatted as: 03/07/2017 14:26
   def time
@@ -16,22 +12,18 @@ module Helpers
     connection.ping?
   end
 
-  def clear_log(log)
-    File.truncate(log, 0)
-  end
-
-  def write_log(log, lines)
-    File.open(log, 'a') do |file|
-      lines.each do |line|
-        file.puts "[#{time}]: #{line}"
-      end
-    end
-  end
-
   def confirm(input=gets.chomp)
     if ["y", "Y", "yes", "Yes", "YES", "k"].include? input
       true
     end
+  end
+
+  def to_minutes(seconds)
+    seconds.to_f / 60
+  end
+
+  def to_seconds(minutes)
+    minutes.to_f * 60
   end
 
 end

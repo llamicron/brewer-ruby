@@ -2,6 +2,5 @@ coverage
 Gemfile.lock
 adaptibrew/
 .DS_Store
-logs/
 *.gem
 .slack.yml

@@ -1,8 +1,4 @@
-require 'git'
-require 'fileutils'
-require_relative 'helpers'
-
-include Helpers
+require_relative "autoload"
 
 # This is the 'manager' for the adaptibrew repo. It handles cloning and such.
 class Adaptibrew

@@ -1,17 +1,10 @@
 #!/usr/bin/env ruby
-# This executable will start a Ripl shell with a 'brewer' and 'adaptibrew' objects
+require_relative "../lib/autoload"
 
-require 'ripl'
-
-require_relative "../lib/adaptibrew"
-require_relative "../lib/brewer"
-require_relative "../lib/helpers"
-
-include Helpers
-
-# Refresh to make sure we have the lastest version of adaptibrew
 brewer = Brewer.new
 adaptibrew = Adaptibrew.new.refresh
+com = Communicator.new
+procedures = Procedures.new
 
 puts "🍺  have fun 🍺"
 Ripl.start :binding => binding
