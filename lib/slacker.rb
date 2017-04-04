@@ -17,12 +17,6 @@ if !File.file?(slack_file)
   store.transaction do
     store['webhook_url'] = webhook_url
   end
-
-  # Here's a comment in .slack.yml so if you find it by accident you'll know what it does
-  File.open(slack_file, 'a') do |file|
-    file.puts "# This is the slack configuration file for the brewer gem"
-    file.puts "# You can delete this file and brewer will re-create it on start-up"
-  end
 end
 
 

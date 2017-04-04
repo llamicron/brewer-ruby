@@ -126,12 +126,6 @@ describe Brewer do
     end
   end
 
-  describe ".ping" do
-    it "pings slack" do
-      expect(@brewer.ping("Tests are passing :D")).to be_an_instance_of Net::HTTPOK
-    end
-  end
-
   describe ".echo" do
     context "when there is an argument" do
       it "prints the arg" do
