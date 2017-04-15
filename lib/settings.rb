@@ -5,54 +5,54 @@ include Helpers
 class Settings
 
   attr_accessor :settings
-  attr_reader :cache, :source
+  attr_reader :cache_file, :source
 
   def initialize(testing=false)
 
     @source = adaptibrew_dir('settings.py')
-    @cache = brewer_dir('settings.yml')
+    @cache_file = brewer_dir('settings.yml')
 
     @settings = Hash.new
 
     if !testing
       Adaptibrew.new.clone
 
-      if cached_settings?
+      if cache?
         load_cached_settings
       else
-        create_parse_and_cache
+        parse_and_cache
       end
-      load_global_variable
+      load_global
     end
   end
 
   # This will create the cache and populate
   # it with settings from settings.py
-  def create_parse_and_cache
-    parse_settings
-    cache_settings
+  def parse_and_cache
+    parse
+    cache
   end
 
   # Loads cached settings
   # If no cached settings, it returns false
   def load_cached_settings
-    if cached_settings?
-      @settings = YAML.load(File.open(@cache))
+    if cache?
+      @settings = YAML.load(File.open(@cache_file))
       return true
     end
     false
   end
 
   # Checks if there are settings in the cache
-  def cached_settings?
-    if File.exists?(@cache) and File.readlines(@cache).grep(/DEBUG/).size > 0
+  def cache?
+    if File.exists?(@cache_file) and File.readlines(@cache_file).grep(/DEBUG/).size > 0
       return true
     end
     false
   end
 
   # Parse the settings from the source file into @settings
-  def parse_settings
+  def parse
     File.open(@source, 'r') do |file|
       file.each_line do |line|
         if line.include? "=" and line[0] != "#"
@@ -66,27 +66,27 @@ class Settings
   end
 
   # Creates the cache if there isn't one already
-  def create_settings_cache
-    unless File.exists?(@cache)
-      File.open(@cache, 'w')
+  def create_cache
+    unless File.exists?(@cache_file)
+      File.open(@cache_file, 'w')
     end
     true
   end
 
   # This will add a new element to the @settings hash
   # AND re-cache the settings
-  def add_setting_to_cache(setting)
+  def add(setting)
     raise "Setting needs to be a hash" unless setting.is_a? Hash
     setting.each do |key, value|
       @settings[key] = value
     end
-    cache_settings
+    cache
   end
 
   # Stores the currents @settings in settings.yml
-  def cache_settings
-    create_settings_cache
-    store = YAML::Store.new @cache
+  def cache
+    create_cache
+    store = YAML::Store.new @cache_file
     store.transaction {
       @settings.each do |k, v|
         store[k] = v
@@ -97,16 +97,16 @@ class Settings
 
   # This deletes the cache file
   def clear_cache
-    if File.exists?(@cache)
-      FileUtils.rm_f @cache
+    if File.exists?(@cache_file)
+      FileUtils.rm_f @cache_file
     end
     true
   end
 
   # This is so that the settings are easier to use in my code
   # and for backwards compatability purposes
-  def load_global_variable
-    create_parse_and_cache
+  def load_global
+    parse_and_cache
     $settings = @settings
   end
 
