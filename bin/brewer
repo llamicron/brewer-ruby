@@ -3,6 +3,7 @@ require_relative "../lib/autoload"
 
 com = Communicator.new
 brewer = Brewer.new
+settings = Settings.new
 adaptibrew = Adaptibrew.new.refresh
 procedures = Procedures.new
 

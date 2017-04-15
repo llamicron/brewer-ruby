@@ -3,12 +3,11 @@ require_relative "autoload"
 class Brewer
 
   attr_reader :base_path
-  attr_accessor :out, :temps
+  attr_accessor :temps
 
   def initialize
     @base_path = Dir.home + '/.brewer'
-    # Output of adaptibrew
-    @out = []
+    Settings.new
     @temps = {}
   end
 
@@ -27,12 +26,7 @@ class Brewer
   # you may see `echo` quite a bit. This will almost always be directly after calling a script
   # It will be set to the output of the last script. I can't just return the output because i need to return self
   def script(script, params=nil)
-    @out.unshift(`python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp)
-    @out.first
-  end
-
-  def clear
-    @out = []
+    `python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp
   end
 
   # Adaptibrew methods ----------------------------------------------
@@ -48,7 +42,6 @@ class Brewer
     else
       if pid['pid_running'].to_b
         pid(0)
-        echo
       end
       return script("set_pump_off")
     end
@@ -95,15 +88,13 @@ class Brewer
   end
 
   def all_relays_status
-    script("get_relay_status_test")
-    puts @out.first.split('\n')
-    @out.shift
+    output = script("get_relay_status_test")
+    puts output.split('\n')
     true
   end
 
   def relay_status(relay)
-    script("get_relay_status", "#{relay}")
-    if @out.include? "on"
+    if script("get_relay_status", "#{relay}").include? "on"
       return "on"
     else
       return "off"

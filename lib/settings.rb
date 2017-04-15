@@ -17,11 +17,12 @@ class Settings
     if !testing
       Adaptibrew.new.clone
 
-      if cache?
-        load_cached_settings
-      else
+      unless cache?
         parse_and_cache
+      else
+        load_cached_settings
       end
+
       load_global
     end
   end

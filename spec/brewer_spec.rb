@@ -36,17 +36,4 @@ describe Brewer do
     end
   end
 
-  describe ".clear" do
-    context "when there is output" do
-      let(:brewer) { Brewer.new }
-      before { brewer.script('python_tester') }
-      specify { expect(brewer.out.first).to eq("it worked") }
-
-      it "can clear the output" do
-        @brewer.clear
-        expect(@brewer.out).to be_empty
-      end
-    end
-  end
-
 end
