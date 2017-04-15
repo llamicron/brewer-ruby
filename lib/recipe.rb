@@ -10,7 +10,14 @@ class Recipe
     @brewer = brewer
   end
 
-  def get_recipe_vars
+  def get_recipe_vars(vars=false)
+    if vars
+      raise "Vars must be a hash" unless vars.is_a? Hash
+      vars.each do |recipe_key, value|
+        instance_variable_set("@" + recipe_key, value)
+      end
+    end
+
     puts "Variables for heating strike water"
     get_strike_temp
 
