@@ -117,13 +117,4 @@ describe "Settings" do
     end
   end
 
-  describe ".type_cast" do
-    it "type casts settings to the correct class" do
-      @settings.create_parse_and_cache
-      @settings.add_setting_to_cache({'num_key' => '5'})
-
-      expect(@settings.settings['num_key']).to be_an_instance_of String
-
-    end
-  end
 end

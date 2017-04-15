@@ -33,6 +33,8 @@ class Settings
     cache_settings
   end
 
+  # Loads cached settings
+  # If no cached settings, it returns false
   def load_cached_settings
     if cached_settings?
       @settings = YAML.load(File.open(@cache))
@@ -41,6 +43,7 @@ class Settings
     false
   end
 
+  # Checks if there are settings in the cache
   def cached_settings?
     if File.exists?(@cache) and File.readlines(@cache).grep(/DEBUG/).size > 0
       return true
@@ -48,6 +51,7 @@ class Settings
     false
   end
 
+  # Parse the settings from the source file into @settings
   def parse_settings
     File.open(@source, 'r') do |file|
       file.each_line do |line|
@@ -61,6 +65,7 @@ class Settings
     false
   end
 
+  # Creates the cache if there isn't one already
   def create_settings_cache
     unless File.exists?(@cache)
       File.open(@cache, 'w')
@@ -68,6 +73,8 @@ class Settings
     true
   end
 
+  # This will add a new element to the @settings hash
+  # AND re-cache the settings
   def add_setting_to_cache(setting)
     raise "Setting needs to be a hash" unless setting.is_a? Hash
     setting.each do |key, value|
@@ -88,6 +95,7 @@ class Settings
     true
   end
 
+  # This deletes the cache file
   def clear_cache
     if File.exists?(@cache)
       FileUtils.rm_f @cache
@@ -102,23 +110,4 @@ class Settings
     $settings = @settings
   end
 
-  def type_cast
-    @settings.each do |k, v|
-      # Match ints
-      begin
-        capture = v.match(/= ([0-9]+)/).captures
-        @settings[k] = capture.strip.chomp.to_i
-      rescue NoMethodError
-        # Do nothing
-      end
-
-      # Match Booleans
-      begin
-        capture = v.match(/= ([false|true]+)/i).captures
-        @settings[k] = capture.strip.chomp.to_b
-      rescue NoMethodError
-        # Do nothing
-      end
-    end
-  end
 end
