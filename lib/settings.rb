@@ -118,4 +118,20 @@ class Settings
     return true
   end
 
+  # This method is r/badcode, i know
+  def type_cast
+    # Super janky
+    change({
+      'rimsaddressint' => @settings['rimsaddressint'].to_i,
+      'switchaddressint' => @settings['switchaddressint'].to_i,
+      'baudrate' => @settings['baudrate'].to_i,
+      'timeout' => @settings['timeout'].to_i,
+      'spargeToMashRelay' => @settings['spargeToMashRelay'].to_i,
+      'spargeRelay' => @settings['spargeRelay'].to_i,
+      'rimsToMashRelay' => @settings['rimsToMashRelay'].to_i,
+      'pumpRelay' => @settings['pumpRelay'].to_i,
+      'DEBUG' => @settings['DEBUG'].to_b,
+    })
+  end
+
 end

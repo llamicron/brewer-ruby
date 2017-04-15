@@ -139,4 +139,16 @@ describe "Settings" do
     end
   end
 
+  describe ".type_cast" do
+    before { @settings.parse }
+
+    specify { expect(@settings.settings['pumpRelay']).to be_an_instance_of String }
+    specify { expect(@settings.settings['DEBUG']).to eq("False") }
+    it "casts values to correct type" do
+      @settings.type_cast
+      expect(@settings.settings['pumpRelay']).to be_an_instance_of Fixnum
+      expect(@settings.settings['DEBUG']).to be false
+    end
+  end
+
 end
