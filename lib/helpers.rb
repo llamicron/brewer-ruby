@@ -31,4 +31,12 @@ module Helpers
     Gem.win_platform? ? (system "cls") : (system "clear")
   end
 
+  def brewer_dir(path="")
+    return Dir.home + "/.brewer/#{path}"
+  end
+
+  def adaptibrew_dir(path="")
+    return brewer_dir + "adaptibrew/#{path}"
+  end
+
 end
