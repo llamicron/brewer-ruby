@@ -61,6 +61,7 @@ class Settings
           @settings[key.strip.chomp] = value.strip.chomp
         end
       end
+      type_cast
       return true
     end
     false

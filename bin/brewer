@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 require_relative "../lib/autoload"
 
+adaptibrew = Adaptibrew.new.refresh
 com = Communicator.new
 brewer = Brewer.new
 settings = Settings.new
-adaptibrew = Adaptibrew.new.refresh
 procedures = Procedures.new
 
 puts "🍺  have fun 🍺"
