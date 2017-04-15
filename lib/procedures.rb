@@ -9,49 +9,11 @@ class Procedures
   def initialize
     @brewer = Brewer.new
     @com = Communicator.new
-    @recipe = {}
-  end
-
-  def get_recipe_vars
-    puts "Variables for heating strike water ---"
-    get_strike_temp
-
-    puts "Variables for mash ---"
-    print "Enter mash temperature: "
-    @recipe['mash_temp'] = gets.chomp.to_f
-    print "Enter mash time in minutes: "
-    @recipe['mash_time'] = to_seconds(gets.chomp.to_f)
-
-    puts "Variables for mashout ---"
-    print "Enter mashout temp: "
-    @recipe['mashout_temp'] = gets.chomp.to_f
-  end
-
-  def get_strike_temp
-    print "Input amount of water in quarts: "
-    @recipe['water'] = gets.chomp.to_f
-
-    print "Input amount of grain in lbs: "
-    @recipe['grain'] = gets.chomp.to_f
-
-    print "Input current grain temp (#{pv.to_s} F): "
-    @recipe['grain_temp'] = gets.chomp.to_f
-    if @recipe['grain_temp'] == ""
-      @recipe['grain_temp'] = pv
-    end
-
-    print "Input desired mash temp (150 F): "
-    @recipe['desired_mash_temp'] = gets.chomp
-    if @recipe['desired_mash_temp'] == ""
-      @recipe['desired_mash_temp'] = 150
-    end
-    @recipe['desired_mash_temp']
-
-    @recipe['strike_water_temp'] = script('get_strike_temp', "#{water} #{grain} #{grain_temp} #{@recipe['desired_mash_temp']}").to_f
+    @recipe = Recipe.new(@brewer)
   end
 
   def master
-    get_recipe_vars
+    @recipe.get_recipe_vars
     boot
     heat_strike_water
     dough_in
@@ -71,9 +33,7 @@ class Procedures
     @brewer.all_relays_status
     puts @brewer.pid
 
-    @brewer.clear
     puts Rainbow("Boot finished!").green
-    @brewer.out.unshift("successful boot at #{Time.now}")
     @com.ping("🍺 boot finished 🍺")
     true
   end
@@ -120,13 +80,13 @@ class Procedures
 
     # calculate strike temp & set PID to strike temp
     # this sets PID SV to calculated strike temp automagically
-    @brewer.sv(@recipe['strike_water_temp'])
+    @brewer.sv(@recipe.strike_water_temp)
     puts "SV has been set to calculated strike water temp"
     # turn on RIMS heater
     @brewer.pid(1)
 
     # measure current strike water temp and save
-    @recipe['starting_strike_temp'] = @brewer.pv
+    @recipe.starting_strike_temp = @brewer.pv
     puts "current strike water temp is #{@brewer.pv}. Saved."
     puts "Heating to #{@brewer.sv}"
 
@@ -157,7 +117,7 @@ class Procedures
   end
 
   def mash
-    @brewer.sv(@recipe['mash_temp'])
+    @brewer.sv(@recipe.mash_temp)
 
     puts Rainbow("mash stated. This will take a while.").green
     @com.ping("Mash started. This will take a while.")
@@ -168,8 +128,8 @@ class Procedures
     @brewer.pid(1)
 
     @brewer.watch
-    @com.ping("Mash temp (#{@brewer.pv} F) reached. Starting timer for #{@recipe['mash_time']} minutes.")
-    @brewer.wait(@recipe['mash_time'])
+    @com.ping("Mash temp (#{@brewer.pv} F) reached. Starting timer for #{@recipe.mash_time} minutes.")
+    @brewer.wait(@recipe.mash_time)
     @com.ping("🍺 Mash complete 🍺. Check for starch conversion.")
     puts Rainbow("Mash complete").green
     puts "Check for starch conversion"
@@ -178,7 +138,7 @@ class Procedures
   def mashout
     @com.ping("Start heating sparge water")
 
-    @brewer.sv(@recipe['mashout_temp'])
+    @brewer.sv(@recipe.mashout_temp)
 
     @brewer.pump(1)
     @brewer.pid(1)
