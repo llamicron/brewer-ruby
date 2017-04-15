@@ -110,4 +110,12 @@ class Settings
     $settings = @settings
   end
 
+  def change(values)
+    raise "Values to change must be a hash" unless values.is_a? Hash
+    values.each do |k, v|
+      @settings[k] = v
+    end
+    return true
+  end
+
 end

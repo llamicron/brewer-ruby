@@ -118,4 +118,25 @@ describe "Settings" do
     end
   end
 
+  describe ".change" do
+    before { @settings.parse_and_cache }
+
+    specify { expect(@settings.settings['DEBUG'].to_b).to be false}
+
+    context "when the setting already exists" do
+      it "changes the value of a setting" do
+        @settings.change({"DEBUG" => true})
+        expect(@settings.settings['DEBUG']).to be true
+      end
+    end
+
+    context "when the setting does not exist" do
+      it "creates the setting" do
+        expect(@settings.settings['doesNotExist']).to be nil
+        @settings.change({"doesNotExist" => true})
+        expect(@settings.settings['doesNotExist']).to be true
+      end
+    end
+  end
+
 end
