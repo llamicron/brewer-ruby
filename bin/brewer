@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require_relative "../lib/autoload"
+require_relative "../lib/brewer"
 
 adaptibrew = Adaptibrew.new.refresh
 com = Communicator.new

@@ -5,4 +5,4 @@ require 'simplecov'
 SimpleCov.command_name 'RSpec'
 SimpleCov.start
 
-require_relative "../lib/autoload"
+require_relative "../lib/brewer"
