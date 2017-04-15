@@ -7,9 +7,10 @@ class Adaptibrew
 
   def initialize
     @install_dir = Dir.home + "/.brewer/"
+    refresh
   end
 
-  # If used in IRB, Ripl, etc. it will clone into the directory IRB was started in
+  # This will clone adaptibrew into ~/.brewer/adaptibrew/
   def clone
     raise "🛑  Cannot clone, no network connection" unless network?
     if !Dir.exists?(@install_dir + "adaptibrew")
@@ -23,15 +24,16 @@ class Adaptibrew
     # :nocov: since this requires network to be off
     if !network?
       print "Warning: you have no network connection. If you clear, you will not be able to clone again, and you'll be stuck without the adaptibrew source. Are you sure? "
-      if !confirm
-        exit
-      end
+      confirm ? nil : abort
     end
     # :nocov:
     FileUtils.rm_rf(@install_dir + 'adaptibrew')
     self
   end
 
+   # This is a good catch-all method
+   # If it's not there, it will clone.
+   # If it is, it will delete and re-clone
   def refresh
     raise "🛑  Cannot refresh, no network connection" unless network?
     clear
@@ -40,10 +42,7 @@ class Adaptibrew
   end
 
   def present?
-    if Dir.exists?(@install_dir + 'adaptibrew/')
-      return true
-    end
-    false
+    return Dir.exists?(@install_dir + 'adaptibrew/') ? true : false
   end
 
 end

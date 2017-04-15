@@ -15,6 +15,10 @@ end
 $settings['settings_cache'] = Dir.home + "/.brewer/.settings.yml"
 adaptibrew_settings_file = Dir.home + '/.brewer/adaptibrew/settings.py'
 
+if !File.exists?($settings['settings_cache'])
+  File.open($settings['settings_cache'], 'w')
+end
+
 def parse_setting_from_line(line)
   key, value = line.match(/(.+)=(.+)/).captures
   value.slice!(/#.+/)
