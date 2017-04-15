@@ -4,3 +4,4 @@ adaptibrew/
 .DS_Store
 *.gem
 notes.md
+doc/
