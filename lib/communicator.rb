@@ -5,19 +5,20 @@ class Communicator
   attr_accessor :slack, :brewer
 
   def initialize
-    @slack = configure_slack
+    @settings = Settings.new
     @brewer = Brewer.new
+    @slack = configure_slack
   end
 
   def configure_slack
-    raise "settings.rb must be called before slack is configured" unless $settings
-    unless File.readlines($settings['settings_cache']).grep(/webhook_url/).size > 0
-      store = YAML::Store.new $settings['settings_cache']
-      print "Enter your Slack webhook url: "
+    unless @settings.settings['webhook_url']
+      print "Slack Webhook URL: "
       webhook_url = gets.chomp
-      store.transaction { store['webhook_url'] = webhook_url }
+      @settings.add({
+        'webhook_url' => webhook_url
+      })
     end
-    return Slack::Notifier.new YAML.load(File.open($settings['settings_cache']))['webhook_url']
+    return Slack::Notifier.new @settings.settings['webhook_url']
   end
 
   def ping(message="ping at #{Time.now}")
