@@ -1,7 +1,5 @@
 require_relative "autoload"
 
-include Helpers
-
 class Recipe
 
   attr_accessor :mash_temp, :mash_time, :mashout_temp, :water, :grain, :grain_temp, :desired_mash_temp, :strike_water_temp, :starting_strike_temp

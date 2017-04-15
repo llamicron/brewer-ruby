@@ -1,7 +1,5 @@
 require_relative "autoload"
 
-include Helpers
-
 class Settings
 
   attr_accessor :settings

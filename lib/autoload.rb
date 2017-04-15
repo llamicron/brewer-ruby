@@ -10,6 +10,6 @@ require 'wannabe_bool'
 require 'terminal-table'
 require "rainbow"
 
-require_all 'lib'
+require_rel '.'
 
 include Helpers

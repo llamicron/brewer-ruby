@@ -1,7 +1,5 @@
 require_relative "autoload"
 
-include Helpers
-
 class Procedures
 
   attr_accessor :com, :brewer, :recipe

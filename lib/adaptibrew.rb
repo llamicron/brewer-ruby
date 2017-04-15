@@ -1,7 +1,5 @@
 require_relative "autoload"
 
-include Helpers
-
 # This is the 'manager' for the adaptibrew repo. It handles cloning and such.
 class Adaptibrew
 
