@@ -19,4 +19,16 @@ describe "Helpers" do
     end
   end
 
+  describe ".brewer_dir" do
+    it "returns the .brewer directory" do
+      expect(brewer_dir).to eq(Dir.home + "/.brewer/")
+    end
+  end
+
+  describe ".adaptibrew_dir" do
+    it "returns the .adaptibrew directory" do
+      expect(adaptibrew_dir).to eq(Dir.home + "/.brewer/adaptibrew/")
+    end
+  end
+
 end

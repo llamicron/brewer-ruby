@@ -1,20 +1,19 @@
 require_relative "autoload"
 
+include Helpers
+
 # This is the 'manager' for the adaptibrew repo. It handles cloning and such.
 class Adaptibrew
 
-  attr_accessor :install_dir
-
   def initialize
-    @install_dir = Dir.home + "/.brewer/"
     refresh
   end
 
   # This will clone adaptibrew into ~/.brewer/adaptibrew/
   def clone
     raise "🛑  Cannot clone, no network connection" unless network?
-    if !Dir.exists?(@install_dir + "adaptibrew")
-      Git.clone('https://github.com/llamicron/adaptibrew.git', 'adaptibrew', :path => @install_dir)
+    if !Dir.exists?(adaptibrew_dir)
+      Git.clone('https://github.com/llamicron/adaptibrew.git', 'adaptibrew', :path => brewer_dir)
     end
     self
   end
@@ -27,7 +26,7 @@ class Adaptibrew
       confirm ? nil : abort
     end
     # :nocov:
-    FileUtils.rm_rf(@install_dir + 'adaptibrew')
+    FileUtils.rm_rf(adaptibrew_dir)
     self
   end
 
@@ -42,7 +41,7 @@ class Adaptibrew
   end
 
   def present?
-    return Dir.exists?(@install_dir + 'adaptibrew/') ? true : false
+    return Dir.exists?(adaptibrew_dir) ? true : false
   end
 
 end
