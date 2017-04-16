@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+require_relative "../lib/brewer/helpers"
+
+include Helpers
+
+require 'sinatra'
+
+get '/', :provides => 'html' do
+  # File.open(File.join("..", "views", "index.html"))
+  view("index")
+end

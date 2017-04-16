@@ -8,6 +8,10 @@ module Helpers
     Time.now.strftime("%m/%d/%Y %H:%M")
   end
 
+  def view(view)
+    File.open(File.join(__dir__ + "/../../views/#{view}.html"))
+  end
+
   # Returns true if there is a network connection
   def network?
     connection = Net::Ping::TCP.new('google.com', 80, 5)
