@@ -2,11 +2,13 @@ require_relative "../gems"
 
 module Helpers
 
+  # Returns the current time
   # Formatted as: 03/07/2017 14:26
   def time
     Time.now.strftime("%m/%d/%Y %H:%M")
   end
 
+  # Returns true if there is a network connection
   def network?
     connection = Net::Ping::TCP.new('google.com', 80, 5)
     connection.ping?

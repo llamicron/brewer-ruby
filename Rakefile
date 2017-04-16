@@ -23,8 +23,10 @@ end
 # Generate or update documentation
 # Generates in `doc/`
 RDoc::Task.new do |rdoc|
+  rm_rf "doc/"
   rdoc.rdoc_dir = 'doc/'
-  rdoc.rdoc_files.include("**/*.rb")
+  rdoc.main = "README.md"
+  # rdoc.rdoc_files.include("**/*.rb")
 end
 
 # Opens documentation.
