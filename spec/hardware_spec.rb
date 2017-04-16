@@ -1,17 +1,17 @@
 require_relative 'spec_helper'
 
-describe Brewer::Brewer do
+describe Brewer do
   before :each do
-    @brewer = Brewer::Brewer.new
+    @brewer = Brewer.new
   end
 
   before :all do
-    Brewer::Adaptibrew.new.refresh
+    Adaptibrew.new.refresh
   end
 
   after :all do
     # in case something goes wrong, everything needs to be reset
-    @brewer = Brewer::Brewer.new
+    @brewer = Brewer.new
     @brewer.pump(0)
     @brewer.pid(0)
     @brewer.boot

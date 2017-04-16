@@ -1,11 +1,11 @@
 require_relative 'spec_helper'
 
 
-describe "Settings" do
+describe Settings do
 
   before :all do
-    @adaptibrew = Brewer::Adaptibrew.new.clone
-    @settings = Brewer::Settings.new(true)
+    @adaptibrew = Adaptibrew.new.clone
+    @settings = Settings.new(true)
   end
 
   describe ".load_cached_settings" do
@@ -82,7 +82,7 @@ describe "Settings" do
   end
 
   describe ".add" do
-    before { @settings = Brewer::Settings.new }
+    before { @settings = Settings.new }
     specify { expect(@settings.settings['test_key']).to be nil }
     it "adds a new setting to the cache" do
       @settings.add({'test_key' => 'test_value'})
