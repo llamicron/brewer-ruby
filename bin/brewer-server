@@ -15,6 +15,7 @@ set :views, Proc.new { File.join(__dir__, "..", "views") }
 # Routes
 get '/' do
   @brewer = Brewer::Brewer.new
+  @relays_status = @brewer.relays_status
   erb :index
 end
 
