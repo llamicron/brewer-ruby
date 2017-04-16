@@ -1,4 +1,4 @@
-require_relative "../brewer"
+require_relative "adaptibrew"
 
 class Settings
 

@@ -1,6 +1,7 @@
-require_relative "../brewer"
+require_relative "helpers.rb"
 
-# This is the 'manager' for the adaptibrew repo. It handles cloning and such.
+include Helpers
+
 class Adaptibrew
 
   def initialize
