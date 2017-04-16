@@ -89,9 +89,9 @@ module Brewer
     end
 
     def all_relays_status
-      output = script("get_relay_status_test")
-      puts output.split('\n')
-      true
+      output = script("get_relay_status_test").split("\n")
+      output.shift(3)
+      return output
     end
 
     def relay_status(relay)

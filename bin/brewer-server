@@ -1,11 +1,26 @@
 #!/usr/bin/env ruby
-require_relative "../lib/brewer/helpers"
+require_relative "../lib/gems"
+require_rel "../lib/brewer/"
 
 include Helpers
+include Brewer
 
+require 'erb'
 require 'sinatra'
 
-get '/', :provides => 'html' do
-  # File.open(File.join("..", "views", "index.html"))
-  view("index")
+set :bind, '0.0.0.0'
+
+set :views, Proc.new { File.join(__dir__, "..", "views") }
+
+# Routes
+get '/' do
+  @brewer = Brewer::Brewer.new
+  erb :index
+end
+
+post '/apply-relay-config' do
+  data = request.body.read
+  # TODO: this VVV
+  # Do something with this data
+  redirect '/'
 end

@@ -6,9 +6,9 @@ module Brewer
     attr_accessor :com, :brewer, :recipe
 
     def initialize
-      @brewer =Brewer::Brewer.new
-      @com =Brewer::Communicator.new
-      @recipe =Brewer::Recipe.new(@brewer)
+      @brewer = Brewer.new
+      @com = Communicator.new
+      @recipe = Recipe.new(@brewer)
     end
 
     def master

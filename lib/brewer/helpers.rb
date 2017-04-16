@@ -9,7 +9,7 @@ module Helpers
   end
 
   def view(view)
-    File.open(File.join(__dir__ + "/../../views/#{view}.html"))
+    File.open(File.join(__dir__ + "/../../views/#{view}.html.erb"))
   end
 
   # Returns true if there is a network connection
