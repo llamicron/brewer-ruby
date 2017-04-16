@@ -1,4 +1,4 @@
-require_rel "gems"
+require_relative "gems"
 
 require_rel 'brewer/'
 

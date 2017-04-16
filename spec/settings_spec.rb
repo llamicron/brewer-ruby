@@ -1,7 +1,7 @@
 require_relative 'spec_helper'
 
 
-describe "Settings" do
+describe Settings do
 
   before :all do
     @adaptibrew = Adaptibrew.new.clone
@@ -136,18 +136,6 @@ describe "Settings" do
         @settings.change({"doesNotExist" => true})
         expect(@settings.settings['doesNotExist']).to be true
       end
-    end
-  end
-
-  describe ".type_cast" do
-    before { @settings.parse }
-
-    specify { expect(@settings.settings['pumpRelay']).to be_an_instance_of String }
-    specify { expect(@settings.settings['DEBUG']).to eq("False") }
-    it "casts values to correct type" do
-      @settings.type_cast
-      expect(@settings.settings['pumpRelay']).to be_an_instance_of Fixnum
-      expect(@settings.settings['DEBUG']).to be false
     end
   end
 

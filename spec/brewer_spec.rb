@@ -15,7 +15,7 @@ describe Brewer do
       expect(Brewer.new).to be_an_instance_of Brewer
     end
     it "does not accept args" do
-      expect { Brewer.new('heres an arg') }.to raise_exception(ArgumentError)
+      expect {Brewer.new('heres an arg') }.to raise_exception(ArgumentError)
     end
   end
 

@@ -6,3 +6,5 @@ SimpleCov.command_name 'RSpec'
 SimpleCov.start
 
 require_relative "../lib/brewer"
+
+include Brewer
