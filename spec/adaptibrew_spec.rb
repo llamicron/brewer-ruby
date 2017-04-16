@@ -1,18 +1,18 @@
 require_relative 'spec_helper'
 
-describe Adaptibrew do
+describe Brewer::Adaptibrew do
 
   before :each do
-    @adaptibrew = Adaptibrew.new.refresh
+    @adaptibrew = Brewer::Adaptibrew.new.refresh
   end
 
   describe "#new" do
-    specify { expect(Adaptibrew.new).to be_an_instance_of Adaptibrew }
+    specify { expect(Brewer::Adaptibrew.new).to be_an_instance_of Brewer::Adaptibrew }
   end
 
   describe ".clear" do
     context "when the repo exists" do
-      let(:adaptibrew) { Adaptibrew.new }
+      let(:adaptibrew) { Brewer::Adaptibrew.new }
       specify { expect(adaptibrew.present?).to be true }
 
       it "deletes the repo" do
@@ -22,7 +22,7 @@ describe Adaptibrew do
     end
 
     context "when the repo does not exist" do
-      let(:adaptibrew) { Adaptibrew.new }
+      let(:adaptibrew) { Brewer::Adaptibrew.new }
       before { adaptibrew.clear }
       specify { expect(adaptibrew.present?).to be false }
 
@@ -35,7 +35,7 @@ describe Adaptibrew do
 
   describe ".clone" do
     context "when the repo does not exist" do
-      let(:adaptibrew) { Adaptibrew.new }
+      let(:adaptibrew) { Brewer::Adaptibrew.new }
       before { adaptibrew.clear }
       specify { expect(adaptibrew.present?).to be false }
 
@@ -46,7 +46,7 @@ describe Adaptibrew do
     end
 
     context "when the repo exists" do
-      let(:adaptibrew) { Adaptibrew.new }
+      let(:adaptibrew) { Brewer::Adaptibrew.new }
       before { adaptibrew.clone }
       specify { expect(adaptibrew.present?).to be true }
 
@@ -58,7 +58,7 @@ describe Adaptibrew do
   end
 
   describe ".refresh" do
-    let(:adaptibrew) { Adaptibrew.new }
+    let(:adaptibrew) { Brewer::Adaptibrew.new }
     before { adaptibrew.refresh }
 
     it "clears and clones the repo" do # regardless of wether or not it's there
@@ -71,7 +71,7 @@ describe Adaptibrew do
 
   describe ".present?" do
     context "when the exists" do
-      let(:adaptibrew) { Adaptibrew.new }
+      let(:adaptibrew) { Brewer::Adaptibrew.new }
       before { adaptibrew.refresh }
       specify { expect(Dir.exists?(Dir.home + '/.brewer/adaptibrew')).to be true }
 
@@ -81,7 +81,7 @@ describe Adaptibrew do
     end
 
     context "when the repo does not exist" do
-      let(:adaptibrew) { Adaptibrew.new }
+      let(:adaptibrew) { Brewer::Adaptibrew.new }
       before { adaptibrew.clear }
       specify { expect(Dir.exists?('adaptibrew')).to be false }
       it "returns false" do

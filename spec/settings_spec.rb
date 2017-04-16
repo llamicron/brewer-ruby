@@ -4,8 +4,8 @@ require_relative 'spec_helper'
 describe "Settings" do
 
   before :all do
-    @adaptibrew = Adaptibrew.new.clone
-    @settings = Settings.new(true)
+    @adaptibrew = Brewer::Adaptibrew.new.clone
+    @settings = Brewer::Settings.new(true)
   end
 
   describe ".load_cached_settings" do
@@ -82,7 +82,7 @@ describe "Settings" do
   end
 
   describe ".add" do
-    before { @settings = Settings.new }
+    before { @settings = Brewer::Settings.new }
     specify { expect(@settings.settings['test_key']).to be nil }
     it "adds a new setting to the cache" do
       @settings.add({'test_key' => 'test_value'})
@@ -136,18 +136,6 @@ describe "Settings" do
         @settings.change({"doesNotExist" => true})
         expect(@settings.settings['doesNotExist']).to be true
       end
-    end
-  end
-
-  describe ".type_cast" do
-    before { @settings.parse }
-
-    specify { expect(@settings.settings['pumpRelay']).to be_an_instance_of String }
-    specify { expect(@settings.settings['DEBUG']).to eq("False") }
-    it "casts values to correct type" do
-      @settings.type_cast
-      expect(@settings.settings['pumpRelay']).to be_an_instance_of Fixnum
-      expect(@settings.settings['DEBUG']).to be false
     end
   end
 
