@@ -93,7 +93,6 @@ module Brewer
 
       # when strike temp is reached, @com.ping slack
       @brewer.watch
-      @com.ping("Strike water heated to #{@brewer.pv}. Maintaining temperature.")
       puts Rainbow("Strike water heated. Maintaining temp.").green
       true
     end
@@ -127,7 +126,7 @@ module Brewer
       @brewer.pid(1)
 
       @brewer.watch
-      @com.ping("Mash temp (#{@brewer.pv} F) reached. Starting timer for #{@recipe.mash_time} minutes.")
+      @com.ping("Starting timer for #{@recipe.mash_time} minutes.")
       @brewer.wait(@recipe.mash_time)
       @com.ping("🍺 Mash complete 🍺. Check for starch conversion.")
       puts Rainbow("Mash complete").green
@@ -144,7 +143,7 @@ module Brewer
 
       @com.ping("Heating to #{@brewer.sv}... this could take a few minutes.")
       @brewer.watch
-      @com.ping("Mashout temperature (#{@brewer.pv}) reached. Mashout complete.")
+      @com.ping("Mashout complete.")
     end
 
     def sparge

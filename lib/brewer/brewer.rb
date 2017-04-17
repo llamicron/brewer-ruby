@@ -117,6 +117,7 @@ module Brewer
       until pv >= sv do
         wait(2)
       end
+      Communicator.new.ping("Temperature is now at #{pv.to_f} F")
       self
     end
     # :nocov:
