@@ -75,28 +75,35 @@
                   <div class="mdl-card__supporting-text">
                     <form action="/apply-relay-config" enctype='application/json' method="post">
                       <!-- HLT to option -->
+
                       <div class="mdl-select mdl-select--floating-label">
-                        <label class="mdl-select__label" for="hlt_to">HLT to: </label>
+                        <label class="mdl-select__label" for="hlt_to">Divert HLT to: </label>
                         <select class="mdl-select__input" id="hlt_to" name="hlt_to">
-                          <option value="mash">Mash</option>
-                          <option value="boil">Boil</option>
+                          <option value="mash" <%= @relays_status['spargeToMashRelay'].to_b ? nil : "selected" %>>Mash</option>
+                          <option value="boil" <%= @relays_status['spargeToMashRelay'].to_b ? "selected" : nil %>>Boil</option>
                         </select>
                       </div>
                       <br>
                       <!-- RIMS to option -->
                       <div class="mdl-select mdl-select--floating-label">
-                        <label class="mdl-select__label" for="rims_to">RIMS to: </label>
+                        <label class="mdl-select__label" for="rims_to">Divert RIMS to: </label>
                         <select class="mdl-select__input" id="rims_to" name="rims_to">
-                          <option value="mash">Mash (Circulate)</option>
-                          <option value="boil">Boil</option>
+                          <option value="mash" <%= @relays_status['rimsToMashRelay'].to_b ? nil : "selected" %>>Mash (Circulate)</option>
+                          <option value="boil" <%= @relays_status['rimsToMashRelay'].to_b ? "selected" : nil %>>Boil</option>
                         </select>
                       </div>
                       <br>
                       <!-- HLT on option -->
                       <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="hlt">
-                        <input type="checkbox" id="hlt" name="hlt" value="1" class="mdl-switch__input">
-                        <input type="hidden" id="hlt" name="hlt" value="0">
-                        <span class="mdl-switch__label">HLT On?</span>
+                        <input type="hidden" name="hlt" value="false">
+                        <input type="checkbox" id="hlt" name="hlt" value="true" class="mdl-switch__input" <%= @relays_status['spargeRelay'].to_b ? "checked" : nil  %>>
+                        <span class="mdl-switch__label">HLT Flowing?</span>
+                      </label>
+                      <!-- Pump option -->
+                      <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="pump">
+                        <input type="hidden" name="pump" value="0">
+                        <input type="checkbox" id="pump" name="pump" value="1" class="mdl-switch__input" <%= @relays_status['pumpRelay'].to_b ? "checked" : nil  %>>
+                        <span class="mdl-switch__label">Pump On?</span>
                       </label>
                       <br>
                   </div>

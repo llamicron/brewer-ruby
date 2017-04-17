@@ -107,7 +107,11 @@ module Brewer
     def relay_config(params)
       raise "Params must be a hash" unless params.is_a? Hash
       params.each do |method, setting|
-        send(method, setting)
+        if method.include? "pump"
+          send(method, setting.to_i)
+        else
+          send(method, setting)
+        end
       end
     end
 
