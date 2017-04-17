@@ -10,6 +10,16 @@ require 'sinatra'
 
 set :bind, '0.0.0.0'
 
+if ARGV.include? "-p"
+  # The next item after "-p"
+  port = ARGV[ARGV.index("-p") + 1]
+  print Rainbow("Warning: ").yellow
+  puts "To bind the port to anything below port 1024, you need to run as root"
+else
+  port = 8080
+end
+set :port, port
+
 set :views, Proc.new { File.join(__dir__, "..", "views") }
 
 # Routes
