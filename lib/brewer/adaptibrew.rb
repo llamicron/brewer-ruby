@@ -5,10 +5,6 @@ include Helpers
 module Brewer
   class Adaptibrew
 
-    def initialize
-      refresh
-    end
-
     # This will clone adaptibrew into ~/.brewer/adaptibrew/
     def clone
       raise "🛑  Cannot clone, no network connection" unless network?
