@@ -1,155 +1,216 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.blue_grey-indigo.min.css" />
+    <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+    <title>Brewer Home</title>
+    <style media="screen">
+      .card-wide {
+        width: 100%;
+        margin-top: 2em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+          <a href="#scroll-tab-1" class="mdl-layout__tab is-active">Relays & Pump</a>
+          <a href="#scroll-tab-2" class="mdl-layout__tab">PID</a>
+          <a href="#scroll-tab-3" class="mdl-layout__tab">Procedures</a>
+        </div>
+      </header>
 
-<head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.blue_grey-indigo.min.css" />
-  <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
-  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
-  <title>Brewer Home</title>
-  <style media="screen">
-    .table-card {
-      width: 80%;
-      padding: 0;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <header class="mdl-layout__header">
-      <div class="mdl-layout__header-row">
-        <!-- Title -->
-        <span class="mdl-layout-title">Brewer Home</span>
-      </div>
-      <!-- Tabs -->
-      <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-        <a href="#scroll-tab-1" class="mdl-layout__tab is-active">Relays & Pump</a>
-        <a href="#scroll-tab-2" class="mdl-layout__tab">PID</a>
-        <a href="#scroll-tab-3" class="mdl-layout__tab">Current Procedure</a>
-      </div>
-    </header>
-    <br><br>
-
-    <main class="mdl-layout__content">
-      <div class="page-content">
-        <div class="row">
-          <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
-            <div class="page-content">
-              <% if flash[:config_done] %>
-              <div class="row">
-                <div class="col-md-2 col-md-offset-5">
-                  <span class="mdl-chip">
-                    <span class="mdl-chip__text"><strong><%= flash[:config_done] %></strong></span>
-                  </span>
-                </div>
-              </div>
-              <% end %>
-              <div class="col-md-4 col-md-offset-2">
-                <!-- Relay Status Card -->
-                <div class="mdl-card mdl-shadow--4dp table-card">
-                  <div class="mdl-card__title mdl-card--expand">
-                    <h2 class="mdl-card__title-text">All Relays Status</h2>
-                  </div>
-                  <div class="mdl-card__supporting-text">
-                    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 100%;">
-                      <thead>
-                        <tr>
-                          <th class="mdl-data-table__cell--non-numeric">Relay Name</th>
-                          <th>Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% @relays_status.each do |relay_name, status| %>
-                          <tr>
-                            <td class="mdl-data-table__cell--non-numeric"><strong><%= relay_name %></strong></td>
-                            <td><strong><%= status %></strong></td>
-                          </tr>
-                        <% end %>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div class="mdl-card__actions mdl-card--border">
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <!-- Set relay card -->
-                <div class="mdl-card mdl-shadow--4dp">
-                  <div class="mdl-card__title mdl-card--expand">
-                    <h2 class="mdl-card__title-text">Relay Configuration</h2>
-                  </div>
-                  <div class="mdl-card__supporting-text">
-                    <form action="/apply-relay-config" enctype='application/json' method="post">
-                      <!-- HLT to option -->
-
-                      <div class="mdl-select mdl-select--floating-label">
-                        <label class="mdl-select__label" for="hlt_to">Divert HLT to: </label>
-                        <select class="mdl-select__input" id="hlt_to" name="hlt_to">
-                          <option value="mash" <%= @relays_status['spargeToMashRelay'].to_b ? nil : "selected" %>>Mash</option>
-                          <option value="boil" <%= @relays_status['spargeToMashRelay'].to_b ? "selected" : nil %>>Boil</option>
-                        </select>
-                      </div>
-                      <br>
-                      <!-- RIMS to option -->
-                      <div class="mdl-select mdl-select--floating-label">
-                        <label class="mdl-select__label" for="rims_to">Divert RIMS to: </label>
-                        <select class="mdl-select__input" id="rims_to" name="rims_to">
-                          <option value="mash" <%= @relays_status['rimsToMashRelay'].to_b ? nil : "selected" %>>Mash (Circulate)</option>
-                          <option value="boil" <%= @relays_status['rimsToMashRelay'].to_b ? "selected" : nil %>>Boil</option>
-                        </select>
-                      </div>
-                      <br>
-                      <!-- HLT on option -->
-                      <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="hlt">
-                        <input type="hidden" name="hlt" value="false">
-                        <input type="checkbox" id="hlt" name="hlt" value="true" class="mdl-switch__input" <%= @relays_status['spargeRelay'].to_b ? "checked" : nil  %>>
-                        <span class="mdl-switch__label">HLT Flowing?</span>
-                      </label>
-                      <br><br><hr><br>
-                      <!-- Pump option -->
-                      <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="pump">
-                        <input type="hidden" name="pump" value="0">
-                        <input type="checkbox" id="pump" name="pump" value="1" class="mdl-switch__input" <%= @relays_status['pumpRelay'].to_b ? "checked" : nil  %>>
-                        <span class="mdl-switch__label">Pump On?</span>
-                      </label>
-                      <br>
-                  </div>
-                  <div class="mdl-card__actions mdl-card--border">
-                    <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                      Apply Configuration
-                    </button>
-                  </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          <section class="mdl-layout__tab-panel" id="scroll-tab-2">
-                <div class="page-content">
-                  <div class="mdl-card mdl-shadow--4dp">
+      <main class="mdl-layout__content">
+        <div class="container">
+          <div class="page-content">
+            <div class="row">
+              <!-- Tab 1 -->
+              <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
+                <div class="col-md-6">
+                  <br>
+                  <!-- Relay Status Card / Table -->
+                  <div class="mdl-card card-wide mdl-shadow--4dp">
                     <div class="mdl-card__title mdl-card--expand">
-                      <h2 class="mdl-card__title-text">PID Status</h2>
+                      <h2 class="mdl-card__title-text">Relay Status</h2>
                     </div>
                     <div class="mdl-card__supporting-text">
-                      <p>
-                        Coming soon
-                      </p>
-                    </div>
-                    <div class="mdl-card__actions mdl-card--border">
-                      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                        Here's a button
-                      </button>
+                      <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 100%;">
+                        <thead>
+                          <tr>
+                            <th class="mdl-data-table__cell--non-numeric">Relay Name</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% @relays_status.each do |relay_name, status| %>
+                            <tr>
+                              <td class="mdl-data-table__cell--non-numeric"><strong><%= relay_name %></strong></td>
+                              <td><strong><%= status %></strong></td>
+                            </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
-            </section>
-        </div>
-      </div>
-    </main>
-  </div>
-</body>
+                <div class="col-md-6">
+                  <!-- Relay Configuration Card / Form -->
+                  <br>
+                  <div class="mdl-shadow--4dp card-wide mdl-card">
+                    <div class="mdl-card__title mdl-card--expand">
+                      <h2 class="mdl-card__title-text">Custom Relay Configuration</h2>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                      <form action="/apply-relay-config" enctype='application/json' method="post">
+                        <!-- HLT to option -->
 
+                        <div class="mdl-select mdl-select--floating-label">
+                          <label class="mdl-select__label" for="hlt_to">Divert HLT to: </label>
+                          <select class="mdl-select__input" id="hlt_to" name="hlt_to">
+                            <option value="mash" <%= @relays_status['spargeToMashRelay'].to_b ? nil : "selected" %>>Mash</option>
+                            <option value="boil" <%= @relays_status['spargeToMashRelay'].to_b ? "selected" : nil %>>Boil</option>
+                          </select>
+                        </div>
+                        <br>
+                        <!-- RIMS to option -->
+                        <div class="mdl-select mdl-select--floating-label">
+                          <label class="mdl-select__label" for="rims_to">Divert RIMS to: </label>
+                          <select class="mdl-select__input" id="rims_to" name="rims_to">
+                            <option value="mash" <%= @relays_status['rimsToMashRelay'].to_b ? nil : "selected" %>>Mash (Circulate)</option>
+                            <option value="boil" <%= @relays_status['rimsToMashRelay'].to_b ? "selected" : nil %>>Boil</option>
+                          </select>
+                        </div>
+                        <br>
+                        <!-- HLT on option -->
+                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="hlt">
+                          <input type="hidden" name="hlt" value="false">
+                          <input type="checkbox" id="hlt" name="hlt" value="true" class="mdl-switch__input" <%= @relays_status['spargeRelay'].to_b ? "checked" : nil  %>>
+                          <span class="mdl-switch__label">HLT Flowing?</span>
+                        </label>
+                        <br><br><hr><br>
+                        <!-- Pump option -->
+                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="pump">
+                          <input type="hidden" name="pump" value="0">
+                          <input type="checkbox" id="pump" name="pump" value="1" class="mdl-switch__input" <%= @relays_status['pumpRelay'].to_b ? "checked" : nil  %>>
+                          <span class="mdl-switch__label">Pump On?</span>
+                        </label>
+                        <br>
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border">
+                          <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            Apply Configuration
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <!-- Tab 2 -->
+              <section class="mdl-layout__tab-panel" id="scroll-tab-2">
+                <div class="col-md-12">
+                  <div class="mdl-card card-wide mdl-shadow--4dp">
+                    <div class="mdl-card__title mdl-card--expand">
+                      <h2 class="mdl-card__title-text">RIMS/PID Status</h2>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                      <div class="col-md-6">
+                        <h1><%= @pid_status['pv_temp'] %>° F</h1>
+                        <h3>Proccess Value Temp</h3>
+                      </div>
+                      <div class="col-md-6">
+                        <h1><%= @pid_status['sv_temp'] %>° F</h1>
+                        <h3>Set Value Temp</h3>
+                      </div>
+                      <br>
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <h3>RIMS Heater is <%= @pid_status['pid_running'].to_b ? "On" : "Off" %></h3>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <!-- Tab 3 -->
+              <section class="mdl-layout__tab-panel" id="scroll-tab-3">
+                <div class="col-md-12">
+                  <div class="mdl-card card-wide mdl-shadow--4dp">
+                    <div class="mdl-card__supporting-text">
+                      <h2>Choose a procedure: </h2>
+                      <form action="/start-procedure" method="post">
+                        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="master">
+                          <input type="radio" id="master" class="mdl-radio__button" name="procedure" value="master">
+                          <span class="mdl-radio__label">Master</span>
+                          <br>
+                          <i>
+                            (Does all the following procedures)
+                          </i>
+                        </label>
+                        <hr>
+                        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="boot">
+                          <input type="radio" id="boot" class="mdl-radio__button" name="procedure" value="boot">
+                          <span class="mdl-radio__label">Boot</span>
+                        </label>
+                        <br><br>
+                        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="heat-strike-water">
+                          <input type="radio" id="heat-strike-water" class="mdl-radio__button" name="procedure" value="heat-strike-water">
+                          <span class="mdl-radio__label">Heat Strike Water</span>
+                        </label>
+                        <br><br>
+                        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="dough-in">
+                          <input type="radio" id="dough-in" class="mdl-radio__button" name="procedure" value="dough-in">
+                          <span class="mdl-radio__label">Dough In</span>
+                        </label>
+                        <br><br>
+                        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="mash">
+                          <input type="radio" id="mash" class="mdl-radio__button" name="procedure" value="mash">
+                          <span class="mdl-radio__label">Mash</span>
+                        </label>
+                        <br><br>
+                        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="mashout">
+                          <input type="radio" id="mashout" class="mdl-radio__button" name="procedure" value="mashout">
+                          <span class="mdl-radio__label">Mashout</span>
+                        </label>
+                        <br><br>
+                        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="sparge">
+                          <input type="radio" id="sparge" class="mdl-radio__button" name="procedure" value="sparge">
+                          <span class="mdl-radio__label">Sparge</span>
+                        </label>
+                        <br><br>
+                        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="top-off">
+                          <input type="radio" id="top-off" class="mdl-radio__button" name="procedure" value="top-off">
+                          <span class="mdl-radio__label">Top Off</span>
+                        </label>
+                        <br><br>
+                        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="boil">
+                          <input type="radio" id="boil" class="mdl-radio__button" name="procedure" value="boil">
+                          <span class="mdl-radio__label">Boil</span>
+                        </label>
+                        <br>
+                        <br>
+                    </div>
+                    <div class="mdl-card__actions mdl-card--border">
+                      <!-- Submit button -->
+                      <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                        Start Procedure
+                      </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
 </html>
