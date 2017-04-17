@@ -27,7 +27,7 @@ module Brewer
       # Configuration
       set :bind, '0.0.0.0'
       set :port, port
-      set :views, Proc.new { File.join(__dir__, "..", "views") }
+      set :views, Proc.new { File.join(File.expand_path("..", __dir__), "views") }
       enable :run
 
       $brewer = Brewer.new
