@@ -30,6 +30,7 @@ module Brewer
       `python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp
     end
 
+
     # Adaptibrew methods ----------------------------------------------
     # for working with the rig
 
@@ -84,7 +85,6 @@ module Brewer
         return true
       end
       script("set_relay", "#{relay} #{state}")
-      wait(10)
       true
     end
 
@@ -102,6 +102,13 @@ module Brewer
         statuses[relay_names.key(relay_num.to_i)] = status
       end
       return statuses
+    end
+
+    def relay_config(params)
+      raise "Params must be a hash" unless params.is_a? Hash
+      params.each do |method, setting|
+        send(method, setting)
+      end
     end
 
     def relay_status(relay)

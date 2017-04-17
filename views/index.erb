@@ -73,7 +73,7 @@
                     <h2 class="mdl-card__title-text">Relay Configuration</h2>
                   </div>
                   <div class="mdl-card__supporting-text">
-                    <form action="/apply-relay-config" method="post">
+                    <form action="/apply-relay-config" enctype='application/json' method="post">
                       <!-- HLT to option -->
                       <div class="mdl-select mdl-select--floating-label">
                         <label class="mdl-select__label" for="hlt_to">HLT to: </label>
@@ -87,14 +87,14 @@
                       <div class="mdl-select mdl-select--floating-label">
                         <label class="mdl-select__label" for="rims_to">RIMS to: </label>
                         <select class="mdl-select__input" id="rims_to" name="rims_to">
-                          <option value="rims">Mash (Circulate)</option>
+                          <option value="mash">Mash (Circulate)</option>
                           <option value="boil">Boil</option>
                         </select>
                       </div>
                       <br>
                       <!-- HLT on option -->
                       <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="hlt_on">
-                        <input type="checkbox" id="hlt_on" name="hlt_on" value="true" class="mdl-switch__input">
+                        <input type="checkbox" id="hlt_on" name="hlt" value="true" class="mdl-switch__input">
                         <span class="mdl-switch__label">HLT On?</span>
                       </label>
                       <br>
