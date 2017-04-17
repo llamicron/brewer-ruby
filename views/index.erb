@@ -38,6 +38,15 @@
         <div class="row">
           <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
             <div class="page-content">
+              <% if flash[:config_done] %>
+              <div class="row">
+                <div class="col-md-2 col-md-offset-5">
+                  <span class="mdl-chip">
+                    <span class="mdl-chip__text"><strong><%= flash[:config_done] %></strong></span>
+                  </span>
+                </div>
+              </div>
+              <% end %>
               <div class="col-md-4 col-md-offset-2">
                 <!-- Relay Status Card -->
                 <div class="mdl-card mdl-shadow--4dp table-card">

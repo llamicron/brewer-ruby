@@ -25,10 +25,12 @@ module Brewer
 
     def boot
       puts Rainbow("booting...").yellow
-      @brewer.pid(0)
-      @brewer.pump(0)
-      @brewer.rims_to('mash')
-      @brewer.hlt_to('mash')
+      @brewer.relay_config({
+        'pid' => 0,
+        'pump' => 0,
+        'rims_to' => 'mash',
+        'hlt_to' => 'mash'
+      })
       @brewer.all_relays_status
       puts @brewer.pid
 
@@ -99,10 +101,10 @@ module Brewer
     # :nocov:
 
     def dough_in
-      # turn pump off
-      @brewer.pump(0)
-      # turn PID off
-      @brewer.pid(0)
+      @brewer.relay_config({
+        'pid' => 0,
+        'pump' => 0
+      })
       @brewer.wait(3)
       @com.ping("Ready to dough in")
       puts Rainbow("Ready to dough in").green
@@ -120,10 +122,11 @@ module Brewer
       puts Rainbow("mash stated. This will take a while.").green
       @com.ping("Mash started. This will take a while.")
 
-      @brewer.rims_to('mash')
-
-      @brewer.pump(1)
-      @brewer.pid(1)
+      @brewer.relay_config({
+        'rims_to' => 'mash',
+        'pid'  => 1,
+        'pump' => 1
+      })
 
       @brewer.watch
       @com.ping("Starting timer for #{@recipe.mash_time} minutes.")
@@ -138,9 +141,10 @@ module Brewer
 
       @brewer.sv(@recipe.mashout_temp)
 
-      @brewer.pump(1)
-      @brewer.pid(1)
-
+      @brewer.relay_config({
+        'pid'  => 1,
+        'pump' => 1
+      })
       @com.ping("Heating to #{@brewer.sv}... this could take a few minutes.")
       @brewer.watch
       @com.ping("Mashout complete.")
@@ -150,32 +154,38 @@ module Brewer
       print Rainbow("Is the sparge water heated to the correct temperature? ").yellow
       confirm ? nil : abort
 
-      @brewer.hlt_to('mash')
-      @brewer.hlt(1)
+      @brewer.relay_config({
+        'hlt_to' => 'mash',
+        'hlt' => 1
+      })
 
       print "Waiting for 10 seconds. "
       puts Rainbow("Regulate sparge balance.").yellow
       puts "(ctrl-c to abort proccess)"
       @brewer.wait(30)
 
-      @brewer.rims_to('boil')
-      @brewer.pump(1)
+      @brewer.relay_config({
+        'rims_to' => 'boil',
+        'pump' => 1
+      })
 
       @com.ping("Please check the sparge balance and ignite boil tun burner")
 
       puts Rainbow("Waiting until intervention to turn off pump (y): ").yellow
       confirm ? nil : abort
 
-      @brewer.pid(0)
-      @brewer.pump(0)
-
-      @brewer.hlt(0)
+      @brewer.relay_config({
+        'pid' => 0,
+        'pump' => 0,
+        'hlt' => 0
+      })
     end
 
     def top_off
-      @brewer.hlt_to('boil')
-
-      @brewer.hlt(1)
+      @brewer.relay_config({
+        'hlt_to' => 'boil',
+        'hlt' => 1
+      })
 
       print Rainbow("waiting for intervention to turn off hlt (y): ").yellow
       confirm ? nil : abort
