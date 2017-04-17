@@ -1,40 +1,55 @@
 #!/usr/bin/env ruby
-require_relative "../lib/gems"
-require_rel "../lib/brewer/"
+require 'sinatra/base'
+require "rainbow"
 
-include Helpers
+require_relative "../lib/gems"
+require_relative "../lib/brewer"
+
 include Brewer
 
-require 'erb'
-require 'sinatra'
+module Brewer
+  class Server < Sinatra::Base
 
-set :bind, '0.0.0.0'
 
-if ARGV.include? "-p"
-  # The next item after "-p"
-  port = ARGV[ARGV.index("-p") + 1]
-  print Rainbow("Warning: ").yellow
-  puts "To bind the port to anything below port 1024, you need to run as root"
-else
-  port = 8080
-end
-set :port, port
+    configure do
+      if ARGV.include? "-p"
+        port = ARGV[ARGV.index("-p") + 1].to_i
+        if port < 1024
+          print Rainbow("Warning: ").yellow
+          puts "The port you selected is less than 1024. This will require sudo."
+          puts "Either use sudo or choose a different port. Sinatra default is 4567."
+          puts ""
+        end
+      else
+        port = 4567
+      end
 
-set :views, Proc.new { File.join(__dir__, "..", "views") }
+      # Configuration
+      set :bind, '0.0.0.0'
+      set :port, port
+      set :views, Proc.new { File.join(__dir__, "..", "views") }
+      enable :run
 
-# Routes
-get '/' do
-  @brewer = Brewer::Brewer.new
+      $brewer = Brewer.new
+    end
 
-  @relays_status = @brewer.relays_status
-  # @pid_status = @brewer.pid
-  erb :index
-end
 
-post '/apply-relay-config' do
-  data = request.body.read
-  puts "----------------------------------------------------"
-  puts data.inspect
-  abort
-  # redirect '/'
+    # Routes
+    not_found do
+      erb :not_found
+    end
+
+    get '/' do
+      @relays_status = $brewer.relays_status
+      # @pid_status = @brewer.pid
+      erb :index
+    end
+
+    post '/apply-relay-config' do
+      $brewer.relay_config(params)
+      redirect '/'
+    end
+
+    run!
+  end
 end
