@@ -25,13 +25,16 @@ set :views, Proc.new { File.join(__dir__, "..", "views") }
 # Routes
 get '/' do
   @brewer = Brewer::Brewer.new
+
   @relays_status = @brewer.relays_status
+  # @pid_status = @brewer.pid
   erb :index
 end
 
 post '/apply-relay-config' do
   data = request.body.read
-  # TODO: this VVV
-  # Do something with this data
-  redirect '/'
+  puts "----------------------------------------------------"
+  puts data.inspect
+  abort
+  # redirect '/'
 end

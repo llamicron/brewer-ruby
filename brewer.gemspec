@@ -2,7 +2,7 @@ require 'rake'
 
 Gem::Specification.new do |s|
   s.name               = "brewer"
-  s.version            = "0.0.83"
+  s.version            = "0.0.85"
   s.default_executable = "brewer"
 
   s.authors = ["Luke Sweeney"]
@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.post_install_message = "🍺  have fun 🍺"
   s.email = %q{luke@thesweeneys.org}
   s.files = FileList.new(['lib/*.rb', 'lib/brewer/*.rb', 'bin/*', '[A-Z]*', 'spec/*.rb']).to_a
-  s.executables = ['brewer']
+  s.executables = ['brewer', 'brewer-server']
   s.bindir = 'bin'
   s.test_files = FileList.new(["spec/*.rb"]).to_a
   s.homepage = %q{https://rubygems.org/gems/brewer}
