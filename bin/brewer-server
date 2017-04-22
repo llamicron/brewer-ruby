@@ -45,15 +45,7 @@ module Brewer
 
     get '/' do
       @relays_status = $brewer.relays_status
-      # Call this line when a PID is connected (dont have one at this point)
-      # @pid_status = @brewer.pid
-
-      # This is a replacement for a physical PID
-      @pid_status = {
-        'pid_running' => false,
-        'sv_temp' => 172,
-        'pv_temp' => 150
-      }
+      @pid_status = $brewer.pid
 
       erb :index
     end
