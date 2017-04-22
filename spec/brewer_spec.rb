@@ -3,7 +3,7 @@ require_relative 'spec_helper'
 describe Brewer do
 
   before :each do
-    @brewer = Brewer.new
+    @brewer = Brewer::Brewer.new
   end
 
   before :all do
@@ -12,10 +12,10 @@ describe Brewer do
 
   describe "#new" do
     it "returns a brewer object" do
-      expect(Brewer.new).to be_an_instance_of Brewer
+      expect(Brewer::Brewer.new).to be_an_instance_of Brewer::Brewer
     end
     it "does not accept args" do
-      expect {Brewer.new('heres an arg') }.to raise_exception(ArgumentError)
+      expect {Brewer::Brewer.new('heres an arg')}.to raise_exception(ArgumentError)
     end
   end
 
