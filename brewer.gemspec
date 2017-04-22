@@ -22,7 +22,6 @@ Gem::Specification.new do |s|
 
   # Runtime dependencies
   s.add_runtime_dependency 'git', '~> 1.3', '>= 1.3.0'
-  s.add_runtime_dependency 'ripl', '~> 0.7.0'
   s.add_runtime_dependency 'net-ping', '~> 1.7'
   s.add_runtime_dependency 'wannabe_bool'
   s.add_runtime_dependency 'slack-notifier'
@@ -31,6 +30,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'terminal-table'
   s.add_runtime_dependency 'rainbow'
   s.add_runtime_dependency 'rack-flash3'
+  s.add_runtime_dependency 'pry'
 
 
   # Dev dependencies
