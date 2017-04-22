@@ -11,6 +11,10 @@ module Brewer
       @recipe = Recipe.new(@brewer)
     end
 
+    # def minified_master(recipe_vars)
+    #   @recipe.get_recipe_vars(recipe_vars)
+    # end
+
     def master
       @recipe.get_recipe_vars
       boot
