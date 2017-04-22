@@ -17,41 +17,40 @@ module Brewer
         end
       end
 
-      puts "Variables for heating strike water"
+      puts Rainbow("Variables for the brew").green
+
       get_strike_temp
 
-      puts "Variables for mash ---"
-      print "Enter mash temperature: "
+      print Rainbow("Enter mash temperature: ").yellow
       @mash_temp = gets.chomp.to_f
-      print "Enter mash time in minutes: "
+      print Rainbow("Enter mash time in minutes: ").yellow
       @mash_time = to_seconds(gets.chomp.to_f)
 
-      puts "Variables for mashout ---"
-      print "Enter mashout temp: "
+      print Rainbow("Enter mashout temp: ").yellow
       @mashout_temp = gets.chomp.to_f
     end
 
     def get_strike_temp
-      print "Input amount of water in quarts: "
+      print Rainbow("Input amount of water in quarts: ").yellow
       @water = gets.chomp.to_f
 
-      print "Input amount of grain in lbs: "
+      print Rainbow("Input amount of grain in lbs: ").yellow
       @grain = gets.chomp.to_f
 
-      print "Input current grain temp (#{@brewer.pv.to_s} F): "
+      print Rainbow("Input current grain temp (#{@brewer.pv.to_s} F): ").yellow
       @grain_temp = gets.chomp.to_f
       if @grain_temp == ""
         @grain_temp = @brewer.pv
       end
 
-      print "Input desired mash temp (150 F): "
+      print Rainbow("Input desired mash temp (150 F): ").yellow
       @desired_mash_temp = gets.chomp
       if @desired_mash_temp == ""
         @desired_mash_temp = 150
       end
       @desired_mash_temp
 
-      @strike_water_temp = script('get_strike_temp', "#{@water} #{@grain} #{@grain_temp} #{@desired_mash_temp}").to_f
+      @strike_water_temp = @brewer.script('get_strike_temp', "#{@water} #{@grain} #{@grain_temp} #{@desired_mash_temp}").to_f
     end
 
   end

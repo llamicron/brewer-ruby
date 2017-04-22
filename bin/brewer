@@ -6,5 +6,5 @@ com         = Brewer::Communicator.new
 brewer      = Brewer::Brewer.new
 procedures  = Brewer::Procedures.new
 puts "🍺  have fun 🍺"
-capture_stdout { binding.pry }
+binding.pry
 # 🍺🍺🍺

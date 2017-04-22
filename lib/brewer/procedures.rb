@@ -21,6 +21,7 @@ module Brewer
       sparge
       top_off
       boil
+      true
     end
 
     def boot
@@ -31,8 +32,8 @@ module Brewer
         'rims_to' => 'mash',
         'hlt_to' => 'mash'
       })
-      @brewer.all_relays_status
-      puts @brewer.pid
+      # puts @brewer.all_relays_status
+      # puts @brewer.pid
 
       puts Rainbow("Boot finished!").green
       @com.ping("🍺 boot finished 🍺")
@@ -41,19 +42,17 @@ module Brewer
 
     # :nocov:
     def heat_strike_water
-      puts "heat-strike-water procedure started"
+      puts Rainbow("About to heat strike water").yellow
 
       # Confirm strike water is in the mash tun
       print Rainbow("Is the strike water in the mash tun? ").yellow
-      # -> response
       confirm ? nil : abort
 
       # confirm return manifold is in the mash tun
       print Rainbow("Is the return manifold in the mash tun? ").yellow
-      # -> response
       confirm ? nil : abort
 
-      print Rainbow("Is the mash tun valve open? ").yellow
+      print Rainbow("Is the manual mash tun valve open? ").yellow
       confirm ? nil : abort
 
       # confirm RIMS relay is on
@@ -64,9 +63,8 @@ module Brewer
       @brewer.pump(1)
       puts "Pump is now on"
 
-      puts Rainbow("Is the pump running properly? ").yellow
-      # TODO: Test this
-      until confirm
+      print Rainbow("Is the pump running properly? ").yellow
+      unless confirm
         puts "restarting pump"
         @brewer.pump(0)
         @brewer.wait(2)
@@ -88,7 +86,7 @@ module Brewer
 
       # measure current strike water temp and save
       @recipe.starting_strike_temp = @brewer.pv
-      puts "current strike water temp is #{@brewer.pv}. Saved."
+      puts "current strike water temp is #{@brewer.pv}."
       puts "Heating to #{@brewer.sv}"
 
       @com.ping("Strike water beginning to heat. This may take a few minutes.")
@@ -119,7 +117,7 @@ module Brewer
     def mash
       @brewer.sv(@recipe.mash_temp)
 
-      puts Rainbow("mash stated. This will take a while.").green
+      puts Rainbow("Mash started. This will take a while.").green
       @com.ping("Mash started. This will take a while.")
 
       @brewer.relay_config({
@@ -129,7 +127,7 @@ module Brewer
       })
 
       @brewer.watch
-      @com.ping("Starting timer for #{@recipe.mash_time} minutes.")
+      @com.ping("Starting timer for #{to_minutes(@recipe.mash_time)} minutes.")
       @brewer.wait(@recipe.mash_time)
       @com.ping("🍺 Mash complete 🍺. Check for starch conversion.")
       puts Rainbow("Mash complete").green
@@ -162,7 +160,7 @@ module Brewer
       print "Waiting for 10 seconds. "
       puts Rainbow("Regulate sparge balance.").yellow
       puts "(ctrl-c to abort proccess)"
-      @brewer.wait(30)
+      @brewer.wait(10)
 
       @brewer.relay_config({
         'rims_to' => 'boil',
@@ -171,7 +169,7 @@ module Brewer
 
       @com.ping("Please check the sparge balance and ignite boil tun burner")
 
-      puts Rainbow("Waiting until intervention to turn off pump (y): ").yellow
+      print Rainbow("Waiting until intervention to turn off pump (y): ").yellow
       confirm ? nil : abort
 
       @brewer.relay_config({
@@ -179,6 +177,7 @@ module Brewer
         'pump' => 0,
         'hlt' => 0
       })
+      true
     end
 
     def top_off
@@ -197,6 +196,7 @@ module Brewer
     end
 
     def boil
+      puts "Timers started... You'll be notified when you need to add hops."
       @com.ping("starting boil procedure")
       @brewer.wait(to_seconds(5))
       @com.ping("Add boil hops")
@@ -207,6 +207,7 @@ module Brewer
       @brewer.wait(30)
       @com.ping("Done.")
       puts Rainbow("Done.").green
+      true
     end
 
   end
