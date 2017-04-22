@@ -88,8 +88,8 @@
                         <br>
                         <!-- HLT on option -->
                         <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="hlt">
-                          <input type="hidden" name="hlt" value="false">
-                          <input type="checkbox" id="hlt" name="hlt" value="true" class="mdl-switch__input" <%= @relays_status['spargeRelay'].to_b ? "checked" : nil  %>>
+                          <input type="hidden" name="hlt" value="0">
+                          <input type="checkbox" id="hlt" name="hlt" value="1" class="mdl-switch__input" <%= @relays_status['spargeRelay'].to_b ? "checked" : nil  %>>
                           <span class="mdl-switch__label">HLT Flowing?</span>
                         </label>
                         <br><br><hr><br>
