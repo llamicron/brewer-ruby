@@ -16,7 +16,7 @@ module Brewer
       if !testing
         Adaptibrew.new.clone
 
-        unless cache?
+        if !cache?
           parse_and_cache
         else
           load_cached_settings
@@ -107,7 +107,7 @@ module Brewer
     # This is so that the settings are easier to use in my code
     # and for backwards compatability purposes
     def load_global
-      parse_and_cache
+      raise "settings instance variable does not exist yet. Run Settings#parse first" unless !@settings.empty?
       $settings = @settings
     end
 

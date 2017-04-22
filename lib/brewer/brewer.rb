@@ -152,11 +152,7 @@ module Brewer
     end
 
     def hlt(state)
-      if state.to_b
-        relay($settings['spargeRelay'], 1)
-      elsif !state.to_b
-        relay($settings['spargeRelay'], 0)
-      end
+      relay($settings['spargeRelay'], state)
       self
     end
 
