@@ -38,7 +38,7 @@ get '/update-pid-status' do
   @pid_status = @brewer.pid
 end
 ```
-that you could somehow call with js. I don't really know how this works though, so that could be completely wrong. I've made this branch (`jakeg`) that you can have, and you can fork this repo so you can do pull requests and shit.
+that you could somehow call with js. I don't really know how this works though, so that could be completely wrong.
 
 ## Running the server
 The `bin/brewer-server` file is a ruby file without the extension. You can just run it. Example:
@@ -54,7 +54,7 @@ OR
 $ pwd
 /some/god/forsaken/directory/
 $ /home/pi/brewer/bin/brewer-server
-
+g
 sinatra server stuff...
 
 
