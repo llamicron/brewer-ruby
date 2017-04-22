@@ -1,0 +1,61 @@
+#!/usr/bin/env ruby
+require 'sinatra/base'
+require "rainbow"
+require 'rack-flash'
+
+require_relative "../lib/gems"
+require_relative "../lib/brewer"
+
+include Brewer
+
+module Brewer
+  class Server < Sinatra::Base
+
+    configure do
+
+      use Rack::Flash
+
+      if ARGV.include? "-p"
+        port = ARGV[ARGV.index("-p") + 1].to_i
+        if port < 1024
+          print Rainbow("Warning: ").yellow
+          puts "The port you selected is less than 1024. This will require sudo."
+          puts "Either use sudo or choose a different port. Sinatra default is 4567."
+          puts ""
+        end
+      else
+        port = 4567
+      end
+
+      # Configuration
+      set :bind, '0.0.0.0'
+      set :port, port
+      set :views, Proc.new { File.join(File.expand_path("..", __dir__), "views") }
+      enable :run
+      enable :sessions
+
+      $brewer = Brewer.new
+    end
+
+    # Routes
+    not_found do
+      erb :not_found
+    end
+
+
+    get '/' do
+      @relays_status = $brewer.relays_status
+      @pid_status = $brewer.pid
+
+      erb :index
+    end
+
+    post '/apply-relay-config' do
+      $brewer.relay_config(params)
+      flash[:config_done] = "Relay Configuration Applied"
+      redirect '/'
+    end
+
+    run!
+  end
+end

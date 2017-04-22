@@ -6,8 +6,8 @@ module Brewer
     attr_accessor :slack, :brewer
 
     def initialize
-      @settings =Brewer::Settings.new
-      @brewer =Brewer::Brewer.new
+      @settings = Settings.new
+      @brewer = Brewer.new
       @slack = configure_slack
     end
 

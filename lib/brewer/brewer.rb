@@ -4,7 +4,7 @@ module Brewer
   class Brewer
 
     attr_reader :base_path
-    attr_accessor :temps
+    attr_accessor :temps, :relays
 
     def initialize
       @base_path = Dir.home + '/.brewer'
@@ -29,6 +29,7 @@ module Brewer
     def script(script, params=nil)
       `python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp
     end
+
 
     # Adaptibrew methods ----------------------------------------------
     # for working with the rig
@@ -84,14 +85,33 @@ module Brewer
         return true
       end
       script("set_relay", "#{relay} #{state}")
-      wait(10)
       true
     end
 
     def all_relays_status
-      output = script("get_relay_status_test")
-      puts output.split('\n')
-      true
+      output = script("get_relay_status_test").split("\n")
+      output.shift(3)
+      return output
+    end
+
+    def relays_status
+      statuses = {}
+      all_relays_status.shift(4).each do |status|
+        relay_num, status = status.match(/relay [0-9+]([0-9]+): (on|off)/).captures
+        relay_names = $settings.select { |key, value| key.to_s.match(/Relay/) }
+        statuses[relay_names.key(relay_num.to_i)] = status
+      end
+      return statuses
+    end
+
+    def relay_config(params)
+      raise "Params must be a hash" unless params.is_a? Hash
+      params.each do |method, setting|
+        if method == "pump"
+          setting = setting.to_i
+        end
+        send(method, setting)
+      end
     end
 
     def relay_status(relay)
@@ -107,6 +127,7 @@ module Brewer
       until pv >= sv do
         wait(2)
       end
+      Communicator.new.ping("Temperature is now at #{pv.to_f} F")
       self
     end
     # :nocov:
@@ -131,11 +152,7 @@ module Brewer
     end
 
     def hlt(state)
-      if state.to_b
-        relay($settings['spargeRelay'], 1)
-      elsif !state.to_b
-        relay($settings['spargeRelay'], 0)
-      end
+      relay($settings['spargeRelay'], state)
       self
     end
 

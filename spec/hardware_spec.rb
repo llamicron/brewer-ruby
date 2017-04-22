@@ -2,16 +2,16 @@ require_relative 'spec_helper'
 
 describe Brewer do
   before :each do
-    @brewer = Brewer.new
+    @brewer = Brewer::Brewer.new
   end
 
   before :all do
-    Adaptibrew.new.refresh
+    Brewer::Adaptibrew.new.refresh
   end
 
   after :all do
     # in case something goes wrong, everything needs to be reset
-    @brewer = Brewer.new
+    @brewer = Brewer::Brewer.new
     @brewer.pump(0)
     @brewer.pid(0)
     @brewer.boot
@@ -89,6 +89,15 @@ describe Brewer do
   describe ".relay_status" do
     it "returns the status of a relay" do
       expect(@brewer.relay_status($settings['rimsToMashRelay'].to_i)).not_to be_empty
+    end
+  end
+
+  describe ".relays_status" do
+    it "returns the status of the 4 main relays" do
+      statuses = @brewer.relays_status
+      expect(statuses).to be_an_instance_of Hash
+      expect(statuses).to_not be_empty
+      expect(statuses['spargeRelay']).to be_an_instance_of String
     end
   end
 

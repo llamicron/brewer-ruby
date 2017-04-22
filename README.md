@@ -33,6 +33,28 @@ You will be prompted to enter a slack `webhook_url`, which you can get from the 
 
 The shell will ask you for recipe variables in the beginning, and will warn you when you need to intervene.
 
+# Web Interface (in development)
+Run the `brewer-server` binary the same way you would run the `brewer` binary. This will start a `sinatra` server on your pi's ip address. The default port is `8080`, but you can specify a custom port with:
+
+```shell
+sudo brewer-server -p YOUR_PORT
+```
+
+Keep in mind that any port below 1024 will need root access. I like to specify port `80` (http default) so that I can leave the port off and it will default to 80.
+
+You can add a line to `/etc/hosts` on your workstation and redirect a url to your pi's ip. For instance, the relevant line in my `/etc/hosts` looks like this:
+
+```shell
+192.168.0.224   navasota.brew
+```
+
+so I can visit `navasota.brew` and see the brewing homepage when `brewer-server` is running.
+
+# Starting the server on system startup
+
+You may want to start the `brewer-server` an system boot so that a workstation is not required to connect (ssh) to your pi.
+
+[See here for a StackOverflow solution](https://raspberrypi.stackexchange.com/a/8735) or read on below.
 
 # Installation
 This is a gem, published on [rubygems.org](http://rubygems.org). Install it the recommended way with:
