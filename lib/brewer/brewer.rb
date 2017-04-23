@@ -9,6 +9,9 @@ module Brewer
     attr_accessor :temps, :relays
 
     def initialize
+      if !Dir.exists?(brewer_dir)
+        Dir.mkdir(brewer_dir)
+      end
       @base_path = Dir.home + '/.brewer'
       Settings.new
       @temps = {}

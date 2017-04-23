@@ -11,10 +11,6 @@ module Brewer
       @recipe = Recipe.new(@brewer)
     end
 
-    # def minified_master(recipe_vars)
-    #   @recipe.get_recipe_vars(recipe_vars)
-    # end
-
     def master
       @recipe.get_recipe_vars
       boot
@@ -46,7 +42,7 @@ module Brewer
 
     # :nocov:
     def heat_strike_water
-      puts Rainbow("About to heat strike water").yellow
+      puts Rainbow("About to heat strike water").green
 
       # Confirm strike water is in the mash tun
       print Rainbow("Is the strike water in the mash tun? ").yellow
@@ -81,13 +77,13 @@ module Brewer
 
       # calculate strike temp & set PID to strike temp
       # this sets PID SV to calculated strike temp automagically
-      @brewer.sv(@recipe.strike_water_temp)
+      @brewer.sv(@recipe.vars['strike_water_temp'])
       puts "SV has been set to calculated strike water temp"
       # turn on RIMS heater
       @brewer.pid(1)
 
       # measure current strike water temp and save
-      @recipe.starting_strike_temp = @brewer.pv
+      @recipe.vars['starting_strike_temp'] = @brewer.pv
       puts "current strike water temp is #{@brewer.pv}."
       puts "Heating to #{@brewer.sv}"
 
@@ -117,7 +113,7 @@ module Brewer
     end
 
     def mash
-      @brewer.sv(@recipe.mash_temp)
+      @brewer.sv(@recipe.vars['mash_temp'])
 
       puts Rainbow("Mash started. This will take a while.").green
       @com.ping("Mash started. This will take a while.")
@@ -129,8 +125,8 @@ module Brewer
       })
 
       @brewer.watch
-      @com.ping("Starting timer for #{to_minutes(@recipe.mash_time)} minutes.")
-      @brewer.wait(@recipe.mash_time)
+      @com.ping("Starting timer for #{to_minutes(@recipe.vars['mash_time'])} minutes.")
+      @brewer.wait(@recipe.vars['mash_time'])
       @com.ping("🍺 Mash complete 🍺. Check for starch conversion.")
       puts Rainbow("Mash complete").green
       puts "Check for starch conversion"
@@ -139,9 +135,9 @@ module Brewer
     def mashout
       @com.ping("Start heating sparge water")
       puts Rainbow("start heating sparge water").yellow
-      puts Rainbow("Mashout started").yellow
+      puts Rainbow("Mashout started").green
 
-      @brewer.sv(@recipe.mashout_temp)
+      @brewer.sv(@recipe.vars['mashout_temp'])
 
       @brewer.relay_config({
         'pid'  => 1,
@@ -151,14 +147,14 @@ module Brewer
       puts Rainbow("Heating to #{@brewer.sv}... this could take a few minutes.").yellow
       @brewer.watch
       @com.ping("Mashout complete.")
-      puts Rainbow("Mashout complete").yellow
+      puts Rainbow("Mashout complete").green
     end
 
     def sparge
       print Rainbow("Is the sparge water heated to the correct temperature? ").yellow
       confirm ? nil : abort
 
-      puts Rainbow("Sparging started").yellow
+      puts Rainbow("Sparging started").green
 
       @brewer.relay_config({
         'hlt_to' => 'mash',
@@ -208,7 +204,7 @@ module Brewer
     end
 
     def boil
-      puts Rainbow("Timers started... You'll be notified when you need to add hops.").yellow
+      puts Rainbow("Timers started for 1 hour... You'll be notified when you need to add hops.").yellow
       @com.ping("starting boil procedure")
       @brewer.wait(to_seconds(5))
       @com.ping("Add boil hops")
