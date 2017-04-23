@@ -61,11 +61,9 @@ module Brewer
 
       # confirm RIMS relay is on
       @brewer.rims_to('mash')
-      puts "RIMS-to-mash relay is now on"
 
       # turn on pump
       @brewer.pump(1)
-      puts "Pump is now on"
 
       print Rainbow("Is the pump running properly? ").yellow
       unless confirm
@@ -140,6 +138,8 @@ module Brewer
 
     def mashout
       @com.ping("Start heating sparge water")
+      puts Rainbow("start heating sparge water").yellow
+      puts Rainbow("Mashout started").yellow
 
       @brewer.sv(@recipe.mashout_temp)
 
@@ -148,13 +148,17 @@ module Brewer
         'pump' => 1
       })
       @com.ping("Heating to #{@brewer.sv}... this could take a few minutes.")
+      puts Rainbow("Heating to #{@brewer.sv}... this could take a few minutes.").yellow
       @brewer.watch
       @com.ping("Mashout complete.")
+      puts Rainbow("Mashout complete").yellow
     end
 
     def sparge
       print Rainbow("Is the sparge water heated to the correct temperature? ").yellow
       confirm ? nil : abort
+
+      puts Rainbow("Sparging started").yellow
 
       @brewer.relay_config({
         'hlt_to' => 'mash',
@@ -163,7 +167,6 @@ module Brewer
 
       print "Waiting for 10 seconds. "
       puts Rainbow("Regulate sparge balance.").yellow
-      puts "(ctrl-c to abort proccess)"
       @brewer.wait(10)
 
       @brewer.relay_config({
@@ -172,19 +175,24 @@ module Brewer
       })
 
       @com.ping("Please check the sparge balance and ignite boil tun burner")
+      puts Rainbow("Ignite boil tun burner").yellow
 
-      print Rainbow("Waiting until intervention to turn off pump (y): ").yellow
-      confirm ? nil : abort
+      print Rainbow("Waiting for intervention to turn off pump (y): ").yellow
+      confirm ? nil : nil
 
       @brewer.relay_config({
         'pid' => 0,
         'pump' => 0,
         'hlt' => 0
       })
+
+      puts Rainbow("Sparging complete").green
       true
     end
 
     def top_off
+      puts Rainbow("Top off started").green
+
       @brewer.relay_config({
         'hlt_to' => 'boil',
         'hlt' => 1
@@ -200,7 +208,7 @@ module Brewer
     end
 
     def boil
-      puts "Timers started... You'll be notified when you need to add hops."
+      puts Rainbow("Timers started... You'll be notified when you need to add hops.").yellow
       @com.ping("starting boil procedure")
       @brewer.wait(to_seconds(5))
       @com.ping("Add boil hops")

@@ -81,10 +81,9 @@ module Brewer
     # Basically when the mash tun is at the set temperate, it will ping and return self.
     # It will also display a status table every 2 seconds
     # :nocov:
-    def watch
+  def watch
       until pv >= sv do
         wait(2)
-        puts status_table
       end
       Slacker.new.ping("Temperature is now at #{pv.to_f} F")
       self
