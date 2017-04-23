@@ -86,7 +86,7 @@ module Brewer
         wait(2)
         puts status_table
       end
-      Communicator.new.ping("Temperature is now at #{pv.to_f} F")
+      Slacker.new.ping("Temperature is now at #{pv.to_f} F")
       self
     end
     # :nocov:

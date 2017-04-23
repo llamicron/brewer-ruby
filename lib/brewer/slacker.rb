@@ -2,7 +2,7 @@ require_relative "../brewer"
 
 module Brewer
   # This class is responsible for slack communication
-  class Communicator
+  class Slacker
 
     attr_accessor :slack, :brewer
 

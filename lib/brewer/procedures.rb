@@ -7,7 +7,7 @@ module Brewer
 
     def initialize
       @brewer = Brewer.new
-      @com = Communicator.new
+      @com = Slacker.new
       @recipe = Recipe.new(@brewer)
     end
 
