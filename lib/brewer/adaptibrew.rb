@@ -7,6 +7,12 @@ module Brewer
   # It is stored in ~/.brewer/adaptibrew/
   class Adaptibrew
 
+    def initialize
+      if !Dir.exists?(adaptibrew_dir)
+        Dir.mkdir(adaptibrew_dir)
+      end
+    end
+
     # This will clone adaptibrew into ~/.brewer/adaptibrew/
     def clone
       raise "🛑  Cannot clone, no network connection" unless network?

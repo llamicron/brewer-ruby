@@ -40,13 +40,17 @@ module Helpers
 
   # Returns the path of the ~/.brewer directory, where everything is stored
   def brewer_dir(path="")
-    return Dir.home + "/.brewer/#{path}"
+    Dir.home + "/.brewer/#{path}"
   end
 
   # Returns the path of the adaptibrew directory
   # ~/.brewer/adaptibrew/
   def adaptibrew_dir(path="")
-    return brewer_dir + "adaptibrew/#{path}"
+    brewer_dir + "adaptibrew/#{path}"
+  end
+
+  def recipe_dir(path="")
+    brewer_dir + "recipes/#{path}"
   end
 
   # Captures standard output, mostly used for testing
