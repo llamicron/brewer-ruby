@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 require_relative "../lib/brewer"
 
-adaptibrew =  Brewer::Adaptibrew.new
-com =         Brewer::Communicator.new
-brewer =      Brewer::Brewer.new
-procedures =  Brewer::Procedures.new
+adaptibrew  = Brewer::Adaptibrew.new
+slack         = Brewer::Slacker.new
+brewer      = Brewer::Brewer.new
+procedures  = Brewer::Procedures.new
 
 puts "🍺  have fun 🍺"
-Ripl.start :binding => binding
+binding.pry(quiet: true)
 # 🍺🍺🍺

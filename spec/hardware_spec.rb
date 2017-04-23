@@ -14,14 +14,12 @@ describe Brewer do
     @brewer = Brewer::Brewer.new
     @brewer.pump(0)
     @brewer.pid(0)
-    @brewer.boot
   end
 
   describe ".pump" do
     # If the pump is already on it does nothing
     it "turns the pump on" do
       expect(@brewer.pump(1)).to eq("pump on")
-      @brewer.wait(2)
     end
 
     # If the pump is already off it does nothing
@@ -41,20 +39,17 @@ describe Brewer do
 
   describe ".relay" do
     it "turns the relay on" do
-      expect(@brewer.relay(2, 1)).to eq("relay 2 on")
-      @brewer.wait(7)
+      expect(@brewer.relay(2, 1)).to be true
     end
 
     it "turns the relay off" do
-      expect(@brewer.relay(2, 0)).to eq("relay 2 off")
-      @brewer.wait(7)
+      expect(@brewer.relay(2, 0)).to be true
     end
   end
 
   describe ".pid" do
     it "turns the pid on" do
       expect(@brewer.pid(1)).to eq("Pump and PID are now on")
-      @brewer.wait(2)
     end
 
     it "turns the pid off" do
@@ -69,20 +64,20 @@ describe Brewer do
   describe ".sv" do
     context "when there is no argument" do
       it "returns the sv temp" do
-        expect(@brewer.sv).to be_an_instance_of String
+        expect(@brewer.sv).to be_an_instance_of Float
       end
     end
 
     context "when there is an argument" do
       it "sets the sv temp" do
-        expect(@brewer.sv(150)).to be_an_instance_of String
+        expect(@brewer.sv(150)).to be_an_instance_of Float
       end
     end
   end
 
   describe ".pv" do
     it "returns the pv" do
-      expect(@brewer.pv).to be_an_instance_of String
+      expect(@brewer.pv).to be_an_instance_of Float
     end
   end
 

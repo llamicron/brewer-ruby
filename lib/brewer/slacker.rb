@@ -1,7 +1,8 @@
 require_relative "../brewer"
 
 module Brewer
-  class Communicator
+  # This class is responsible for slack communication
+  class Slacker
 
     attr_accessor :slack, :brewer
 
@@ -11,6 +12,7 @@ module Brewer
       @slack = configure_slack
     end
 
+    # This will look for a webhook in settings.yml and ask you for one if it doesn't find one
     def configure_slack
       unless @settings.settings['webhook_url']
         print "Slack Webhook URL: "
@@ -22,47 +24,34 @@ module Brewer
       return Slack::Notifier.new @settings.settings['webhook_url']
     end
 
+    # This sends a message in slack.
+    # If an array is passed in, it will send it as one message with
+    # new lines between each array item
     def ping(message="ping at #{Time.now}")
-      if message.is_a? Array
-        final = message.join("\n")
-        @slack.ping(final)
-      end
       @slack.ping(message)
     end
 
-    # TODO: test these methods
-    def slack_monitor(delay=10)
+    # This does the same thing as Brewer#monitor, but it also sends a slack message
+    # after a specified wait, normally 10 minutes
+    def monitor(delay=10)
       while true do
+        table = @brewer.status_table
+
         before_temp = @brewer.pv
         @brewer.wait(to_seconds(delay))
         diff = @brewer.pv - before_temp
+
+        clear_screen
+        puts table
 
         ping([
           "Current Temperature: #{@brewer.pid['pv_temp']} F",
           "Set Value Temperature: #{@brewer.pid['sv_temp']} F",
           "Current temperature has climed #{diff} F since #{delay} minute(s) ago",
-          "Sent at #{Time.now.strftime("%H:%M")}",
-          ""
-        ])
+          "Sent at #{Time.now.strftime("%H:%M")}"
+        ].join("\n"))
       end
       true
-    end
-
-    def monitor
-      while true do
-        status_table_rows = [
-          ["Current Temp", @brewer.pv],
-          ["Set Value Temp", @brewer.sv],
-          ["PID is: ", @brewer.pid['pid_running'].to_b ? "on" : "off"],
-          ["Pump is: ", @brewer.pump]
-        ]
-
-        status_table = Terminal::Table.new :headings ["Item", "Status"], :rows => status_table_rows
-
-        clear_screen
-        puts status_table
-        sleep(1)
-      end
     end
 
   end

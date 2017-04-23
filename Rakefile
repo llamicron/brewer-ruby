@@ -8,8 +8,14 @@ task default: %w[spec]
 # Unit testing
 # You can specify a specific test case to use
 # rake spec SPEC=spec/adaptibrew_spec.rb SPEC_OPTS="-e \"#new\""
-task :spec, [:tc] do |t, tc|
-  RSpec::Core::RakeTask.new(:spec)
+#
+# task :spec, [:tc] do |t, tc|
+#   RSpec::Core::RakeTask.new(:spec)
+# end
+
+RSpec::Core::RakeTask.new do |t|
+  t.pattern = "spec/*_spec.rb"
+  t.verbose = false
 end
 
 # Opens code coverage in your browser
