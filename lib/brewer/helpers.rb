@@ -65,4 +65,18 @@ module Helpers
     fake.string
   end
 
+  def dummy_recipe_vars
+    return {
+      'name' => "dummy_recipe",
+      'mash_temp' => 150,
+      'mash_time' => 10,
+      'mashout_temp' => 172,
+      'water' => 14,
+      'grain' => 5,
+      'grain_temp' => 80.1,
+      'desired_mash_temp' => 150,
+      'strike_water_temp' => 168.6,
+    }
+  end
+
 end
