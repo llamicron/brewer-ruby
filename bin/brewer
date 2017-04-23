@@ -5,6 +5,7 @@ adaptibrew  = Brewer::Adaptibrew.new
 com         = Brewer::Communicator.new
 brewer      = Brewer::Brewer.new
 procedures  = Brewer::Procedures.new
+
 puts "🍺  have fun 🍺"
 binding.pry(quiet: true)
 # 🍺🍺🍺

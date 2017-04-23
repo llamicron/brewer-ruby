@@ -9,3 +9,5 @@ require 'net/ping'
 require 'wannabe_bool'
 require 'terminal-table'
 require "rainbow"
+require 'rack-flash'
+require 'sinatra/base'

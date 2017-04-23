@@ -1,6 +1,8 @@
 require_relative "../brewer"
 
 module Brewer
+  # This class handles the physical brewing rig.
+  # Turning on valves, the pump, RIMS and such
   class Brewer
 
     attr_reader :base_path
@@ -14,26 +16,20 @@ module Brewer
 
     public
 
-    # Brewer methods ------------------------------------------------------
-    # general utilities for the brewer class
-
+    # sleeps for a number of seconds
     def wait(time=30)
       sleep(time.to_f)
-      true
+      self
     end
 
-    # Runs an adaptibrew script
-    # Output will be stored in @out
-    # you may see `echo` quite a bit. This will almost always be directly after calling a script
-    # It will be set to the output of the last script. I can't just return the output because i need to return self
+    # Runs an adaptibrew script (written in python)
     def script(script, params=nil)
       `python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp
     end
 
 
-    # Adaptibrew methods ----------------------------------------------
-    # for working with the rig
-
+    # Turns the pump on and off, or returns the status if no arg
+    # Turning the pump off will turn the pid off too, as it should not be on when the pump is off
     def pump(state="status")
       if state == "status"
         return relay_status($settings['pumpRelay'])
@@ -49,7 +45,7 @@ module Brewer
       end
     end
 
-    # Turns PID on or off, or gets state if no arg is provided
+    # Turns PID on or off, or gets status if no arg is provided
     def pid(state="status")
       if state == "status"
         return {
@@ -68,6 +64,7 @@ module Brewer
       end
     end
 
+    # Sets the setpoint value (sv) on the PID, or returns the current SV
     def sv(temp=nil)
       if temp
         return script('set_sv', temp).to_f
@@ -75,25 +72,75 @@ module Brewer
       script('get_sv').to_f
     end
 
+    # Returns the proccess value (this one can't be changed)
     def pv
       script('get_pv').to_f
     end
 
-    def relay(relay, state)
-      # If you try to turn the relay to a state that it is already in, this skips the wait
-      if relay_status(relay).to_b == state.to_b
-        return true
+    # This method will wait until the pv >= sv
+    # Basically when the mash tun is at the set temperate, it will ping and return self.
+    # It will also display a status table every 2 seconds
+    # :nocov:
+    def watch
+      until pv >= sv do
+        wait(2)
+        puts status_table
       end
+      Communicator.new.ping("Temperature is now at #{pv.to_f} F")
+      self
+    end
+    # :nocov:
+
+    # This will display an updated status table every second
+    def monitor
+      while true do
+        # Making a new table with TerminalTable takes about 1 second. I assign
+        # it here so it has time to start up, and there's minimal lag between clearing
+        # and displaying the table
+        table = status_table
+        wait(1)
+        clear_screen
+        puts table
+      end
+    end
+
+    # This returns a status table
+    def status_table
+      status_table_rows = [
+        ["Current Temp", pv],
+        ["Set Value Temp", sv],
+        ["PID is: ", pid['pid_running'].to_b ? "on" : "off"],
+        ["Pump is: ", pump]
+      ]
+
+      status_table = Terminal::Table.new :headings => ["Item", "Status"], :rows => status_table_rows
+      status_table
+    end
+
+    # Turns a relay on or off
+    def relay(relay, state)
       script("set_relay", "#{relay} #{state}")
       true
     end
 
+    # Returns the status of a single relay
+    def relay_status(relay)
+      if script("get_relay_status", "#{relay}").include? "on"
+        return "on"
+      else
+        return "off"
+      end
+    end
+
+    # Returns the status of all relays
     def all_relays_status
       output = script("get_relay_status_test").split("\n")
       output.shift(3)
       return output
     end
 
+    # This returns a prettier version of all_relays_status, and only returns the
+    # relays in use, being 0-3.
     def relays_status
       statuses = {}
       all_relays_status.shift(4).each do |status|
@@ -101,9 +148,12 @@ module Brewer
         relay_names = $settings.select { |key, value| key.to_s.match(/Relay/) }
         statuses[relay_names.key(relay_num.to_i)] = status
       end
-      return statuses
+      statuses
     end
 
+    # Give this a relay configuration hash and it will set the relays to that configuration
+    # eg. {'hlt' => 0, 'rims_to' => 'boil', 'pump' => 1}
+    # This is so that we can set multiple valves at effectively the same time
     def relay_config(params)
       raise "Params must be a hash" unless params.is_a? Hash
       params.each do |method, setting|
@@ -114,43 +164,32 @@ module Brewer
       end
     end
 
-    def relay_status(relay)
-      if script("get_relay_status", "#{relay}").include? "on"
-        return "on"
-      else
-        return "off"
-      end
-    end
-
-    # :nocov:
-    def watch
-      until pv >= sv do
-        wait(2)
-      end
-      Communicator.new.ping("Temperature is now at #{pv.to_f} F")
-      self
-    end
-    # :nocov:
-
+    # Diverts rims valve to mash or boil tun
     def rims_to(location)
       if location == "mash"
         # we ended up swapping this relay, so the name is backwards
         relay($settings['rimsToMashRelay'], 0)
       elsif location == "boil"
         relay($settings['rimsToMashRelay'], 1)
+      else
+        raise "Not a valid location for rims valve"
       end
       self
     end
 
+    # Diverts hlt valve to mash or boil tun
     def hlt_to(location)
       if location == "mash"
         relay($settings['spargeToMashRelay'], 0)
       elsif location == "boil"
         relay($settings['spargeToMashRelay'], 1)
+      else
+        raise "Not a valid location for the hlt valve"
       end
       self
     end
 
+    # Opens or closes hlt valve
     def hlt(state)
       relay($settings['spargeRelay'], state)
       self

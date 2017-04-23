@@ -1,9 +1,4 @@
 #!/usr/bin/env ruby
-require 'sinatra/base'
-require "rainbow"
-require 'rack-flash'
-
-require_relative "../lib/gems"
 require_relative "../lib/brewer"
 
 include Brewer
@@ -28,8 +23,8 @@ module Brewer
       end
 
       # Configuration
-      set :bind, '0.0.0.0'
       set :port, port
+      set :bind, '0.0.0.0'
       set :views, Proc.new { File.join(File.expand_path("..", __dir__), "views") }
       enable :run
       enable :sessions
@@ -42,7 +37,6 @@ module Brewer
       erb :not_found
     end
 
-
     get '/' do
       @relays_status = $brewer.relays_status
       @pid_status = $brewer.pid
@@ -53,6 +47,7 @@ module Brewer
     post '/apply-relay-config' do
       $brewer.relay_config(params)
       flash[:config_done] = "Relay Configuration Applied"
+
       redirect '/'
     end
 

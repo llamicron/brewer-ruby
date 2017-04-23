@@ -3,18 +3,23 @@ require_relative "helpers.rb"
 include Helpers
 
 module Brewer
+  # This class handles the adaptibrew repo
+  # It is stored in ~/.brewer/adaptibrew/
   class Adaptibrew
 
     # This will clone adaptibrew into ~/.brewer/adaptibrew/
     def clone
       raise "🛑  Cannot clone, no network connection" unless network?
+
       if !Dir.exists?(adaptibrew_dir)
         Git.clone('https://github.com/llamicron/adaptibrew.git', 'adaptibrew', :path => brewer_dir)
       end
+
       self
     end
 
     # Danger zone...
+    # This deletes adaptibrew
     def clear
       # :nocov: since this requires network to be off
       if !network?
@@ -27,8 +32,7 @@ module Brewer
     end
 
      # This is a good catch-all method
-     # If it's not there, it will clone.
-     # If it is, it will delete and re-clone
+     # This deletes and re-clones adaptibrew
     def refresh
       raise "🛑  Cannot refresh, no network connection" unless network?
       clear
@@ -36,6 +40,7 @@ module Brewer
       self
     end
 
+    # Returns true if adaptibrew is present
     def present?
       return Dir.exists?(adaptibrew_dir) ? true : false
     end
