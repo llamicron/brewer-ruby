@@ -85,4 +85,4 @@ Documentation is in `doc/` or on rubygems.org
 
 ---
 
-*This line is for CI build triggers, please ignore*
+*This line is for Travis CI build triggers, please ignore*
