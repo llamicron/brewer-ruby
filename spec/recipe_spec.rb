@@ -8,6 +8,7 @@ describe Recipe do
     @brewer = Brewer::Brewer.new
     @recipe = Brewer::Recipe.new(@brewer)
     @recipe.new_dummy
+    @recipe.store
   end
 
   describe "#new" do
@@ -36,7 +37,45 @@ describe Recipe do
   end
 
   describe ".store" do
+    context "when there is a loaded recipe" do
+      before { @recipe.delete_recipe_file }
+      it "stores the loaded recipe" do
+        expect(@recipe.loaded_recipe?).to be false
+        @recipe.store
+        expect(@recipe.loaded_recipe?).to be true
+      end
+    end
 
+    context "when there is no loaded recipe" do
+      before { @recipe.clear }
+      specify { expect(@recipe.vars).to be_empty }
+      it "raises an exception" do
+        expect { @recipe.store }.to raise_error(/store/)
+      end
+    end
+  end
+
+  describe ".load" do
+    context "when the recipe exists" do
+      before { @recipe.clear }
+      it "loads the recipe" do
+        capture_stdout { expect(@recipe.load("dummy_recipe")).to be true }
+        expect(@recipe.loaded_recipe?).to be true
+      end
+    end
+
+    context "when the recipe does not exist" do
+      it "raises an error" do
+        expect { @recipe.load("not_a_real_recipe") }.to raise_error(/does not exist/)
+      end
+    end
+  end
+
+  describe ".list_recipes" do
+    it "returns an array of recipes" do
+      expect(@recipe.list_recipes).to be_an_instance_of Array
+      expect(@recipe.list_recipes).not_to be_empty
+    end
   end
 
 end

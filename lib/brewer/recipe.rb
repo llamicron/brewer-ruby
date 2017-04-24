@@ -84,14 +84,20 @@ module Brewer
     def store(name=false)
       raise "Nothing to store! Please run `.get_recipe_vars` to fill in the recipe variables before storing." unless !@vars.empty?
 
-      unless name
-        print "Please enter a name for this recipe: "
-        name = gets.chomp
+      # :nocov:
+      if @vars['name'].empty?
+        if !name
+          print "Please enter a name for this recipe: "
+          @vars['name'] = gets.chomp
+        else
+          @vars['name'] = name
+        end
       end
+      # :nocov:
 
-      store = YAML::Store.new recipe_dir(name + ".yml")
+      store = YAML::Store.new recipe_dir(@vars['name'] + ".yml")
       store.transaction {
-        store["name"] = name
+        store["name"] = @vars['name']
         @vars.each do |k, v|
           store[k] = v
         end
@@ -114,7 +120,7 @@ module Brewer
       recipes.each do |recipe|
         recipe.slice! ".yml"
       end
-      return recipes
+      recipes
     end
 
     def loaded_recipe?
@@ -124,15 +130,13 @@ module Brewer
       false
     end
 
-    def update
-      raise "Nothing to store! Please load a recipe before updating." unless loaded_recipe?
-
-      store(@vars['name'])
-      true
-    end
-
     def clear
       @vars = {}
+    end
+
+    def delete_recipe_file
+      FileUtils.rm_rf(recipe_dir + @vars['name'] + ".yml")
+      true
     end
 
   end

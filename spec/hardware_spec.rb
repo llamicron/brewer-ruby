@@ -27,6 +27,10 @@ describe Brewer do
       expect(@brewer.pump(0)).to eq("pump off")
     end
 
+    it "returns the pump status" do
+      expect(@brewer.pump).to be_an_instance_of String
+    end
+
     # cant really test this one...
     context "when the pid is also on" do
       # This turns on both pump and pid
@@ -83,7 +87,10 @@ describe Brewer do
 
   describe ".relay_status" do
     it "returns the status of a relay" do
-      expect(@brewer.relay_status($settings['rimsToMashRelay'].to_i)).not_to be_empty
+      @brewer.relay($settings['rimsToMashRelay'], 1)
+      expect(@brewer.relay_status($settings['rimsToMashRelay'].to_i)).to eq("on")
+      @brewer.relay($settings['rimsToMashRelay'], 0)
+      expect(@brewer.relay_status($settings['rimsToMashRelay'].to_i)).to eq("off")
     end
   end
 
@@ -94,6 +101,16 @@ describe Brewer do
       expect(statuses).to_not be_empty
       expect(statuses['spargeRelay']).to be_an_instance_of String
     end
+  end
+
+  describe ".status_table" do
+    it "returns a current status table" do
+      expect(@brewer.status_table).to be_an_instance_of Terminal::Table
+    end
+  end
+
+  describe ".relay_config" do
+    
   end
 
 end

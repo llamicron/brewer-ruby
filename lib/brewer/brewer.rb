@@ -10,7 +10,9 @@ module Brewer
 
     def initialize
       if !Dir.exists?(brewer_dir)
+        # :nocov:
         Dir.mkdir(brewer_dir)
+        # :nocov:
       end
       @base_path = Dir.home + '/.brewer'
       Settings.new
@@ -29,7 +31,6 @@ module Brewer
     def script(script, params=nil)
       `python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp
     end
-
 
     # Turns the pump on and off, or returns the status if no arg
     # Turning the pump off will turn the pid off too, as it should not be on when the pump is off
@@ -84,7 +85,7 @@ module Brewer
     # Basically when the mash tun is at the set temperate, it will ping and return self.
     # It will also display a status table every 2 seconds
     # :nocov:
-  def watch
+    def watch
       until pv >= sv do
         wait(2)
       end
@@ -94,6 +95,7 @@ module Brewer
     # :nocov:
 
     # This will display an updated status table every second
+    # :nocov:
     def monitor
       while true do
         # Making a new table with TerminalTable takes about 1 second. I assign
@@ -105,6 +107,7 @@ module Brewer
         puts table
       end
     end
+    # :nocov:
 
     # This returns a status table
     def status_table
