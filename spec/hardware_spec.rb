@@ -12,8 +12,13 @@ describe Brewer do
   after :all do
     # in case something goes wrong, everything needs to be reset
     @brewer = Brewer::Brewer.new
-    @brewer.pump(0)
-    @brewer.pid(0)
+    @brewer.relay_config({
+      'pump' => 0,
+      'pid' => 0,
+      'rims_to' => 'mash',
+      'hlt_to' => 'mash',
+      'hlt' => 0,
+    })
   end
 
   describe ".pump" do
@@ -110,7 +115,52 @@ describe Brewer do
   end
 
   describe ".relay_config" do
-    
+    it "sets the relays to the configuration" do
+      @brewer.relay_config({
+        'hlt' => 1,
+        'pump' => 0,
+      })
+      expect(@brewer.relay_status($settings['spargeRelay'])).to eq("on")
+    end
+  end
+
+  describe ".hlt" do
+    it "opens or closes the hlt valve" do
+      @brewer.hlt(0)
+      expect(@brewer.relay_status($settings['spargeRelay'])).to eq("off")
+      @brewer.hlt(1)
+      expect(@brewer.relay_status($settings['spargeRelay'])).to eq("on")
+    end
+  end
+
+  describe ".rims_to" do
+    it "diverts the rims relay to boil or mash tuns" do
+      @brewer.rims_to("boil")
+      expect(@brewer.relay_status($settings['rimsToMashRelay'])).to eq("on")
+      @brewer.rims_to("mash")
+      expect(@brewer.relay_status($settings['rimsToMashRelay'])).to eq("off")
+    end
+
+    context "when the location is not valid" do
+      it "raises an error" do
+        expect { @brewer.rims_to("not_valid") }.to raise_error(/valid location/)
+      end
+    end
+  end
+
+  describe ".hlt_to" do
+    it "diverts the hlt relay to boil or mash tuns" do
+      @brewer.hlt_to("boil")
+      expect(@brewer.relay_status($settings['spargeToMashRelay'])).to eq("on")
+      @brewer.hlt_to("mash")
+      expect(@brewer.relay_status($settings['spargeToMashRelay'])).to eq("off")
+    end
+
+    context "when the location is not valid" do
+      it "raises an error" do
+        expect { @brewer.hlt_to("not_valid") }.to raise_error(/valid location/)
+      end
+    end
   end
 
 end
