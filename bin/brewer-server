@@ -19,7 +19,7 @@ module Brewer
           puts ""
         end
       else
-        port = 4567
+        port = 8080
       end
 
       # Configuration
@@ -38,14 +38,23 @@ module Brewer
     end
 
     get '/' do
-      @relays_status = $brewer.relays_status
-      @pid_status = $brewer.pid
+      @relays_status = {
+        "spargeToMashRelay" => "off",
+        "spargeRelay" => "on",
+        "rimsToMashRelay" => "off",
+        "pumpRelay" => "on"
+      }
+      @pid_status = {
+        "pid_running" => "False",
+        "sv_temp" => 50.0,
+        "pv_temp" => 112.0
+      }
 
       erb :index
     end
 
     post '/apply-relay-config' do
-      $brewer.relay_config(params)
+      # $brewer.relay_config(params)
       flash[:config_done] = "Relay Configuration Applied"
 
       redirect '/'
