@@ -10,10 +10,12 @@ module Helpers
   end
 
   # Returns true if there is a network connection
+  # :nocov:
   def network?
     connection = Net::Ping::TCP.new('google.com', 80, 5)
     connection.ping?
   end
+  # :nocov:
 
   # waits for user input, if 'y' return true, else return false
   def confirm(input=gets.chomp)
@@ -34,9 +36,11 @@ module Helpers
   end
 
   # Clears the terminal screen
+  # :nocov:
   def clear_screen
     Gem.win_platform? ? (system "cls") : (system "clear")
   end
+  # :nocov:
 
   # Returns the path of the ~/.brewer directory, where everything is stored
   def brewer_dir(path="")
@@ -49,11 +53,13 @@ module Helpers
     brewer_dir + "adaptibrew/#{path}"
   end
 
+  # Returns the path of the recipe storage
   def recipe_dir(path="")
     brewer_dir + "recipes/#{path}"
   end
 
   # Captures standard output, mostly used for testing
+  # :nocov:
   def capture_stdout(&block)
     original_stdout = $stdout
     $stdout = fake = StringIO.new
@@ -63,6 +69,21 @@ module Helpers
       $stdout = original_stdout
     end
     fake.string
+  end
+  # :nocov:
+
+  def dummy_recipe_vars
+    return {
+      'name' => "dummy_recipe",
+      'mash_temp' => 150,
+      'mash_time' => 10,
+      'mashout_temp' => 172,
+      'water' => 14,
+      'grain' => 5,
+      'grain_temp' => 80.1,
+      'desired_mash_temp' => 150,
+      'strike_water_temp' => 168.6,
+    }
   end
 
 end

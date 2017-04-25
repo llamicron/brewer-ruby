@@ -7,25 +7,38 @@ module Brewer
 
     def initialize(brewer)
       @brewer = brewer
+      @vars = Hash.new(0)
+      make_recipe_dir
+    end
+
+    def make_recipe_dir
       if !Dir.exists?(recipe_dir)
         Dir.mkdir(recipe_dir)
       end
-      @vars = Hash.new(0)
+      true
     end
 
+    def new_dummy
+      @vars = dummy_recipe_vars
+    end
+
+    # These methods require a lot of user input. Not going to test them.
+    # :nocov:
     def get_recipe_vars(vars=false)
+      if vars
+        raise "Vars must be a hash" unless vars.is_a? Hash
+        @vars = vars
+        return true
+      end
+
       print "Enter a recipe name to load an existing recipe, or nothing to start a new one: "
       name = gets.chomp.strip
 
       unless name.empty?
-        load_recipe(name)
+        load(name)
         return true
       end
 
-      if vars
-        raise "Vars must be a hash" unless vars.is_a? Hash
-        @vars = vars
-      end
 
       puts Rainbow("Variables for the brew").green
 
@@ -41,7 +54,9 @@ module Brewer
 
       true
     end
+    # :nocov:
 
+    # :nocov:
     def get_strike_temp
       print Rainbow("Input amount of water in quarts: ").yellow
       @vars['water'] = gets.chomp.to_f
@@ -64,23 +79,34 @@ module Brewer
 
       @vars['strike_water_temp'] = @brewer.script('get_strike_temp', "#{@vars['water']} #{@vars['grain']} #{@vars['grain_temp']} #{@vars['desired_mash_temp']}").to_f
     end
+    # :nocov:
 
-    def store
-      print "Please enter a name for this recipe: "
-      name = gets.chomp
+    def store(name=false)
+      raise "Nothing to store! Please run `.get_recipe_vars` to fill in the recipe variables before storing." unless !@vars.empty?
 
-      store = YAML::Store.new recipe_dir(name + ".yml")
+      # :nocov:
+      if @vars['name'].empty?
+        if !name
+          print "Please enter a name for this recipe: "
+          @vars['name'] = gets.chomp
+        else
+          @vars['name'] = name
+        end
+      end
+      # :nocov:
+
+      store = YAML::Store.new recipe_dir(@vars['name'] + ".yml")
       store.transaction {
-        store["name"] = name
+        store["name"] = @vars['name']
         @vars.each do |k, v|
           store[k] = v
         end
         store["created_on"] = time
       }
-      return true
+      true
     end
 
-    def load_recipe(recipe)
+    def load(recipe)
       raise "Recipe does not exist" unless File.exists?(recipe_dir(recipe) + ".yml")
       @vars = YAML.load(File.open(recipe_dir(recipe) + ".yml"))
       puts "Recipe Loaded"
@@ -94,7 +120,23 @@ module Brewer
       recipes.each do |recipe|
         recipe.slice! ".yml"
       end
-      return recipes
+      recipes
+    end
+
+    def loaded_recipe?
+      if File.exists?(recipe_dir(@vars['name']) + ".yml")
+        return true
+      end
+      false
+    end
+
+    def clear
+      @vars = {}
+    end
+
+    def delete_recipe_file
+      FileUtils.rm_rf(recipe_dir + @vars['name'] + ".yml")
+      true
     end
 
   end
