@@ -5,6 +5,7 @@ include Brewer
 
 module Brewer
   class Server < Sinatra::Base
+    include Sinatra::SSE
 
     configure do
 
@@ -38,20 +39,28 @@ module Brewer
     end
 
     get '/' do
-      @relays_status = {
-        "spargeToMashRelay" => "off",
-        "spargeRelay" => "on",
-        "rimsToMashRelay" => "off",
-        "pumpRelay" => "on"
-      }
-      @pid_status = {
-        "pid_running" => "False",
-        "sv_temp" => 50.0,
-        "pv_temp" => 112.0
-      }
-
-      erb :index
+      sse_stream do |out|
+        EM.add_periodic_timer(1) do
+          out.push :event => "timer", :data => Time.now.to_s
+        end
+      end
     end
+
+    # get '/' do
+    #   @relays_status = {
+    #     "spargeToMashRelay" => "off",
+    #     "spargeRelay" => "on",
+    #     "rimsToMashRelay" => "off",
+    #     "pumpRelay" => "on"
+    #   }
+    #   @pid_status = {
+    #     "pid_running" => "False",
+    #     "sv_temp" => 50.0,
+    #     "pv_temp" => 112.0
+    #   }
+    #
+    #   erb :index
+    # end
 
     post '/apply-relay-config' do
       # $brewer.relay_config(params)

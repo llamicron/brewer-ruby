@@ -1,5 +1,7 @@
+require 'rubygems'
+
 require 'pry'
-require "require_all"
+require 'require_all'
 require 'git'
 require 'fileutils'
 require 'slack-notifier'
@@ -8,6 +10,9 @@ require 'yaml/store'
 require 'net/ping'
 require 'wannabe_bool'
 require 'terminal-table'
-require "rainbow"
+require 'rainbow'
 require 'rack-flash'
+require 'sinatra'
 require 'sinatra/base'
+require "sinatra/sse"
+require 'thin'

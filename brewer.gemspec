@@ -27,10 +27,12 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'slack-notifier'
   s.add_runtime_dependency 'require_all'
   s.add_runtime_dependency 'sinatra'
+  s.add_runtime_dependency 'sinatra-sse'
   s.add_runtime_dependency 'terminal-table'
   s.add_runtime_dependency 'rainbow'
   s.add_runtime_dependency 'rack-flash3'
   s.add_runtime_dependency 'pry'
+  s.add_runtime_dependency 'thin'
 
 
   # Dev dependencies
