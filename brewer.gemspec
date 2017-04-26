@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.post_install_message = "🍺  have fun 🍺"
   s.email = %q{luke@thesweeneys.org}
   s.files = FileList.new(['lib/*.rb', 'lib/brewer/*.rb', 'bin/*', 'views/*', '[A-Z]*', 'spec/*.rb']).to_a
-  s.executables = ['brewer', 'brewer-server']
+  s.executables = ['brewer']
   s.bindir = 'bin'
   s.test_files = FileList.new(["spec/*.rb"]).to_a
   s.homepage = %q{https://rubygems.org/gems/brewer}
@@ -26,10 +26,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'wannabe_bool'
   s.add_runtime_dependency 'slack-notifier'
   s.add_runtime_dependency 'require_all'
-  s.add_runtime_dependency 'sinatra'
   s.add_runtime_dependency 'terminal-table'
   s.add_runtime_dependency 'rainbow'
-  s.add_runtime_dependency 'rack-flash3'
   s.add_runtime_dependency 'pry'
 
 
