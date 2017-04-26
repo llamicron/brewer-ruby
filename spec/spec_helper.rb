@@ -7,4 +7,5 @@ SimpleCov.start
 
 require_relative "../lib/brewer"
 
+include Helpers
 include Brewer

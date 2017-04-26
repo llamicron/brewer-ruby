@@ -1,89 +1,98 @@
 require_relative 'spec_helper'
 
-describe Adaptibrew do
+include Helpers
+
+describe Brewer::Adaptibrew do
 
   before :each do
-    @adaptibrew = Adaptibrew.new.refresh
+    @adaptibrew = Adaptibrew.new
+    @adaptibrew.refresh
+  end
+
+  after :all do
+    Adaptibrew.new.clone
   end
 
   describe "#new" do
-    specify { expect(Adaptibrew.new).to be_an_instance_of Adaptibrew }
+    it "makes a new Adaptibrew object" do
+      expect(Adaptibrew.new).to be_an_instance_of Adaptibrew
+    end
   end
 
   describe ".clear" do
     context "when the repo exists" do
-      let(:adaptibrew) { Adaptibrew.new }
-      specify { expect(adaptibrew.present?).to be true }
-
-      it "deletes the repo" do
-        @adaptibrew.clear
+      before  { @adaptibrew.clone    }
+      specify { expect(@adaptibrew.present?).to be true }
+      it "deletes the repo and returns true" do
+        expect(@adaptibrew.clear).to be true
         expect(@adaptibrew.present?).to be false
       end
     end
 
     context "when the repo does not exist" do
-      let(:adaptibrew) { Adaptibrew.new }
-      before { adaptibrew.clear }
-      specify { expect(adaptibrew.present?).to be false }
-
-      it "does nothing" do
-        @adaptibrew.clear
+      before  { @adaptibrew.clear }
+      specify { expect(@adaptibrew.present?).to be false }
+      it "does nothing and returns false" do
+        expect(@adaptibrew.clear).to be false
         expect(@adaptibrew.present?).to be false
       end
     end
   end
 
   describe ".clone" do
-    context "when the repo does not exist" do
-      let(:adaptibrew) { Adaptibrew.new }
-      before { adaptibrew.clear }
-      specify { expect(adaptibrew.present?).to be false }
-
-      it "clones the repo" do
-        @adaptibrew.clone
+    context "when the repo exists" do
+      before { @adaptibrew.clone }
+      it "does nothing and returns false" do
+        expect(@adaptibrew.clone).to be false
         expect(@adaptibrew.present?).to be true
       end
     end
 
-    context "when the repo exists" do
-      let(:adaptibrew) { Adaptibrew.new }
-      before { adaptibrew.clone }
-      specify { expect(adaptibrew.present?).to be true }
-
-      it "does nothing" do
-        @adaptibrew.clone
+    context "when the repo does not exist" do
+      before { @adaptibrew.clear }
+      it "clones it and returns true" do
+        expect(@adaptibrew.clone).to be true
         expect(@adaptibrew.present?).to be true
       end
+    end
+
+    context "when network operations are disabled" do
+      # Clearing it here so that @adaptibrew.clone would otherwise return true
+      before { @adaptibrew.clear}
+      before { @adaptibrew.disable_network_operations = true}
+      it "does nothing and returns false" do
+        expect(@adaptibrew.clone).to be false
+      end
+      after { @adaptibrew.disable_network_operations = false}
     end
   end
 
   describe ".refresh" do
-    let(:adaptibrew) { Adaptibrew.new }
-    before { adaptibrew.refresh }
-
-    it "clears and clones the repo" do # regardless of wether or not it's there
-      expect(@adaptibrew.present?).to be true
-      @adaptibrew.refresh
-      expect(@adaptibrew.present?).to be true
+    context "when network operations are disabled" do
+      before { @adaptibrew.disable_network_operations = true}
+      it "does nothing and returns false" do
+        expect(@adaptibrew.refresh).to be false
+      end
+      after { @adaptibrew.disable_network_operations = false}
     end
 
+    it "clears and clones the repo then returns true" do
+      expect(@adaptibrew.refresh).to be true
+    end
   end
 
   describe ".present?" do
     context "when the exists" do
-      let(:adaptibrew) { Adaptibrew.new }
-      before { adaptibrew.refresh }
-      specify { expect(Dir.exists?(Dir.home + '/.brewer/adaptibrew')).to be true }
-
+      before { @adaptibrew.clone }
+      specify { expect(Dir.exists?(adaptibrew_dir)).to be true }
       it "returns true" do
         expect(@adaptibrew.present?).to be true
       end
     end
 
     context "when the repo does not exist" do
-      let(:adaptibrew) { Adaptibrew.new }
-      before { adaptibrew.clear }
-      specify { expect(Dir.exists?('adaptibrew')).to be false }
+      before { @adaptibrew.clear }
+      specify { expect(Dir.exists?(adaptibrew_dir)).to be false }
       it "returns false" do
         expect(@adaptibrew.present?).to be false
       end
