@@ -8,7 +8,7 @@ module Brewer
 
     def initialize(testing=false)
 
-      @source = adaptibrew_dir('settings.py')
+      @source = adaptibrew_dir('print_settings.py')
       @cache_file = brewer_dir('settings.yml')
 
       @settings = Hash.new
@@ -51,19 +51,15 @@ module Brewer
       false
     end
 
-    # Parse the settings from the source file into @settings
+    # Parse the settings from @source into @settings
     def parse
-      File.open(@source, 'r') do |file|
-        file.each_line do |line|
-          if line.include? "=" and line[0] != "#"
-            key, value = line.match(/(.+)=(.+)/).captures
-            @settings[key.strip.chomp] = value.strip.chomp
-          end
-        end
-        type_cast
-        return true
+      settings_file_output = `python #{@source}`.chomp
+      settings_array = settings_file_output.split("\n")
+      settings_array.each do |setting|
+        key, value = setting.match(/(.+)=(.+)/).captures
+        @settings[key.strip.chomp] = value.strip.chomp
       end
-      false
+      true
     end
 
     # Creates the cache if there isn't one already

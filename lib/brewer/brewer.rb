@@ -36,7 +36,7 @@ module Brewer
     # Turning the pump off will turn the pid off too, as it should not be on when the pump is off
     def pump(state="status")
       if state == "status"
-        return relay_status($settings['pumpRelay'])
+        return relay_status($settings['pump'])
       end
 
       if state == 1
@@ -173,9 +173,9 @@ module Brewer
     def rims_to(location)
       if location == "mash"
         # we ended up swapping this relay, so the name is backwards
-        relay($settings['rimsToMashRelay'], 0)
+        relay($settings['rimsToMash'], 0)
       elsif location == "boil"
-        relay($settings['rimsToMashRelay'], 1)
+        relay($settings['rimsToMash'], 1)
       else
         raise "Not a valid location for rims valve"
       end
@@ -185,9 +185,9 @@ module Brewer
     # Diverts hlt valve to mash or boil tun
     def hlt_to(location)
       if location == "mash"
-        relay($settings['spargeToMashRelay'], 0)
+        relay($settings['hltToMash'], 0)
       elsif location == "boil"
-        relay($settings['spargeToMashRelay'], 1)
+        relay($settings['hltToMash'], 1)
       else
         raise "Not a valid location for the hlt valve"
       end
@@ -196,7 +196,7 @@ module Brewer
 
     # Opens or closes hlt valve
     def hlt(state)
-      relay($settings['spargeRelay'], state)
+      relay($settings['hlt'], state)
       self
     end
 
