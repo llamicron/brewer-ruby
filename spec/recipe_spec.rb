@@ -78,4 +78,23 @@ describe Recipe do
     end
   end
 
+  describe ".list_as_table" do
+    context "when there are no recipes" do
+      before { FileUtils.rm_rf(Dir.glob(recipe_dir("*"))) }
+      it "returns without a table" do
+        expect(@recipe.list_as_table).to eq("No Saved Recipes.")
+      end
+    end
+
+    context "when there are recipes" do
+      before {
+        @recipe.new_dummy
+        @recipe.store
+      }
+      it "returns a TerminalTable" do
+        expect(@recipe.list_as_table).to be_an_instance_of Terminal::Table
+      end
+    end
+  end
+
 end

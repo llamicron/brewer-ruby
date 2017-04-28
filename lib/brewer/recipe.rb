@@ -31,19 +31,23 @@ module Brewer
         return true
       end
 
-      clear_screen
-      puts "Enter a recipe name to load an existing recipe, or nothing to start a new one."
-      puts list_as_table
-      print "> "
-      name = gets.chomp.strip
+      if !list_recipes.empty?
+        clear_screen
+        puts "Enter a recipe name to load an existing recipe, or nothing to start a new one."
+        puts list_as_table
+        print "> "
+        name = gets.chomp.strip
+      else
+        puts Rainbow("No available recipes").yellow
+        name = ""
+      end
 
       unless name.empty?
         load(name)
         return true
       end
 
-
-      puts Rainbow("Variables for the brew").green
+      puts Rainbow("Creating a new recipe").green
 
       get_strike_temp
 
@@ -127,6 +131,9 @@ module Brewer
     end
 
     def list_as_table
+      if list_recipes.empty?
+        return "No Saved Recipes."
+      end
       recipes_table_rows = list_recipes.each_slice(5).to_a
       recipes_table = Terminal::Table.new :title => "All Recipes", :rows => recipes_table_rows
       return recipes_table

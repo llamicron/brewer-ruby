@@ -1,5 +1,5 @@
 require_relative "../brewer"
-
+# :nocov:
 module Brewer
   class Procedures
 
@@ -40,7 +40,7 @@ module Brewer
       true
     end
 
-    # :nocov:
+
     def heat_strike_water
       puts Rainbow("About to heat strike water").green
 
@@ -94,7 +94,7 @@ module Brewer
       puts Rainbow("Strike water heated. Maintaining temp.").green
       true
     end
-    # :nocov:
+
 
     def dough_in
       @brewer.relay_config({
@@ -220,3 +220,4 @@ module Brewer
 
   end
 end
+# :nocov:

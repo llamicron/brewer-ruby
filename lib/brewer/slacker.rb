@@ -1,27 +1,36 @@
 require_relative "../brewer"
-
+# :nocov:
 module Brewer
   # This class is responsible for slack communication
   class Slacker
 
     attr_accessor :slack, :brewer
 
-    def initialize
+    def initialize(webhook=false)
       @settings = Settings.new
       @brewer = Brewer.new
-      @slack = configure_slack
+      @slack = configure_slack(webhook)
     end
 
     # This will look for a webhook in settings.yml and ask you for one if it doesn't find one
-    def configure_slack
-      unless @settings.settings['webhook_url']
-        print "Slack Webhook URL: "
-        webhook_url = gets.chomp
-        @settings.add({
-          'webhook_url' => webhook_url
-        })
+    def configure_slack(webhook)
+      if webhook
+        return Slack::Notifier.new webhook
+      end
+      if !@settings.settings['webhook_url']
+        get_webhook_url
       end
       return Slack::Notifier.new @settings.settings['webhook_url']
+    end
+
+    def get_new_webhook
+      print "Slack Webhook URL: "
+      webhook_url = gets.chomp
+      @settings.add({
+        'webhook_url' => webhook_url
+      })
+      @settings.cache
+      webhook_url
     end
 
     # This sends a message in slack.
@@ -56,3 +65,4 @@ module Brewer
 
   end
 end
+# :nocov:

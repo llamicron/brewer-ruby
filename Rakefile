@@ -44,17 +44,3 @@ end
 task :clear_coverage do
   rm_rf('coverage/')
 end
-
-# Adaptibrew tasks
-# Clear, Clone, and Refresh
-task :adaptibrew, [:method] do |t, method|
-  case method.to_a.first
-  when 'clear'
-    rm_rf 'adaptibrew/'
-  when 'clone'
-    Git.clone('https://github.com/adaptiman/adaptibrew.git', 'adaptibrew')
-  when 'refresh'
-    rm_rf 'adaptibrew/'
-    Git.clone('https://github.com/adaptiman/adaptibrew.git', 'adaptibrew')
-  end
-end

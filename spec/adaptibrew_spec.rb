@@ -17,6 +17,15 @@ describe Brewer::Adaptibrew do
     it "makes a new Adaptibrew object" do
       expect(Adaptibrew.new).to be_an_instance_of Adaptibrew
     end
+
+    context "when the adaptibrew and brewer directories dont exist" do
+      before { FileUtils.rm_rf(brewer_dir) }
+      it "creates them" do
+        a = Adaptibrew.new
+        expect(Dir.exists?(brewer_dir)).to be true
+        expect(Dir.exists?(adaptibrew_dir)).to be true
+      end
+    end
   end
 
   describe ".clear" do
