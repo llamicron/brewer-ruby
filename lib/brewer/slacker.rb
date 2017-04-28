@@ -18,7 +18,7 @@ module Brewer
         return Slack::Notifier.new webhook
       end
       if !@settings.settings['webhook_url']
-        get_webhook_url
+        get_new_webhook
       end
       return Slack::Notifier.new @settings.settings['webhook_url']
     end

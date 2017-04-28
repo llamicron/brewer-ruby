@@ -59,6 +59,15 @@ module Brewer
       print Rainbow("Enter mashout temp: ").yellow
       @vars['mashout_temp'] = gets.chomp.to_f
 
+      puts Rainbow("Enter a name for your new recipe, or nothing to not store the recipe.").yellow
+      print "> "
+      name = gets.chomp
+
+      if !name.empty?
+        @vars['name'] = name
+        store
+        puts Rainbow("Recipe saved.").green
+      end
       true
     end
     # :nocov:
