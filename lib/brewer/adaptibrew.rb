@@ -11,6 +11,10 @@ module Brewer
       @disable_network_operations = network? ? false : true
       @adaptibrew_url = 'https://github.com/llamicron/adaptibrew.git'
 
+      if !Dir.exists?(brewer_dir)
+        Dir.mkdir(brewer_dir)
+      end
+
       if !Dir.exists?(adaptibrew_dir)
         Dir.mkdir(adaptibrew_dir)
       end
