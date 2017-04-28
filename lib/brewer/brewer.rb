@@ -150,7 +150,7 @@ module Brewer
       statuses = {}
       all_relays_status.shift(4).each do |status|
         relay_num, status = status.match(/relay [0-9+]([0-9]+): (on|off)/).captures
-        relay_names = $settings.select { |key, value| key.to_s.match(/Relay/) }
+        relay_names = $settings.select { |key, value| key.to_s.match(/hlt|rims[^A]|pump/) }
         statuses[relay_names.key(relay_num.to_i)] = status
       end
       statuses

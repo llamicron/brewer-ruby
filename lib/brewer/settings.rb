@@ -104,6 +104,7 @@ module Brewer
     # and for backwards compatability purposes
     def load_global
       raise "settings instance variable does not exist yet. Run Settings#parse first" unless !@settings.empty?
+      type_cast
       $settings = @settings
     end
 
@@ -119,14 +120,14 @@ module Brewer
     def type_cast
       # Super janky
       change({
-        'rimsaddressint' => @settings['rimsaddressint'].to_i,
-        'switchaddressint' => @settings['switchaddressint'].to_i,
-        'baudrate' => @settings['baudrate'].to_i,
+        'rimsAddress' => @settings['rimsAddress'].to_i,
+        'switchAddress' => @settings['switchAddress'].to_i,
+        'baudRate' => @settings['baudRate'].to_i,
         'timeout' => @settings['timeout'].to_i,
-        'spargeToMashRelay' => @settings['spargeToMashRelay'].to_i,
-        'spargeRelay' => @settings['spargeRelay'].to_i,
-        'rimsToMashRelay' => @settings['rimsToMashRelay'].to_i,
-        'pumpRelay' => @settings['pumpRelay'].to_i,
+        'hltToMash' => @settings['hltToMash'].to_i,
+        'hlt' => @settings['hlt'].to_i,
+        'rimsToMash' => @settings['rimsToMash'].to_i,
+        'pump' => @settings['pump'].to_i,
         'DEBUG' => @settings['DEBUG'].to_b,
       })
     end

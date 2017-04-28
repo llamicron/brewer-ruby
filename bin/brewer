@@ -6,6 +6,5 @@ slack         = Brewer::Slacker.new
 brewer      = Brewer::Brewer.new
 procedures  = Brewer::Procedures.new
 
-puts "🍺  have fun 🍺"
 binding.pry(quiet: true)
 # 🍺🍺🍺

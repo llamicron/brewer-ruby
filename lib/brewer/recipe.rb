@@ -31,7 +31,10 @@ module Brewer
         return true
       end
 
-      print "Enter a recipe name to load an existing recipe, or nothing to start a new one: "
+      clear_screen
+      puts "Enter a recipe name to load an existing recipe, or nothing to start a new one."
+      puts list_as_table
+      print "> "
       name = gets.chomp.strip
 
       unless name.empty?
@@ -121,6 +124,12 @@ module Brewer
         recipe.slice! ".yml"
       end
       recipes
+    end
+
+    def list_as_table
+      recipes_table_rows = list_recipes.each_slice(5).to_a
+      recipes_table = Terminal::Table.new :title => "All Recipes", :rows => recipes_table_rows
+      return recipes_table
     end
 
     def loaded_recipe?
