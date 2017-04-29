@@ -25,21 +25,18 @@ module Brewer
     end
 
     def boot
-      puts Rainbow("booting...").yellow
+      puts Rainbow("Booting...").yellow
       @brewer.relay_config({
         'pid' => 0,
         'pump' => 0,
         'rims_to' => 'mash',
         'hlt_to' => 'mash'
       })
-      # puts @brewer.all_relays_status
-      # puts @brewer.pid
 
       puts Rainbow("Boot finished!").green
       @com.ping("🍺 boot finished 🍺")
       true
     end
-
 
     def heat_strike_water
       puts Rainbow("About to heat strike water").green
@@ -94,7 +91,6 @@ module Brewer
       puts Rainbow("Strike water heated. Maintaining temp.").green
       true
     end
-
 
     def dough_in
       @brewer.relay_config({
