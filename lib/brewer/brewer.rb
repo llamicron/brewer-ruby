@@ -21,12 +21,6 @@ module Brewer
 
     public
 
-    # sleeps for a number of seconds
-    def wait(time=30)
-      sleep(time.to_f)
-      self
-    end
-
     # Runs an adaptibrew script (written in python)
     def script(script, params=nil)
       `python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp

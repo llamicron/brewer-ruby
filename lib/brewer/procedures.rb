@@ -62,7 +62,7 @@ module Brewer
       unless confirm
         puts "restarting pump"
         @brewer.pump(0)
-        @brewer.wait(2)
+        wait(2)
         @brewer.pump(1)
       end
 
@@ -97,7 +97,7 @@ module Brewer
         'pid' => 0,
         'pump' => 0
       })
-      @brewer.wait(3)
+      wait(3)
       @com.ping("Ready to dough in")
       puts Rainbow("Ready to dough in").green
 
@@ -122,7 +122,7 @@ module Brewer
 
       @brewer.watch
       @com.ping("Starting timer for #{to_minutes(@recipe.vars['mash_time'])} minutes.")
-      @brewer.wait(@recipe.vars['mash_time'])
+      wait(@recipe.vars['mash_time'])
       @com.ping("🍺 Mash complete 🍺. Check for starch conversion.")
       puts Rainbow("Mash complete").green
       puts "Check for starch conversion"
@@ -159,7 +159,7 @@ module Brewer
 
       print "Waiting for 10 seconds. "
       puts Rainbow("Regulate sparge balance.").yellow
-      @brewer.wait(10)
+      wait(10)
 
       @brewer.relay_config({
         'rims_to' => 'boil',
@@ -202,13 +202,13 @@ module Brewer
     def boil
       puts Rainbow("Timers started for 1 hour... You'll be notified when you need to add hops.").yellow
       @com.ping("starting boil procedure")
-      @brewer.wait(to_seconds(5))
+      wait(to_seconds(5))
       @com.ping("Add boil hops")
-      @brewer.wait(to_seconds(40))
+      wait(to_seconds(40))
       @com.ping("Add flovering hops")
-      @brewer.wait(to_seconds(13))
+      wait(to_seconds(13))
       @com.ping("Add finishing hops")
-      @brewer.wait(30)
+      wait(30)
       @com.ping("Done.")
       puts Rainbow("Done.").green
       true

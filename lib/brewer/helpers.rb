@@ -9,6 +9,10 @@ module Helpers
     Time.now.strftime("%m/%d/%Y %H:%M")
   end
 
+  def wait(time=30)
+    sleep(time.to_f)
+  end
+
   # Returns true if there is a network connection
   # :nocov:
   def network?
