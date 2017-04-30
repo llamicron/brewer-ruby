@@ -53,7 +53,10 @@ module Brewer
     end
 
     def present?
-      return Dir.exists?(adaptibrew_dir) ? true : false
+      if Dir.entries(adaptibrew_dir).length > 2
+        return true
+      end
+      return false
     end
 
   end

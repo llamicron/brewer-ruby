@@ -8,10 +8,9 @@ module Brewer
 
     def initialize(source_file: false, cache_file: false)
 
+      @settings = {}
       @source_file = source_file ? adaptibrew_dir(source_file) : adaptibrew_dir("print_settings.py")
       @cache_file = cache_file ? brewer_dir(cache_file) : brewer_dir("settings.yml")
-
-      @settings = Hash.new
 
       if !cache?
         parse
@@ -21,16 +20,6 @@ module Brewer
       end
 
       load_global
-    end
-
-    # Loads cached settings
-    # If no cached settings, it returns false
-    def load_cached_settings
-      if cache?
-        @settings = YAML.load(File.open(@cache_file))
-        return true
-      end
-      false
     end
 
     # Checks if there are settings in the cache
@@ -44,8 +33,7 @@ module Brewer
     # Parse the settings from @source_file into @settings
     def parse
       settings_file_output = `python #{@source_file}`.chomp
-      settings_array = settings_file_output.split("\n")
-      settings_array.each do |setting|
+      settings_file_output.split("\n").each do |setting|
         key, value = setting.match(/(.+)=(.+)/).captures
         @settings[key.strip.chomp] = value.strip.chomp
       end
@@ -58,6 +46,23 @@ module Brewer
       true
     end
 
+    # Stores the currents @settings in settings.yml
+    def cache
+      raise "Settings cache could not be created. Check permissions on ~/.brewer/" unless create_cache
+      store(@settings)
+      true
+    end
+
+    # Loads cached settings
+    # If no cached settings, it returns false
+    def load_cached_settings
+      if cache?
+        @settings = YAML.load(File.open(@cache_file))
+        return true
+      end
+      false
+    end
+
     # This will add a new element to the @settings hash
     # AND re-cache the settings
     def add(setting)
@@ -65,13 +70,6 @@ module Brewer
       setting.each do |key, value|
         @settings[key] = value
       end
-      true
-    end
-
-    # Stores the currents @settings in settings.yml
-    def cache
-      raise "Settings cache could not be created. Check permissions on ~/.brewer/" unless create_cache
-      store(@settings)
       true
     end
 
