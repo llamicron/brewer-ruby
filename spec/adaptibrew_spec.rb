@@ -6,7 +6,7 @@ describe Brewer::Adaptibrew do
 
   before :each do
     @adaptibrew = Adaptibrew.new
-    @adaptibrew.refresh
+    @adaptibrew.clone
   end
 
   after :all do
@@ -17,20 +17,11 @@ describe Brewer::Adaptibrew do
     it "makes a new Adaptibrew object" do
       expect(Adaptibrew.new).to be_an_instance_of Adaptibrew
     end
-
-    context "when the adaptibrew and brewer directories dont exist" do
-      before { FileUtils.rm_rf(brewer_dir) }
-      it "creates them" do
-        a = Adaptibrew.new
-        expect(Dir.exists?(brewer_dir)).to be true
-        expect(Dir.exists?(adaptibrew_dir)).to be true
-      end
-    end
   end
 
   describe ".clear" do
     context "when the repo exists" do
-      before  { @adaptibrew.clone    }
+      before  { @adaptibrew.clone }
       specify { expect(@adaptibrew.present?).to be true }
       it "deletes the repo and returns true" do
         expect(@adaptibrew.clear).to be true

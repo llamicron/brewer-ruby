@@ -14,11 +14,6 @@ module Brewer
       unless Dir.exists?(brewer_dir)
         Dir.mkdir(brewer_dir)
       end
-
-      unless Dir.exists?(adaptibrew_dir)
-        Dir.mkdir(adaptibrew_dir)
-      end
-
     end
 
     def clone
@@ -26,7 +21,7 @@ module Brewer
         return false
       end
 
-      if !Dir.exists?(adaptibrew_dir)
+      if !present?
         Git.clone(@adaptibrew_url, 'adaptibrew', :path => brewer_dir)
         return true
       end
@@ -53,10 +48,12 @@ module Brewer
     end
 
     def present?
-      if Dir.entries(adaptibrew_dir).length > 2
-        return true
+      if Dir.exists?(adaptibrew_dir)
+        if Dir.entries(adaptibrew_dir).length > 2
+          return true
+        end
       end
-      return false
+      false
     end
 
   end
