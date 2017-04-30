@@ -11,7 +11,8 @@ describe Settings do
   describe ".load_cached_settings" do
     context "when there are cached settings" do
       before {
-        @settings.parse_and_cache
+        @settings.parse
+        @settings.cache
         @settings.settings = {}
       }
 
@@ -35,7 +36,8 @@ describe Settings do
   describe ".cache?" do
     context "when the cache exists" do
       before {
-        @settings.parse_and_cache
+        @settings.parse
+        @settings.cache
       }
       it "returns true" do
         expect(@settings.cache?).to be true
@@ -62,7 +64,10 @@ describe Settings do
 
   describe ".create_cache" do
     context "when the cache exists" do
-      before { @settings.parse_and_cache }
+      before {
+        @settings.parse
+        @settings.cache
+      }
 
       specify { expect(@settings.cache?).to be true }
       it "returns true" do
@@ -102,7 +107,10 @@ describe Settings do
   end
 
   describe ".clear_cache" do
-    before { @settings.parse_and_cache}
+    before {
+      @settings.parse
+      @settings.cache
+    }
 
     specify { expect(@settings.cache?).to be true }
     it "deletes the cache file" do
@@ -119,7 +127,10 @@ describe Settings do
   end
 
   describe ".change" do
-    before { @settings.parse_and_cache }
+    before {
+      @settings.parse
+      @settings.cache
+    }
 
     specify { expect(@settings.settings['DEBUG'].to_b).to be false}
 

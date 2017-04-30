@@ -11,13 +11,14 @@ module Brewer
       @disable_network_operations = network? ? false : true
       @adaptibrew_url = 'https://github.com/llamicron/adaptibrew.git'
 
-      if !Dir.exists?(brewer_dir)
+      unless Dir.exists?(brewer_dir)
         Dir.mkdir(brewer_dir)
       end
 
-      if !Dir.exists?(adaptibrew_dir)
+      unless Dir.exists?(adaptibrew_dir)
         Dir.mkdir(adaptibrew_dir)
       end
+
     end
 
     def clone
@@ -36,6 +37,7 @@ module Brewer
       if @disable_network_operations
         return false
       end
+
       if present?
         FileUtils.rm_rf(adaptibrew_dir)
         return true

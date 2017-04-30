@@ -4,33 +4,23 @@ module Brewer
   class Settings
 
     attr_accessor :settings
-    attr_reader :cache_file, :source
+    attr_reader :cache_file, :source_file
 
-    def initialize(testing=false)
+    def initialize(source_file: false, cache_file: false)
 
-      @source = adaptibrew_dir('print_settings.py')
-      @cache_file = brewer_dir('settings.yml')
+      @source_file = source_file ? adaptibrew_dir(source_file) : adaptibrew_dir("print_settings.py")
+      @cache_file = cache_file ? brewer_dir(cache_efile) : brewer_dir("settings.yml")
 
       @settings = Hash.new
 
-      if !testing
-        Adaptibrew.new.clone
-
-        if !cache?
-          parse_and_cache
-        else
-          load_cached_settings
-        end
-
-        load_global
+      if !cache?
+        parse
+        cache
+      else
+        load_cached_settings
       end
-    end
 
-    # This will create the cache and populate
-    # it with settings from settings.py
-    def parse_and_cache
-      parse
-      cache
+      load_global
     end
 
     # Loads cached settings
@@ -51,9 +41,9 @@ module Brewer
       false
     end
 
-    # Parse the settings from @source into @settings
+    # Parse the settings from @source_file into @settings
     def parse
-      settings_file_output = `python #{@source}`.chomp
+      settings_file_output = `python #{@source_file}`.chomp
       settings_array = settings_file_output.split("\n")
       settings_array.each do |setting|
         key, value = setting.match(/(.+)=(.+)/).captures
@@ -64,9 +54,7 @@ module Brewer
 
     # Creates the cache if there isn't one already
     def create_cache
-      unless File.exists?(@cache_file)
-        File.open(@cache_file, 'w')
-      end
+      File.open(@cache_file, 'w')
       true
     end
 
@@ -77,18 +65,13 @@ module Brewer
       setting.each do |key, value|
         @settings[key] = value
       end
-      cache
+      true
     end
 
     # Stores the currents @settings in settings.yml
     def cache
-      create_cache
-      store = YAML::Store.new @cache_file
-      store.transaction {
-        @settings.each do |k, v|
-          store[k] = v
-        end
-      }
+      raise "Settings cache could not be created. Check permissions on ~/.brewer/" unless create_cache
+      store(@settings)
       true
     end
 
@@ -116,6 +99,8 @@ module Brewer
       return true
     end
 
+    private
+
     # This method is r/badcode, i know
     def type_cast
       # Super janky
@@ -130,6 +115,17 @@ module Brewer
         'pump' => @settings['pump'].to_i,
         'DEBUG' => @settings['DEBUG'].to_b,
       })
+    end
+
+    # This writes directly to the @cache_file file
+    def store(settings={})
+      raise "You must provide a hash to store" if settings.empty?
+      store = YAML::Store.new @cache_file
+      store.transaction {
+        settings.each do |setting, value|
+          store[setting] = value
+        end
+      }
     end
 
   end
