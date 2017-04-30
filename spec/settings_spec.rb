@@ -5,7 +5,7 @@ describe Settings do
 
   before :all do
     @adaptibrew = Adaptibrew.new.clone
-    @settings = Settings.new(true)
+    @settings = Settings.new(cache_file: "test_settings.yml")
   end
 
   describe ".load_cached_settings" do
@@ -87,7 +87,7 @@ describe Settings do
   end
 
   describe ".add" do
-    before { @settings = Settings.new }
+    before { @settings = Settings.new(cache_file: "test_settings.yml") }
     specify { expect(@settings.settings['test_key']).to be nil }
     it "adds a new setting to the cache" do
       @settings.add({'test_key' => 'test_value'})

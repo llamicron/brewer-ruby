@@ -9,7 +9,7 @@ module Brewer
     def initialize(source_file: false, cache_file: false)
 
       @source_file = source_file ? adaptibrew_dir(source_file) : adaptibrew_dir("print_settings.py")
-      @cache_file = cache_file ? brewer_dir(cache_efile) : brewer_dir("settings.yml")
+      @cache_file = cache_file ? brewer_dir(cache_file) : brewer_dir("settings.yml")
 
       @settings = Hash.new
 
