@@ -4,6 +4,7 @@ require_relative "../lib/brewer"
 adaptibrew  = Brewer::Adaptibrew.new
 adaptibrew.refresh
 
+kitchen     = Brewer::Kitchen.new
 slack       = Brewer::Slacker.new
 brewer      = Brewer::Brewer.new
 procedures  = Brewer::Procedures.new

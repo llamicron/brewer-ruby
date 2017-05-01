@@ -51,9 +51,9 @@ describe "Helpers" do
     end
   end
 
-  describe ".recipe_dir" do
+  describe ".kitchen_dir" do
     it "returns the path to the recipe storage dir" do
-      expect(recipe_dir).to eq(Dir.home + "/.brewer/recipes/")
+      expect(kitchen_dir).to eq(Dir.home + "/.brewer/recipes/")
     end
   end
 

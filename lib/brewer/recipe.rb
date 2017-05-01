@@ -8,14 +8,6 @@ module Brewer
     def initialize(brewer)
       @brewer = brewer
       @vars = Hash.new(0)
-      make_recipe_dir
-    end
-
-    def make_recipe_dir
-      if !Dir.exists?(recipe_dir)
-        Dir.mkdir(recipe_dir)
-      end
-      true
     end
 
     def new_dummy
@@ -111,7 +103,7 @@ module Brewer
       end
       # :nocov:
 
-      store = YAML::Store.new recipe_dir(@vars['name'] + ".yml")
+      store = YAML::Store.new kitchen_dir(@vars['name'] + ".yml")
       store.transaction {
         store["name"] = @vars['name']
         @vars.each do |k, v|
@@ -123,14 +115,14 @@ module Brewer
     end
 
     def load(recipe)
-      raise "Recipe does not exist" unless File.exists?(recipe_dir(recipe) + ".yml")
-      @vars = YAML.load(File.open(recipe_dir(recipe) + ".yml"))
+      raise "Recipe does not exist" unless File.exists?(kitchen_dir(recipe) + ".yml")
+      @vars = YAML.load(File.open(kitchen_dir(recipe) + ".yml"))
       puts "Recipe Loaded"
       true
     end
 
     def list_recipes
-      recipes = Dir.entries(recipe_dir)
+      recipes = Dir.entries(kitchen_dir)
       recipes.delete(".")
       recipes.delete("..")
       recipes.each do |recipe|
@@ -149,7 +141,7 @@ module Brewer
     end
 
     def loaded_recipe?
-      if File.exists?(recipe_dir(@vars['name']) + ".yml")
+      if File.exists?(kitchen_dir(@vars['name']) + ".yml")
         return true
       end
       false
@@ -160,7 +152,7 @@ module Brewer
     end
 
     def delete_recipe_file
-      FileUtils.rm_rf(recipe_dir + @vars['name'] + ".yml")
+      FileUtils.rm_rf(kitchen_dir + @vars['name'] + ".yml")
       true
     end
 

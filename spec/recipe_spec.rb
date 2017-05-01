@@ -27,13 +27,13 @@ describe Recipe do
     end
   end
 
-  describe ".make_recipe_dir" do
-    before  { FileUtils.rm_rf(recipe_dir) }
-    specify { !Dir.exists?(recipe_dir)    }
+  describe ".make_kitchen_dir" do
+    before  { FileUtils.rm_rf(kitchen_dir) }
+    specify { !Dir.exists?(kitchen_dir)    }
     it "makes the recipe storage directory" do
-      expect(@recipe.make_recipe_dir).to be true
+      expect(@recipe.make_kitchen_dir).to be true
     end
-    specify { Dir.exists?(recipe_dir) }
+    specify { Dir.exists?(kitchen_dir) }
   end
 
   describe ".store" do
@@ -80,7 +80,7 @@ describe Recipe do
 
   describe ".list_as_table" do
     context "when there are no recipes" do
-      before { FileUtils.rm_rf(Dir.glob(recipe_dir("*"))) }
+      before { FileUtils.rm_rf(Dir.glob(kitchen_dir("*"))) }
       it "returns without a table" do
         expect(@recipe.list_as_table).to eq("No Saved Recipes.")
       end

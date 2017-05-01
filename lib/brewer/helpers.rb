@@ -58,8 +58,8 @@ module Helpers
   end
 
   # Returns the path of the recipe storage
-  def recipe_dir(path="")
-    brewer_dir + "recipes/#{path}"
+  def kitchen_dir(path="")
+    brewer_dir + "kitchen/#{path}"
   end
 
   # Captures standard output, mostly used for testing
