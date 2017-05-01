@@ -67,6 +67,23 @@ module Brewer
       true
     end
 
+    def new_recipe(name=nil)
+      if name
+        @recipe = Recipe.new(name)
+      else
+        puts "Please enter a name for the new recipe"
+        print ">> "
+        @recipe = Recipe.new(gets.chomp)
+      end
+    end
+
+    def delete_recipe(recipe)
+      if recipe_exists?(recipe)
+        File.delete(kitchen_dir(recipe + ".yml"))
+        return true
+      end
+      false
+    end
 
     def list_recipes
       list = Dir.entries(kitchen_dir).select {|file| file.match(/\.yml/) }
@@ -98,6 +115,7 @@ module Brewer
       end
       false
     end
+
 
   end
 end

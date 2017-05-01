@@ -164,4 +164,12 @@ describe Kitchen do
     end
   end
 
+  describe ".delete_recipe" do
+    it "deletes a recipe" do
+      expect(@kitchen.recipe_exists?("dummy_recipe")).to be true
+      expect(@kitchen.delete_recipe("dummy_recipe")).to be true
+      expect(@kitchen.recipe_exists?("dummy_recipe")).to be false
+    end
+  end
+
 end
