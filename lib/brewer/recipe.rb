@@ -5,13 +5,12 @@ module Brewer
 
     attr_accessor :vars
 
-    def initialize
-      # @brewer = brewer
-      @vars = Hash.new(0)
-    end
-
-    def new_dummy
-      @vars = dummy_recipe_vars
+    def initialize(dummy: false)
+      if dummy
+        @vars = dummy_recipe_vars
+      else
+        @vars = Hash.new(0)
+      end
     end
 
     # These methods require a lot of user input. Not going to test them.
@@ -88,66 +87,6 @@ module Brewer
       @vars['strike_water_temp'] = @brewer.script('get_strike_temp', "#{@vars['water']} #{@vars['grain']} #{@vars['grain_temp']} #{@vars['desired_mash_temp']}").to_f
     end
     # :nocov:
-
-    def store(name=false)
-      raise "Nothing to store! Please run `.get_recipe_vars` to fill in the recipe variables before storing." unless !@vars.empty?
-
-      # :nocov:
-      if @vars['name'].empty?
-        if !name
-          print "Please enter a name for this recipe: "
-          @vars['name'] = gets.chomp
-        else
-          @vars['name'] = name
-        end
-      end
-      # :nocov:
-
-      store = YAML::Store.new kitchen_dir(@vars['name'] + ".yml")
-      store.transaction {
-        store["name"] = @vars['name']
-        @vars.each do |k, v|
-          store[k] = v
-        end
-        store["created_on"] = time
-      }
-      true
-    end
-
-    def list_recipes
-      recipes = Dir.entries(kitchen_dir)
-      recipes.delete(".")
-      recipes.delete("..")
-      recipes.each do |recipe|
-        recipe.slice! ".yml"
-      end
-      recipes
-    end
-
-    def list_as_table
-      if list_recipes.empty?
-        return "No Saved Recipes."
-      end
-      recipes_table_rows = list_recipes.each_slice(5).to_a
-      recipes_table = Terminal::Table.new :title => "All Recipes", :rows => recipes_table_rows
-      return recipes_table
-    end
-
-    def loaded_recipe?
-      if File.exists?(kitchen_dir(@vars['name']) + ".yml")
-        return true
-      end
-      false
-    end
-
-    def clear
-      @vars = {}
-    end
-
-    def delete_recipe_file
-      FileUtils.rm_rf(kitchen_dir + @vars['name'] + ".yml")
-      true
-    end
 
   end
 end

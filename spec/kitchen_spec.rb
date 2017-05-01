@@ -117,7 +117,51 @@ describe Kitchen do
     end
   end
 
+  describe ".store" do
+    context "when a recipe is loaded" do
+      before {
+        @kitchen.recipe = Recipe.new(dummy: true)
+        @kitchen.recipe.vars['name'] = "test_recipe"
+      }
+      it "stores the recipe" do
+        expect(@kitchen.store).to be true
+      end
+    end
+  end
 
+  describe ".recipe_exists?" do
+    context "when the recipe exists" do
+      before {
+        @kitchen.recipe = Brewer::Recipe.new(dummy: true)
+        @kitchen.recipe.vars['name'] = "test_recipe"
+        @kitchen.store
+      }
+      it "returns true" do
+        expect(@kitchen.recipe_exists?("test_recipe")).to be true
+      end
+    end
 
+    context "when the recipe does not exist" do
+      it "returns false" do
+        expect(@kitchen.recipe_exists?("doesnt_exist")).to be false
+      end
+    end
+  end
+
+  describe ".loaded_recipe?" do
+    context "when there is a loaded recipe" do
+      before { @kitchen.load("dummy_recipe") }
+      it "returns true" do
+        expect(@kitchen.loaded_recipe?).to be true
+      end
+    end
+
+    context "when there is not loaded recipe" do
+      before { @kitchen.recipe = nil }
+      it "returns false" do
+        expect(@kitchen.loaded_recipe?).to be false
+      end
+    end
+  end
 
 end

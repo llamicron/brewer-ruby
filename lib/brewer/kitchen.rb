@@ -46,6 +46,28 @@ module Brewer
       false
     end
 
+
+    def load(recipe)
+      raise "Recipe name must be a string" unless recipe.is_a? String
+      raise "Recipe does not exist" unless recipe_exists?(recipe)
+      @recipe = Recipe.new
+      @recipe.vars = YAML.load(File.open(kitchen_dir(recipe) + ".yml"))
+      true
+    end
+
+    def store
+      raise "Recipe not loaded. Load a recipe or create a new one" unless !@recipe.vars.empty?
+      store = YAML::Store.new kitchen_dir(@recipe.vars['name'] + ".yml")
+      store.transaction do
+        @recipe.vars.each do |k, v|
+          store[k] = v
+        end
+        store['created_on'] = Time.now
+      end
+      true
+    end
+
+
     def list_recipes
       list = Dir.entries(kitchen_dir).select {|file| file.match(/\.yml/) }
       list.each {|recipe_name| recipe_name.slice!(".yml") }
@@ -70,12 +92,11 @@ module Brewer
       false
     end
 
-    def load(recipe)
-      raise "Recipe name must be a string" unless recipe.is_a? String
-      raise "Recipe does not exist" unless recipe_exists?(recipe)
-      @recipe = Recipe.new
-      @recipe.vars = YAML.load(File.open(kitchen_dir(recipe) + ".yml"))
-      true
+    def loaded_recipe?
+      if @recipe
+        return true
+      end
+      false
     end
 
   end
