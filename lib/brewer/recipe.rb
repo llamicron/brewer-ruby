@@ -5,8 +5,8 @@ module Brewer
 
     attr_accessor :vars
 
-    def initialize(brewer)
-      @brewer = brewer
+    def initialize
+      # @brewer = brewer
       @vars = Hash.new(0)
     end
 
@@ -111,13 +111,6 @@ module Brewer
         end
         store["created_on"] = time
       }
-      true
-    end
-
-    def load(recipe)
-      raise "Recipe does not exist" unless File.exists?(kitchen_dir(recipe) + ".yml")
-      @vars = YAML.load(File.open(kitchen_dir(recipe) + ".yml"))
-      puts "Recipe Loaded"
       true
     end
 

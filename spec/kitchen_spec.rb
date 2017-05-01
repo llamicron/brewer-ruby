@@ -9,6 +9,12 @@ describe Kitchen do
     it "returns a kitchen object" do
       expect(Brewer::Kitchen.new).to be_an_instance_of Brewer::Kitchen
     end
+
+    it "can accept arguments" do
+      kitchen = Brewer::Kitchen.new(url: "url", recipe: "recipe")
+      expect(kitchen.recipe).to eq("recipe")
+      expect(kitchen.url).to eq("url")
+    end
   end
 
   describe ".present?" do
@@ -101,5 +107,17 @@ describe Kitchen do
       expect(@kitchen.present?).to be true
     end
   end
+
+  describe ".load" do
+    before { @kitchen.clone }
+    specify { expect(@kitchen.recipe_exists?("dummy_recipe")).to be true }
+    it "loads a recipe into the @recipe variable" do
+      expect(@kitchen.load("dummy_recipe")).to be true
+      expect(@kitchen.recipe).to be_an_instance_of Recipe
+    end
+  end
+
+
+
 
 end
