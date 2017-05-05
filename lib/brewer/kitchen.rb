@@ -63,13 +63,7 @@ module Brewer
     end
 
     def new_recipe(name=nil)
-      if name
-        @recipe = Recipe.new(name)
-      else
-        puts "Please enter a name for the new recipe"
-        print ">> "
-        @recipe = Recipe.new(gets.chomp)
-      end
+      @recipe = Recipe.new
     end
 
     def delete_recipe(recipe)
