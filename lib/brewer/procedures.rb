@@ -8,11 +8,19 @@ module Brewer
     def initialize
       @brewer = Brewer.new
       @com = Slacker.new
-      @recipe = Recipe.new(@brewer)
+      @kitchen = Kitchen.new
     end
 
     def master
-      @recipe.get_recipe_vars
+      puts "Enter a recipe name or nothing to make a new one."
+      @kitchen.list_recipes_as_table
+      print ">> "
+      choice = gets.chomp.strip
+      if choice.empty?
+        @kitchen.new_recipe
+      else
+        @kitchen.load(choice)
+      end
       boot
       heat_strike_water
       dough_in
@@ -74,13 +82,13 @@ module Brewer
 
       # calculate strike temp & set PID to strike temp
       # this sets PID SV to calculated strike temp automagically
-      @brewer.sv(@recipe.vars['strike_water_temp'])
+      @brewer.sv(@kitchen.recipe.vars['strike_water_temp'])
       puts "SV has been set to calculated strike water temp"
       # turn on RIMS heater
       @brewer.pid(1)
 
       # measure current strike water temp and save
-      @recipe.vars['starting_strike_temp'] = @brewer.pv
+      @kitchen.recipe.vars['starting_strike_temp'] = @brewer.pv
       puts "current strike water temp is #{@brewer.pv}."
       puts "Heating to #{@brewer.sv}"
 
@@ -109,7 +117,7 @@ module Brewer
     end
 
     def mash
-      @brewer.sv(@recipe.vars['mash_temp'])
+      @brewer.sv(@kitchen.recipe.vars['mash_temp'])
 
       puts Rainbow("Mash started. This will take a while.").green
       @com.ping("Mash started. This will take a while.")
@@ -121,8 +129,8 @@ module Brewer
       })
 
       @brewer.watch
-      @com.ping("Starting timer for #{to_minutes(@recipe.vars['mash_time'])} minutes.")
-      wait(@recipe.vars['mash_time'])
+      @com.ping("Starting timer for #{to_minutes(@kitchen.recipe.vars['mash_time'])} minutes.")
+      wait(@kitchen.recipe.vars['mash_time'])
       @com.ping("🍺 Mash complete 🍺. Check for starch conversion.")
       puts Rainbow("Mash complete").green
       puts "Check for starch conversion"
@@ -133,7 +141,7 @@ module Brewer
       puts Rainbow("start heating sparge water").yellow
       puts Rainbow("Mashout started").green
 
-      @brewer.sv(@recipe.vars['mashout_temp'])
+      @brewer.sv(@kitchen.recipe.vars['mashout_temp'])
 
       @brewer.relay_config({
         'pid'  => 1,
