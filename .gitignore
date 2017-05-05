@@ -1,6 +1,5 @@
 coverage
 Gemfile.lock
-adaptibrew/
 .DS_Store
 *.gem
 notes.md

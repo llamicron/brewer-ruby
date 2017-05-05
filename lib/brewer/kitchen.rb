@@ -46,7 +46,6 @@ module Brewer
       false
     end
 
-
     def load(recipe)
       raise "Recipe name must be a string" unless recipe.is_a? String
       raise "Recipe does not exist" unless recipe_exists?(recipe)
@@ -97,6 +96,7 @@ module Brewer
       else
         recipes_table_rows = list_recipes.each_slice(5).to_a
         recipes_table = Terminal::Table.new :title => "All Recipes", :rows => recipes_table_rows
+        puts recipes_table
         return recipes_table
       end
     end
@@ -111,7 +111,9 @@ module Brewer
 
     def loaded_recipe?
       if @recipe
-        return true
+        if @recipe['name']
+          return true
+        end
       end
       false
     end

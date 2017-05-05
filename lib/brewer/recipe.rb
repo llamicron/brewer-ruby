@@ -5,21 +5,22 @@ module Brewer
 
     attr_accessor :vars
 
-    def initialize(name=nil, dummy: false, empty: false)
+    def initialize(name=nil, empty: false)
+      @vars = {}
+
       if empty
-        @vars = {}
-        return truee
+        return true
       end
 
-      if dummy
-        @vars = dummy_recipe_vars
-      else
-        @vars = Hash.new(0)
-        @vars['name'] = name
-        get_recipe_vars
+      if name
+        load(name)
+        return true
       end
     end
 
+    def load(recipe)
+      @vars = YAML.load(File.open(kitchen_dir(recipe) + ".yml"))
+    end
 
     # :nocov:
     def get_recipe_vars
