@@ -5,10 +5,14 @@ module Brewer
 
     attr_accessor :vars
 
-    def initialize(name=nil)
+    def initialize(name=nil, blank: false)
       @brewer = Brewer.new
 
       @vars = {}
+      if blank
+        return true
+      end
+
       if name
         load(name)
         return true
