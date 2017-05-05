@@ -22,6 +22,10 @@ module Brewer
       end
     end
 
+    def name
+      return @vars['name'] if @vars['name']
+    end
+
     def load(recipe)
       @vars = YAML.load(File.open(kitchen_dir(recipe) + ".yml"))
     end

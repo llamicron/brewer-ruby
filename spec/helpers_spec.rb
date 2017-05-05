@@ -33,6 +33,12 @@ describe "Helpers" do
     end
   end
 
+  describe ".kitchen_dir" do
+    it "returns the path to the recipe storage dir" do
+      expect(kitchen_dir).to eq(Dir.home + "/.brewer/kitchen/")
+    end
+  end
+
   describe ".adaptibrew_dir" do
     it "returns the .adaptibrew directory" do
       expect(adaptibrew_dir).to eq(Dir.home + "/.brewer/adaptibrew/")
@@ -48,12 +54,6 @@ describe "Helpers" do
   describe ".to_seconds" do
     it "turns minutes to seconds" do
       expect(to_seconds(1)).to eq(60)
-    end
-  end
-
-  describe ".kitchen_dir" do
-    it "returns the path to the recipe storage dir" do
-      expect(kitchen_dir).to eq(Dir.home + "/.brewer/recipes/")
     end
   end
 

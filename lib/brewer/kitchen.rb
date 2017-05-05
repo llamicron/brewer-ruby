@@ -99,7 +99,7 @@ module Brewer
 
     def loaded_recipe?
       if @recipe
-        if @recipe['name']
+        if @recipe.name
           return true
         end
       end

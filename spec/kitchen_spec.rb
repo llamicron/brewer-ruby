@@ -5,18 +5,9 @@ describe Kitchen do
     @kitchen = Brewer::Kitchen.new
   end
 
-  before :all do
-    @kitchen.recipe = Brewer::Recipe.new
-  end
-
   describe "#new" do
     it "returns a kitchen object" do
       expect(Brewer::Kitchen.new).to be_an_instance_of Brewer::Kitchen
-    end
-
-    it "can accept arguments" do
-      kitchen = Brewer::Kitchen.new(recipe: "test_recipe")
-      expect(kitchen.recipe).to be_an_instance_of Brewer::Recipe
     end
   end
 
@@ -123,7 +114,7 @@ describe Kitchen do
   describe ".store" do
     context "when a recipe is loaded" do
       before {
-        @kitchen.recipe = Recipe.new(dummy: true)
+        @kitchen.recipe = Recipe.new(blank: true)
         @kitchen.recipe.vars['name'] = "test_recipe"
       }
       it "stores the recipe" do
@@ -135,7 +126,7 @@ describe Kitchen do
   describe ".recipe_exists?" do
     context "when the recipe exists" do
       before {
-        @kitchen.recipe = Brewer::Recipe.new(dummy: true)
+        @kitchen.recipe = Brewer::Recipe.new(blank: true)
         @kitchen.recipe.vars['name'] = "test_recipe"
         @kitchen.store
       }
@@ -153,8 +144,12 @@ describe Kitchen do
 
   describe ".loaded_recipe?" do
     context "when there is a loaded recipe" do
-      before { @kitchen.load("dummy_recipe") }
+      before {
+        @kitchen.recipe = Brewer::Recipe.new(blank: true)
+        @kitchen.recipe.vars = dummy_recipe_vars
+      }
       it "returns true" do
+        expect(@kitchen.load("dummy_recipe")).to be true
         expect(@kitchen.loaded_recipe?).to be true
       end
     end
