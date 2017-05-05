@@ -5,13 +5,10 @@ module Brewer
 
     attr_accessor :vars
 
-    def initialize(name=nil, empty: false)
+    def initialize(name=nil)
+      @brewer = Brewer.new
+
       @vars = {}
-
-      if empty
-        return true
-      end
-
       if name
         load(name)
         return true
@@ -22,46 +19,44 @@ module Brewer
       @vars = YAML.load(File.open(kitchen_dir(recipe) + ".yml"))
     end
 
+    def ask_for(var, default: nil)
+      @vars[var] = default
+      input = gets.chomp.strip
+      @vars[var] = input if !input.empty?
+    end
+
+    def using_message(message)
+      raise "Message needs to be a string" unless message.is_a? String
+      print message
+      self
+    end
+
     # :nocov:
     def get_recipe_vars
       puts Rainbow("Creating a new recipe").green
 
-      calculate_strike_temp
-
-      print Rainbow("Enter mash temperature: ").yellow
-      @vars['mash_temp'] = gets.chomp.to_f
-      print Rainbow("Enter mash time in minutes: ").yellow
-      @vars['mash_time'] = to_seconds(gets.chomp.to_f)
-
-      print Rainbow("Enter mashout temp: ").yellow
-      @vars['mashout_temp'] = gets.chomp.to_f
-
+      using_message("Amount of water in quarts: ").ask_for("water")
+      using_message("Amount of grain in lbs: ").ask_for("grain")
+      using_message("Current grain temp (#{@brewer.pv.to_s} F): ").ask_for("grain_temp", default: @brewer.pv)
+      using_message("Desired mash temp (150 F): ").ask_for("desired_mash_temp", default: 150)
+      using_message("Mash temperature: ").ask_for("mash_temp")
+      using_message("Mash time in minutes (60): ").ask_for("mash_time", default: 60)
+      @vars['mash_time'] = to_seconds(@vars['mash_time'])
+      using_message("Mashout temp: ").ask_for("mashout_temp")
       true
     end
     # :nocov:
 
+    def typecast_vars
+      @vars.each do |key, value|
+        # All values in @vars should be floats
+        @vars[key] = Float(value)
+      end
+    end
+
     # :nocov:
     def calculate_strike_temp
-      print Rainbow("Input amount of water in quarts: ").yellow
-      @vars['water'] = gets.chomp.to_f
-
-      print Rainbow("Input amount of grain in lbs: ").yellow
-      @vars['grain'] = gets.chomp.to_f
-
-      print Rainbow("Input current grain temp (#{Brewer.new.pv.to_s} F): ").yellow
-      @vars['grain_temp'] = gets.chomp.to_f
-      if @vars['grain_temp'] == ""
-        @vars['grain_temp'] = @brewer.pv
-      end
-
-      print Rainbow("Input desired mash temp (150 F): ").yellow
-      @vars['desired_mash_temp'] = gets.chomp
-      if @vars['desired_mash_temp'] == ""
-        @vars['desired_mash_temp'] = 150
-      end
-      @vars['desired_mash_temp']
-
-      @vars['strike_water_temp'] = Brewer.new.script('get_strike_temp', "#{@vars['water']} #{@vars['grain']} #{@vars['grain_temp']} #{@vars['desired_mash_temp']}").to_f
+      @vars['strike_water_temp'] = @brewer.script('get_strike_temp', "#{@vars['water']} #{@vars['grain']} #{@vars['grain_temp']} #{@vars['desired_mash_temp']}").to_f
     end
     # :nocov:
 

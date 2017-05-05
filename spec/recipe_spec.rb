@@ -1,14 +1,8 @@
 require_relative "spec_helper"
-require 'fileutils'
 
-include Helpers
-
-describe Recipe do
+describe Brewer::Recipe do
   before :each do
-    @brewer = Brewer::Brewer.new
-    @recipe = Brewer::Recipe.new(@brewer)
-    @recipe.new_dummy
-    @recipe.store
+    @recipe = Brewer::Recipe.new
   end
 
   describe "#new" do

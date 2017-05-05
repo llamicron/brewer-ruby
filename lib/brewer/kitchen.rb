@@ -114,6 +114,5 @@ module Brewer
       false
     end
 
-
   end
 end

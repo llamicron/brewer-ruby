@@ -45,15 +45,15 @@ task :clear_coverage do
   rm_rf('coverage/')
 end
 
-# task :console do
-#   require 'pry'
-#   require_relative 'lib/brewer'
-#
-#   def reload!
-#     files = $LOADED_FEATURES.select { |feat| feat =~ /\/brewer\// }
-#     files.each { |file| load file }
-#   end
-#
-#   ARGV.clear
-#   Pry.start
-# end
+task :console do
+  require 'pry'
+  require_relative 'lib/brewer'
+
+  def reload!
+    files = $LOADED_FEATURES.select { |feat| feat =~ /\/brewer\// }
+    files.each { |file| load file }
+  end
+
+  ARGV.clear
+  Pry.start
+end
