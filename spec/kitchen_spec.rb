@@ -5,15 +5,18 @@ describe Kitchen do
     @kitchen = Brewer::Kitchen.new
   end
 
+  before :all do
+    @kitchen.recipe = Brewer::Recipe.new
+  end
+
   describe "#new" do
     it "returns a kitchen object" do
       expect(Brewer::Kitchen.new).to be_an_instance_of Brewer::Kitchen
     end
 
     it "can accept arguments" do
-      kitchen = Brewer::Kitchen.new(url: "url", recipe: "recipe")
-      expect(kitchen.recipe).to eq("recipe")
-      expect(kitchen.url).to eq("url")
+      kitchen = Brewer::Kitchen.new(recipe: "test_recipe")
+      expect(kitchen.recipe).to be_an_instance_of Brewer::Recipe
     end
   end
 
@@ -87,14 +90,14 @@ describe Kitchen do
         Dir.mkdir(kitchen_dir)
       }
       it "returns a message" do
-        expect(@kitchen.list_recipes_as_table).to eq("No Saved Recipes")
+        capture_stdout { expect(@kitchen.list_recipes_as_table).to eq("No Saved Recipes") }
       end
     end
 
     context "when the recipe list is not empty" do
       before { @kitchen.refresh }
       it "returns a TerminalTable of the recipes" do
-        expect(@kitchen.list_recipes_as_table).to be_an_instance_of Terminal::Table
+        capture_stdout { expect(@kitchen.list_recipes_as_table).to be_an_instance_of Terminal::Table }
       end
     end
   end

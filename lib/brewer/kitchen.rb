@@ -5,14 +5,10 @@ module Brewer
 
     attr_accessor :url, :recipe
 
-    def initialize(url: false, recipe: false)
-      if url
-        @url = url
-      else
-        @url = "http://github.com/llamicron/kitchen.git"
-      end
+    def initialize(recipe: false)
+      @url = "http://github.com/llamicron/kitchen.git"
 
-      @recipe = recipe if recipe
+      @recipe = load(recipe) if recipe
     end
 
     def clear
@@ -49,9 +45,9 @@ module Brewer
     def load(recipe)
       raise "Recipe name must be a string" unless recipe.is_a? String
       raise "Recipe does not exist" unless recipe_exists?(recipe)
-      @recipe = Recipe.new
-      @recipe.vars = YAML.load(File.open(kitchen_dir(recipe) + ".yml"))
-      true
+      recipe = Recipe.new
+      recipe.vars = YAML.load(File.open(kitchen_dir(recipe) + ".yml"))
+      return recipe
     end
 
     def store

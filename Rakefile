@@ -29,7 +29,7 @@ end
 # Generate or update documentation
 # Generates in `doc/`
 RDoc::Task.new do |rdoc|
-  rm_rf "doc/"
+  # rm_rf "doc/"
   rdoc.rdoc_dir = 'doc/'
   rdoc.main = "README.md"
   # rdoc.rdoc_files.include("**/*.rb")
@@ -44,3 +44,16 @@ end
 task :clear_coverage do
   rm_rf('coverage/')
 end
+
+# task :console do
+#   require 'pry'
+#   require_relative 'lib/brewer'
+#
+#   def reload!
+#     files = $LOADED_FEATURES.select { |feat| feat =~ /\/brewer\// }
+#     files.each { |file| load file }
+#   end
+#
+#   ARGV.clear
+#   Pry.start
+# end
