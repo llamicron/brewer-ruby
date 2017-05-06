@@ -88,7 +88,7 @@ describe Kitchen do
     context "when the recipe list is not empty" do
       before { @kitchen.refresh }
       it "returns a TerminalTable of the recipes" do
-        capture_stdout { expect(@kitchen.list_recipes_as_table).to be_an_instance_of Terminal::Table }
+        capture_stdout { expect(@kitchen.list_recipes_as_table).to be true }
       end
     end
   end

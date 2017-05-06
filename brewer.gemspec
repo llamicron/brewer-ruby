@@ -2,7 +2,7 @@ require 'rake'
 
 Gem::Specification.new do |s|
   s.name               = "brewer"
-  s.version            = "0.0.97"
+  s.version            = "0.0.98"
   s.default_executable = "brewer"
 
   s.authors = ["Luke Sweeney"]
@@ -34,7 +34,6 @@ Gem::Specification.new do |s|
   # Dev dependencies
   s.add_development_dependency 'rake', '~> 12.0', '>= 12.0.0'
   s.add_development_dependency 'rspec', '~> 3.5.0', '>= 3.5.0'
-  s.add_development_dependency 'launchy', '~> 2.4', '>= 2.4.0'
   s.add_development_dependency 'simplecov', '~> 0.13.0'
   s.add_development_dependency 'simplecov-html', '~> 0.10.0'
   s.add_development_dependency 'rdoc', '~> 5.1', '>= 5.1.0'

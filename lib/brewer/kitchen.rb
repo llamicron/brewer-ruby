@@ -85,7 +85,7 @@ module Brewer
         recipes_table_rows = list_recipes.each_slice(5).to_a
         recipes_table = Terminal::Table.new :title => "All Recipes", :rows => recipes_table_rows
         puts recipes_table
-        return recipes_table
+        return true
       end
     end
 
