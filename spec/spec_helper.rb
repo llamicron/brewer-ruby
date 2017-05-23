@@ -9,3 +9,5 @@ require_relative "../lib/brewer"
 
 include Helpers
 include Brewer
+
+Brewer::Adaptibrew::build

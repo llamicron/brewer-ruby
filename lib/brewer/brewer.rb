@@ -9,11 +9,7 @@ module Brewer
     attr_accessor :temps, :relays
 
     def initialize
-      if !Dir.exists?(brewer_dir)
-        # :nocov:
-        Dir.mkdir(brewer_dir)
-        # :nocov:
-      end
+      Brewer::Adaptibrew::build
       @base_path = Dir.home + '/.brewer'
       Settings.new
       @temps = {}

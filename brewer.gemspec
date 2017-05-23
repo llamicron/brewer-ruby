@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
 
   # Runtime dependencies
+  s.add_runtime_dependency 'brewer-adaptibrew'
   s.add_runtime_dependency 'git', '~> 1.3', '>= 1.3.0'
   s.add_runtime_dependency 'net-ping', '~> 1.7'
   s.add_runtime_dependency 'wannabe_bool'

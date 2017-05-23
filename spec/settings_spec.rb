@@ -1,10 +1,10 @@
 require_relative 'spec_helper'
 
 
-describe Settings do
+describe Brewer::Settings do
 
   before :all do
-    @adaptibrew = Adaptibrew.new.clone
+    Brewer::Adaptibrew::build
     @settings = Settings.new(cache_file: "test_settings.yml")
   end
 

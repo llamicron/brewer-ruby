@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 include Helpers
 
-describe "Helpers" do
+describe Helpers do
 
   describe "#time" do
     it "can return the date/time" do

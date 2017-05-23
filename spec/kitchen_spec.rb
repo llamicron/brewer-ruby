@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 
-describe Kitchen do
+describe Brewer::Kitchen do
   before :each do
     @kitchen = Brewer::Kitchen.new
   end

@@ -1,5 +1,3 @@
-require_relative "adaptibrew"
-
 module Brewer
   class Settings
 

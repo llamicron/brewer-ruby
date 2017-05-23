@@ -1,5 +1,4 @@
 require 'git'
-require 'launchy'
 require 'rdoc/task'
 require 'rspec/core/rake_task'
 

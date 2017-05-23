@@ -1,13 +1,13 @@
 require_relative 'spec_helper'
 
-describe Brewer do
+describe Brewer::Brewer do
 
   before :each do
     @brewer = Brewer::Brewer.new
   end
 
   before :all do
-    Adaptibrew.new.refresh
+    Brewer::Adaptibrew::Manager.new.refresh
   end
 
   describe "#new" do
