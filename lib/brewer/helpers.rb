@@ -90,4 +90,9 @@ module Helpers
     }
   end
 
+  def dd(message="died here")
+    puts message
+    abort
+  end
+
 end

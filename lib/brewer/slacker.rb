@@ -1,4 +1,5 @@
 require_relative "../brewer"
+
 # :nocov:
 module Brewer
   # This class is responsible for slack communication

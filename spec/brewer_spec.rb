@@ -7,7 +7,7 @@ describe Brewer::Brewer do
   end
 
   before :all do
-    Brewer::Adaptibrew::Manager.new.refresh
+    Brewer::Adaptibrew::build
   end
 
   describe "#new" do
