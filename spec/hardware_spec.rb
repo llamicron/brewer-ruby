@@ -1,8 +1,8 @@
 require_relative 'spec_helper'
 
-describe Brewer::Brewer do
+describe Brewer::Controller do
   before :each do
-    @brewer = Brewer::Brewer.new
+    @brewer = Brewer::Controller.new
   end
 
   before :all do
@@ -11,7 +11,7 @@ describe Brewer::Brewer do
 
   after :all do
     # in case something goes wrong, everything needs to be reset
-    @brewer = Brewer::Brewer.new
+    @brewer = Brewer::Controller.new
     @brewer.relay_config({
       'pump' => 0,
       'pid' => 0,

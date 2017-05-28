@@ -3,7 +3,7 @@ require_relative "../brewer"
 module Brewer
   # This class handles the physical brewing rig.
   # Turning on valves, the pump, RIMS and such
-  class Brewer
+  class Controller
 
     attr_reader :base_path
     attr_accessor :temps, :relays
