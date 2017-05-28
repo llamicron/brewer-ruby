@@ -1,5 +1,6 @@
 # This is the helper file for rspec
 # For the spec of helpers.rb, see helper_spec.b
+
 # Code Coverage
 require 'simplecov'
 SimpleCov.command_name 'RSpec'
