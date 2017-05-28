@@ -6,9 +6,10 @@ module Brewer
     attr_accessor :vars
 
     def initialize(name=nil, blank: false)
-      @brewer = Controller.new
+      @controller = Controller.new
 
       @vars = {}
+
       if blank
         return true
       end
@@ -37,7 +38,7 @@ module Brewer
       using_message("Name this recipe: ").ask_for("name")
       using_message("Amount of water in quarts: ").ask_for("water")
       using_message("Amount of grain in lbs: ").ask_for("grain")
-      using_message("Current grain temp (#{@brewer.pv.to_s} F): ").ask_for("grain_temp", default: @brewer.pv)
+      using_message("Current grain temp (#{@controller.pv.to_s} F): ").ask_for("grain_temp", default: @controller.pv)
       using_message("Desired mash temp (150 F): ").ask_for("desired_mash_temp", default: 150)
       using_message("Mash temperature: ").ask_for("mash_temp")
       using_message("Mash time in minutes (60): ").ask_for("mash_time", default: 60)
@@ -50,7 +51,7 @@ module Brewer
 
     # :nocov:
     def calculate_strike_temp
-      @vars['strike_water_temp'] = @brewer.script('get_strike_temp', "#{@vars['water']} #{@vars['grain']} #{@vars['grain_temp']} #{@vars['desired_mash_temp']}").to_f
+      @vars['strike_water_temp'] = @controller.script('get_strike_temp', "#{@vars['water']} #{@vars['grain']} #{@vars['grain_temp']} #{@vars['desired_mash_temp']}").to_f
     end
     # :nocov:
 

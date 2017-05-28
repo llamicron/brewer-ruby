@@ -5,7 +5,7 @@ Brewer::Adaptibrew::build
 
 kitchen     = Brewer::Kitchen.new
 slack       = Brewer::Slacker.new
-brewer      = Brewer::Controller.new
+controller  = Brewer::Controller.new
 procedures  = Brewer::Procedures.new
 
 binding.pry(quiet: true)

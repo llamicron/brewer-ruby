@@ -3,7 +3,7 @@ require_relative 'spec_helper'
 describe Brewer::Controller do
 
   before :each do
-    @brewer = Brewer::Controller.new
+    @controller = Brewer::Controller.new
   end
 
   before :all do
@@ -32,7 +32,7 @@ describe Brewer::Controller do
 
   describe ".script" do
     it "can run a python script and get output" do
-      expect(@brewer.script('python_tester')).to eq("it worked")
+      expect(@controller.script('python_tester')).to eq("it worked")
     end
   end
 

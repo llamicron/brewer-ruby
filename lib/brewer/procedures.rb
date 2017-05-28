@@ -6,7 +6,7 @@ module Brewer
     attr_accessor :com, :brewer, :recipe
 
     def initialize
-      @brewer = Controller.new
+      @controller = Controller.new
       @com = Slacker.new
       @kitchen = Kitchen.new
     end
@@ -34,7 +34,7 @@ module Brewer
 
     def boot
       puts Rainbow("Booting...").yellow
-      @brewer.relay_config({
+      @controller.relay_config({
         'pid' => 0,
         'pump' => 0,
         'rims_to' => 'mash',
@@ -61,17 +61,17 @@ module Brewer
       confirm ? nil : abort
 
       # confirm RIMS relay is on
-      @brewer.rims_to('mash')
+      @controller.rims_to('mash')
 
       # turn on pump
-      @brewer.pump(1)
+      @controller.pump(1)
 
       print Rainbow("Is the pump running properly? ").yellow
       unless confirm
         puts "restarting pump"
-        @brewer.pump(0)
+        @controller.pump(0)
         wait(2)
-        @brewer.pump(1)
+        @controller.pump(1)
       end
 
       # confirm that strike water is circulating well
@@ -82,26 +82,26 @@ module Brewer
 
       # calculate strike temp & set PID to strike temp
       # this sets PID SV to calculated strike temp automagically
-      @brewer.sv(@kitchen.recipe.vars['strike_water_temp'])
+      @controller.sv(@kitchen.recipe.vars['strike_water_temp'])
       puts "SV has been set to calculated strike water temp"
       # turn on RIMS heater
-      @brewer.pid(1)
+      @controller.pid(1)
 
       # measure current strike water temp and save
-      @kitchen.recipe.vars['starting_strike_temp'] = @brewer.pv
-      puts "current strike water temp is #{@brewer.pv}."
-      puts "Heating to #{@brewer.sv}"
+      @kitchen.recipe.vars['starting_strike_temp'] = @controller.pv
+      puts "current strike water temp is #{@controller.pv}."
+      puts "Heating to #{@controller.sv}"
 
       @com.ping("Strike water beginning to heat. This may take a few minutes.")
 
       # when strike temp is reached, @com.ping slack
-      @brewer.watch
+      @controller.watch
       puts Rainbow("Strike water heated. Maintaining temp.").green
       true
     end
 
     def dough_in
-      @brewer.relay_config({
+      @controller.relay_config({
         'pid' => 0,
         'pump' => 0
       })
@@ -117,18 +117,18 @@ module Brewer
     end
 
     def mash
-      @brewer.sv(@kitchen.recipe.vars['mash_temp'])
+      @controller.sv(@kitchen.recipe.vars['mash_temp'])
 
       puts Rainbow("Mash started. This will take a while.").green
       @com.ping("Mash started. This will take a while.")
 
-      @brewer.relay_config({
+      @controller.relay_config({
         'rims_to' => 'mash',
         'pid'  => 1,
         'pump' => 1
       })
 
-      @brewer.watch
+      @controller.watch
       @com.ping("Starting timer for #{to_minutes(@kitchen.recipe.vars['mash_time'])} minutes.")
       wait(@kitchen.recipe.vars['mash_time'])
       @com.ping("🍺 Mash complete 🍺. Check for starch conversion.")
@@ -141,15 +141,15 @@ module Brewer
       puts Rainbow("start heating sparge water").yellow
       puts Rainbow("Mashout started").green
 
-      @brewer.sv(@kitchen.recipe.vars['mashout_temp'])
+      @controller.sv(@kitchen.recipe.vars['mashout_temp'])
 
-      @brewer.relay_config({
+      @controller.relay_config({
         'pid'  => 1,
         'pump' => 1
       })
-      @com.ping("Heating to #{@brewer.sv}... this could take a few minutes.")
-      puts Rainbow("Heating to #{@brewer.sv}... this could take a few minutes.").yellow
-      @brewer.watch
+      @com.ping("Heating to #{@controller.sv}... this could take a few minutes.")
+      puts Rainbow("Heating to #{@controller.sv}... this could take a few minutes.").yellow
+      @controller.watch
       @com.ping("Mashout complete.")
       puts Rainbow("Mashout complete").green
     end
@@ -160,7 +160,7 @@ module Brewer
 
       puts Rainbow("Sparging started").green
 
-      @brewer.relay_config({
+      @controller.relay_config({
         'hlt_to' => 'mash',
         'hlt' => 1
       })
@@ -169,7 +169,7 @@ module Brewer
       puts Rainbow("Regulate sparge balance.").yellow
       wait(10)
 
-      @brewer.relay_config({
+      @controller.relay_config({
         'rims_to' => 'boil',
         'pump' => 1
       })
@@ -180,7 +180,7 @@ module Brewer
       print Rainbow("Waiting for intervention to turn off pump (y): ").yellow
       confirm ? nil : nil
 
-      @brewer.relay_config({
+      @controller.relay_config({
         'pid' => 0,
         'pump' => 0,
         'hlt' => 0
@@ -193,7 +193,7 @@ module Brewer
     def top_off
       puts Rainbow("Top off started").green
 
-      @brewer.relay_config({
+      @controller.relay_config({
         'hlt_to' => 'boil',
         'hlt' => 1
       })
@@ -201,7 +201,7 @@ module Brewer
       print Rainbow("waiting for intervention to turn off hlt (y): ").yellow
       confirm ? nil : abort
 
-      @brewer.hlt(0)
+      @controller.hlt(0)
 
       @com.ping('Topping off complete')
       puts Rainbow("Topping off complete").green

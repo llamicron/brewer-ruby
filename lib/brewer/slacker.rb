@@ -5,11 +5,11 @@ module Brewer
   # This class is responsible for slack communication
   class Slacker
 
-    attr_accessor :slack, :brewer
+    attr_accessor :slack, :controller
 
     def initialize(webhook=false)
       @settings = Settings.new
-      @brewer = Controller.new
+      @controller = Controller.new
       @slack = configure_slack(webhook)
     end
 
@@ -43,18 +43,18 @@ module Brewer
 
     def monitor(delay=10)
       while true do
-        table = @brewer.status_table
+        table = @controller.status_table
 
-        before_temp = @brewer.pv
+        before_temp = @controller.pv
         wait(to_seconds(delay))
-        diff = @brewer.pv - before_temp
+        diff = @controller.pv - before_temp
 
         clear_screen
         puts table
 
         ping([
-          "Current Temperature: #{@brewer.pid['pv_temp']} F",
-          "Set Value Temperature: #{@brewer.pid['sv_temp']} F",
+          "Current Temperature: #{@controller.pid['pv_temp']} F",
+          "Set Value Temperature: #{@controller.pid['sv_temp']} F",
           "Current temperature has climed #{diff} F since #{delay} minute(s) ago",
           "Sent at #{Time.now.strftime("%H:%M")}"
         ])
