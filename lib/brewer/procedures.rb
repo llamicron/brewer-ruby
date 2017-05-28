@@ -6,7 +6,7 @@ module Brewer
     attr_accessor :com, :brewer, :recipe
 
     def initialize
-      @brewer = Brewer.new
+      @brewer = Controller.new
       @com = Slacker.new
       @kitchen = Kitchen.new
     end

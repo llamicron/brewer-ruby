@@ -9,7 +9,7 @@ module Brewer
 
     def initialize(webhook=false)
       @settings = Settings.new
-      @brewer = Brewer.new
+      @brewer = Controller.new
       @slack = configure_slack(webhook)
     end
 

@@ -10,11 +10,11 @@ module Brewer
       @source_file = source_file ? adaptibrew_dir(source_file) : adaptibrew_dir("print_settings.py")
       @cache_file = cache_file ? brewer_dir(cache_file) : brewer_dir("settings.yml")
 
-      if !cache?
+      if cache?
+        load_cached_settings
+      else
         parse
         cache
-      else
-        load_cached_settings
       end
 
       load_global
@@ -124,5 +124,19 @@ module Brewer
       }
     end
 
+  end
+end
+
+
+module Brewer
+  def self.load_settings
+    settings = Settings.new
+    if !settings.cache?
+      settings.parse
+      settings.cache
+    else
+      settings.load_cached_settings
+    end
+    settings.load_global
   end
 end

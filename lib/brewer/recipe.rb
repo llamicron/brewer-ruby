@@ -6,7 +6,7 @@ module Brewer
     attr_accessor :vars
 
     def initialize(name=nil, blank: false)
-      @brewer = Brewer.new
+      @brewer = Controller.new
 
       @vars = {}
       if blank

@@ -9,9 +9,8 @@ module Brewer
     attr_accessor :temps, :relays
 
     def initialize
-      Brewer::Adaptibrew::build
       @base_path = Dir.home + '/.brewer'
-      Settings.new
+      Brewer::load_settings
       @temps = {}
     end
 
