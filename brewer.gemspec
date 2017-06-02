@@ -2,7 +2,7 @@ require 'rake'
 
 Gem::Specification.new do |s|
   s.name               = "brewer"
-  s.version            = "0.0.98"
+  s.version            = "0.1"
   s.default_executable = "brewer"
 
   s.authors = ["Luke Sweeney"]
@@ -25,8 +25,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'git', '~> 1.3', '>= 1.3.0'
   s.add_runtime_dependency 'net-ping', '~> 1.7'
   s.add_runtime_dependency 'wannabe_bool'
-  # Version 2.2 is broken as of 5/27/17
-  s.add_runtime_dependency 'slack-notifier', '= 2.1'
+  s.add_runtime_dependency 'slack-notifier'
   s.add_runtime_dependency 'require_all'
   s.add_runtime_dependency 'terminal-table'
   s.add_runtime_dependency 'rainbow'
