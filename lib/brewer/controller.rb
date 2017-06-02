@@ -57,6 +57,16 @@ module Brewer
       end
     end
 
+    # This is for jake's js
+    def pid_to_web
+      return {
+        'pid_running' => script('is_pid_running').to_b,
+        'sv' => sv,
+        'pv' => pv
+      }
+    end
+
+
     # Sets the setpoint value (sv) on the PID, or returns the current SV
     def sv(temp=nil)
       if temp
@@ -143,6 +153,17 @@ module Brewer
         statuses[relay_names.key(relay_num.to_i)] = status
       end
       statuses
+    end
+
+    def relays_status_to_web
+      statuses = relays_status
+      statuses.each do |k, v|
+        if v == "on"
+          statuses[k] = 1
+        else
+          statuses[k] = 0
+        end
+      end
     end
 
     # Give this a relay configuration hash and it will set the relays to that configuration
