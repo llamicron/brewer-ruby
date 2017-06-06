@@ -8,7 +8,6 @@ Gem::Specification.new do |s|
   s.authors = ["Luke Sweeney"]
   s.date = %q{2017-03-08}
   s.description = %q{A Ruby API for adaptiman/adaptibrew}
-  s.post_install_message = "🍺  have fun 🍺"
   s.email = %q{luke@thesweeneys.org}
   s.files = FileList.new(['lib/*.rb', 'lib/brewer/*.rb', 'bin/*', 'views/*', '[A-Z]*', 'spec/*.rb']).to_a
   s.executables = ['brewer']
@@ -21,6 +20,7 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
 
   # Runtime dependencies
+  s.add_runtime_dependency 'sqlite3'
   s.add_runtime_dependency 'brewer-adaptibrew'
   s.add_runtime_dependency 'git'
   s.add_runtime_dependency 'net-ping'

@@ -5,13 +5,15 @@ module Brewer
   # Turning on valves, the pump, RIMS and such
   class Controller
 
-    attr_reader :base_path
+    attr_reader :base_path, :db
     attr_accessor :temps, :relays
 
     def initialize
       @base_path = Dir.home + '/.brewer'
       Brewer::load_settings
       @temps = {}
+
+      @db = Brewer::DB.new
     end
 
     public
