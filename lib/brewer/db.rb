@@ -12,7 +12,7 @@ module Brewer
     end
 
     def get_latest_record
-      @db.execute("SELECT * FROM info WHERE timestamp + id = (SELECT MAX(timestamp + id) FROM info);")
+      @db.execute("SELECT * FROM info WHERE timestamp + id = (SELECT MAX(timestamp + id) FROM info);").first
     end
 
     def get_all_records

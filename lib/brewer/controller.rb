@@ -29,7 +29,11 @@ module Brewer
       record = @db.get_latest_record
       if state == "status"
         # return relay_status($settings['pump'])
-        return record['pump'].to_b
+        if record['pump'] == 0
+          return "off"
+        else
+          return "on"
+        end
       end
 
       if state == 1
@@ -65,27 +69,23 @@ module Brewer
 
     # This is for jake's js
     def pid_to_web
-      record = @db.get_latest_record
-
-      return {
-        'pid_running' => record['pid_running'].to_b,
-        'sv' => record['sv'],
-        'pv' => record['pv']
-      }
+      status = pid
+      status["sv"] = status.delete "sv_temp"
+      status["pv"] = status.delete "pv_temp"
+      return status
     end
-
 
     # Sets the setpoint value (sv) on the PID, or returns the current SV
     def sv(temp=nil)
       if temp
         return script('set_sv', temp).to_f
       end
-      @db.get_latest_record['sv']
+      @db.get_latest_record['sv'].to_f
     end
 
     # Returns the proccess value (this one can't be changed)
     def pv
-      @db.get_latest_record['pv']
+      @db.get_latest_record['pv'].to_f
     end
 
     # This method will wait until the pv >= sv
@@ -138,7 +138,7 @@ module Brewer
     # Returns the status of a single relay
     def relay_status(relay)
       record = @db.get_latest_record
-      if record[record.key("relay")].to_b
+      if record[$settings['relays'].key(relay)].to_b
         return "on"
       else
         return "off"
@@ -147,9 +147,19 @@ module Brewer
 
     # Returns the status of all relays
     def all_relays_status
-      output = script("get_relay_status_test").split("\n")
-      output.shift(3)
-      return output
+      record = @db.get_latest_record
+      # Just a bit of regex golf. Matches relay names
+      # https://regex101.com/r/uCvT1t/1
+      relays = record.select {|key| key.to_s.match(/h|ri|pu/) }
+      # I hate returning strings... -_-
+      relays.each do |relay_num, status|
+        if status == 1
+          relays[relay_num] = "on"
+        else
+          relays[relay_num] = "off"
+        end
+      end
+      return relays
     end
 
     # This returns a prettier version of all_relays_status, and only returns the

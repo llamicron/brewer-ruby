@@ -92,10 +92,10 @@ describe Brewer::Controller do
 
   describe ".relay_status" do
     it "returns the status of a relay" do
-      @controller.relay($settings['rimsToMash'], 1)
-      expect(@controller.relay_status($settings['rimsToMash'].to_i)).to eq("on")
-      @controller.relay($settings['rimsToMash'], 0)
-      expect(@controller.relay_status($settings['rimsToMash'].to_i)).to eq("off")
+      @controller.relay($settings['relays']['rimsToMash'], 1)
+      expect(@controller.relay_status($settings['relays']['rimsToMash'].to_i)).to eq("on")
+      @controller.relay($settings['relays']['rimsToMash'], 0)
+      expect(@controller.relay_status($settings['relays']['rimsToMash'].to_i)).to eq("off")
     end
   end
 
@@ -120,25 +120,25 @@ describe Brewer::Controller do
         'hlt' => 1,
         'pump' => 0,
       })
-      expect(@controller.relay_status($settings['hlt'])).to eq("on")
+      expect(@controller.relay_status($settings['relays']['hlt'])).to eq("on")
     end
   end
 
   describe ".hlt" do
     it "opens or closes the hlt valve" do
       @controller.hlt(0)
-      expect(@controller.relay_status($settings['hlt'])).to eq("off")
+      expect(@controller.relay_status($settings['relays']['hlt'])).to eq("off")
       @controller.hlt(1)
-      expect(@controller.relay_status($settings['hlt'])).to eq("on")
+      expect(@controller.relay_status($settings['relays']['hlt'])).to eq("on")
     end
   end
 
   describe ".rims_to" do
     it "diverts the rims relay to boil or mash tuns" do
       @controller.rims_to("boil")
-      expect(@controller.relay_status($settings['rimsToMash'])).to eq("on")
+      expect(@controller.relay_status($settings['relays']['rimsToMash'])).to eq("on")
       @controller.rims_to("mash")
-      expect(@controller.relay_status($settings['rimsToMash'])).to eq("off")
+      expect(@controller.relay_status($settings['relays']['rimsToMash'])).to eq("off")
     end
 
     context "when the location is not valid" do
@@ -151,9 +151,9 @@ describe Brewer::Controller do
   describe ".hlt_to" do
     it "diverts the hlt relay to boil or mash tuns" do
       @controller.hlt_to("boil")
-      expect(@controller.relay_status($settings['hltToMash'])).to eq("on")
+      expect(@controller.relay_status($settings['relays']['hltToMash'])).to eq("on")
       @controller.hlt_to("mash")
-      expect(@controller.relay_status($settings['hltToMash'])).to eq("off")
+      expect(@controller.relay_status($settings['relays']['hltToMash'])).to eq("off")
     end
 
     context "when the location is not valid" do

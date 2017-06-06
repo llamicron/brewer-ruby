@@ -35,6 +35,13 @@ module Brewer
         key, value = setting.match(/(.+)=(.+)/).captures
         @settings[key.strip.chomp] = value.strip.chomp
       end
+
+      @settings['relays'] = {
+        'rimsToMash' => @settings['rimsToMash'].to_i,
+        'hltToMash' => @settings['hltToMash'].to_i,
+        'hlt' => @settings['hlt'].to_i,
+        'pump' => @settings['pump'].to_i
+      }
       true
     end
 

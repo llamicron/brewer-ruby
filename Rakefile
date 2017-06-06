@@ -32,6 +32,8 @@ task :console do
   require 'pry'
   require_relative 'lib/brewer'
 
+  Brewer::load_settings
+
   def reload!
     files = $LOADED_FEATURES.select { |feat| feat =~ /\/brewer\// }
     files.each { |file| load file }

@@ -22,8 +22,6 @@ describe Brewer::Controller do
   describe ".wait" do
     # This is kind of iffy like the Helpers#time test
     it "can wait for a number of seconds" do
-      #  not using let(:current_time) etc. because
-      # the var is created upon the first calling, which is in the expect()
       current_time = Time.now.to_i
       wait(1)
       expect(current_time + 1).to eq(Time.now.to_i)
