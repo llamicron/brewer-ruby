@@ -37,12 +37,12 @@ module Brewer
       end
 
       if state == 1
-        return script("set_pump_on")
+        @db.write_request("set_relay", "#{$settings['relays']['pump']} 1")
       else
         if record['pid_running'].to_b
           pid(0)
         end
-        return script("set_pump_off")
+        @db.write_request("set_relay", "#{$settings['relays']['pump']} 0")
       end
     end
 
@@ -59,11 +59,11 @@ module Brewer
       end
 
       if state == 1
-        script('set_pid_on')
+        @db.write_request('set_pid_on')
         pump(1)
         return "Pump and PID are now on"
       else
-        return script("set_pid_off")
+        @db.write_request('set_pid_off')
       end
     end
 
@@ -78,7 +78,7 @@ module Brewer
     # Sets the setpoint value (sv) on the PID, or returns the current SV
     def sv(temp=nil)
       if temp
-        return script('set_sv', temp).to_f
+        return @db.write_request('set_sv', temp.to_s)
       end
       @db.get_latest_record['sv'].to_f
     end
@@ -131,7 +131,7 @@ module Brewer
 
     # Turns a relay on or off
     def relay(relay, state)
-      script("set_relay", "#{relay} #{state}")
+      @db.write_request("set_relay", "#{relay} #{state}")
       true
     end
 

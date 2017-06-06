@@ -19,5 +19,9 @@ module Brewer
       @db.execute("SELECT * FROM info;")
     end
 
+    def write_request(request, args="")
+      @db.execute("INSERT INTO request(method, args, timestamp) VALUES(?, ?, ?)", [request, args, Time.now.to_f])
+    end
+
   end
 end
