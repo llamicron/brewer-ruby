@@ -26,14 +26,16 @@ module Brewer
     # Turns the pump on and off, or returns the status if no arg
     # Turning the pump off will turn the pid off too, as it should not be on when the pump is off
     def pump(state="status")
+      record = @db.get_latest_record
       if state == "status"
-        return relay_status($settings['pump'])
+        # return relay_status($settings['pump'])
+        return record['pump'].to_b
       end
 
       if state == 1
         return script("set_pump_on")
       else
-        if pid['pid_running'].to_b
+        if record['pid_running'].to_b
           pid(0)
         end
         return script("set_pump_off")
@@ -42,11 +44,13 @@ module Brewer
 
     # Turns PID on or off, or gets status if no arg is provided
     def pid(state="status")
+      record = @db.get_latest_record
+
       if state == "status"
         return {
-          'pid_running' => script("is_pid_running"),
-          'sv_temp' => sv,
-          'pv_temp' => pv
+          'pid_running' => record['pid_running'].to_b,
+          'sv_temp' => record['sv'],
+          'pv_temp' => record['pv']
         }
       end
 
@@ -61,10 +65,12 @@ module Brewer
 
     # This is for jake's js
     def pid_to_web
+      record = @db.get_latest_record
+
       return {
-        'pid_running' => script('is_pid_running').to_b,
-        'sv' => sv,
-        'pv' => pv
+        'pid_running' => record['pid_running'].to_b,
+        'sv' => record['sv'],
+        'pv' => record['pv']
       }
     end
 
@@ -74,12 +80,12 @@ module Brewer
       if temp
         return script('set_sv', temp).to_f
       end
-      script('get_sv').to_f
+      @db.get_latest_record['sv']
     end
 
     # Returns the proccess value (this one can't be changed)
     def pv
-      script('get_pv').to_f
+      @db.get_latest_record['pv']
     end
 
     # This method will wait until the pv >= sv
@@ -115,7 +121,7 @@ module Brewer
       status_table_rows = [
         ["Current Temp", pv],
         ["Set Value Temp", sv],
-        ["PID is: ", pid['pid_running'].to_b ? "on" : "off"],
+        ["PID is: ", @db.get_latest_record['pid_running'].to_b ? "on" : "off"],
         ["Pump is: ", pump]
       ]
 
@@ -131,7 +137,8 @@ module Brewer
 
     # Returns the status of a single relay
     def relay_status(relay)
-      if script("get_relay_status", "#{relay}").include? "on"
+      record = @db.get_latest_record
+      if record[record.key("relay")].to_b
         return "on"
       else
         return "off"
