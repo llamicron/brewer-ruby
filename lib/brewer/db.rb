@@ -12,11 +12,23 @@ module Brewer
     end
 
     def get_latest_record
-      @db.execute("SELECT * FROM info WHERE timestamp + id = (SELECT MAX(timestamp + id) FROM info);").first
+      sql = "SELECT * FROM info WHERE timestamp + id = (SELECT MAX(timestamp + id) FROM info);"
+      begin
+        @db.execute(sql).first
+      rescue SQLite3::BusyException
+        sleep(0.1)
+        @db.execute(sql).first
+      end
     end
 
     def get_all_records
-      @db.execute("SELECT * FROM info;")
+      sql = "SELECT * FROM info;"
+      begin
+        @db.execute(sql)
+      rescue SQLite3::BusyException
+        sleep(0.1)
+        @db.execute(sql)
+      end
     end
 
     def write_request(request, args="")
