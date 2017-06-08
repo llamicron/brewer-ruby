@@ -5,21 +5,14 @@ module Brewer
 
     attr_accessor :vars
 
-    def initialize(name=nil, blank: false)
+    def initialize(recipe: recipe)
       @controller = Controller.new
       @db = DB.new
 
       @vars = {}
 
-      if blank
-        return true
-      end
-
-      if name
-        load(name)
-        return true
-      else
-        get_recipe_vars
+      if recipe
+        load(recipe)
         typecast_vars
       end
     end
@@ -77,7 +70,6 @@ module Brewer
 
     def typecast_vars
       @vars.each do |key, value|
-        # All values in @vars should be floats
         @vars[key] = value.to_f if key != "name"
       end
     end
