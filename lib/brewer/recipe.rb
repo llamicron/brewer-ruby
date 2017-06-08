@@ -7,6 +7,7 @@ module Brewer
 
     def initialize(name=nil, blank: false)
       @controller = Controller.new
+      @db = DB.new
 
       @vars = {}
 
@@ -27,8 +28,13 @@ module Brewer
       return @vars['name'] if @vars['name']
     end
 
-    def load(recipe)
-      @vars = YAML.load(File.open(kitchen_dir(recipe) + ".yml"))
+    def load(recipe_name)
+      @vars = @db.get_recipe(recipe_name)
+      return @vars.empty? ? false : true
+    end
+
+    def store
+      @db.write_recipe(@vars)
     end
 
     # :nocov:

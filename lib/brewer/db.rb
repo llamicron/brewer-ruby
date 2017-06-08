@@ -44,5 +44,15 @@ module Brewer
       execute("INSERT INTO request(method, args, timestamp) VALUES(\"#{request}\", \"#{args}\", \"#{Time.now.to_f}\");")
     end
 
+    def get_recipe(recipe)
+      sql = "SELECT * FROM recipe WHERE name = '#{recipe}';"
+      execute(sql)
+    end
+
+    def write_recipe(vars)
+      sql = "INSERT INTO recipe (name, water, grain, grain_temp, desired_mash_temp, mash_temp, mash_time, mashout_temp) VALUES (\"#{vars['name']}\", \"#{vars['water']}\", \"#{vars['grain']}\", \"#{vars['grain_temp']}\", \"#{vars['desired_mash_temp']}\", \"#{vars['mash_temp']}\", \"#{vars['mash_time']}\", \"#{vars['mashout_temp']}\");"
+      execute(sql)
+    end
+
   end
 end
