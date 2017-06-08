@@ -8,29 +8,28 @@ module Brewer
     attr_accessor :slack, :controller
 
     def initialize(webhook=false)
-      @settings = Settings.new
       @controller = Controller.new
       @slack = configure_slack(webhook)
+      @db = DB.new
+
+      Brewer::load_settings
     end
 
     def configure_slack(webhook)
       if webhook
         return Slack::Notifier.new webhook
       end
-      if !@settings.settings['webhook_url']
+      if !$settings['webhook_url']
         get_new_webhook
       end
-      return Slack::Notifier.new @settings.settings['webhook_url']
+      return Slack::Notifier.new $settings['webhook_url']
     end
 
     def get_new_webhook
       print "Slack Webhook URL: "
       webhook_url = gets.chomp
-      @settings.add({
-        'webhook_url' => webhook_url
-      })
-      @settings.cache
-      webhook_url
+      $settings['webhook_url'] = webhook_url
+      # @db.cache_settings
     end
 
     def ping(message="Ping as #{Time.now}")
