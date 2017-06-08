@@ -37,13 +37,13 @@ module Brewer
       end
 
       if state == 1
-        relay($settings['relays']['pump'], 1)
+        relay($settings['pump'], 1)
         return "pump on"
       else
         if record['pid_running'].to_b
           pid(0)
         end
-        relay($settings['relays']['pump'], 0)
+        relay($settings['pump'], 0)
         return "pump off"
       end
     end
@@ -143,7 +143,7 @@ module Brewer
     # Returns the status of a single relay
     def relay_status(relay)
       record = @db.get_latest_info
-      if record[$settings['relays'].key(relay)].to_b
+      if record[$settings.key(relay)].to_b
         return "on"
       else
         return "off"
@@ -207,9 +207,9 @@ module Brewer
     def rims_to(location)
       if location == "mash"
         # we ended up swapping this relay, so the name is backwards
-        relay($settings['relays']['rimsToMash'], 0)
+        relay($settings['rimsToMash'], 0)
       elsif location == "boil"
-        relay($settings['relays']['rimsToMash'], 1)
+        relay($settings['rimsToMash'], 1)
       else
         raise "Not a valid location for rims valve"
       end
@@ -219,9 +219,9 @@ module Brewer
     # Diverts hlt valve to mash or boil tun
     def hlt_to(location)
       if location == "mash"
-        relay($settings['relays']['hltToMash'], 0)
+        relay($settings['hltToMash'], 0)
       elsif location == "boil"
-        relay($settings['relays']['hltToMash'], 1)
+        relay($settings['hltToMash'], 1)
       else
         raise "Not a valid location for the hlt valve"
       end
@@ -230,7 +230,7 @@ module Brewer
 
     # Opens or closes hlt valve
     def hlt(state)
-      relay($settings['relays']['hlt'], state)
+      relay($settings['hlt'], state)
       self
     end
 

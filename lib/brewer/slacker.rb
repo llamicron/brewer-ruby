@@ -29,7 +29,7 @@ module Brewer
       print "Slack Webhook URL: "
       webhook_url = gets.chomp
       $settings['webhook_url'] = webhook_url
-      # @db.cache_settings
+      @db.update_settings
     end
 
     def ping(message="Ping as #{Time.now}")

@@ -30,6 +30,17 @@ module Brewer
       execute(sql).first
     end
 
+    def update_settings
+      raise "$settings global does not exist" unless $settings
+      # I Hate the next 4 lines
+      sql = <<-SQL
+        INSERT INTO setting (hltToMash, hlt, rimsToMash, pump, webhook_url)
+        VALUES  ("#{$settings['hltToMash']}", "#{$settings['hlt']}", "#{$settings['rimsToMash']}", "#{$settings['pump']}", "#{$settings['webhook_url']}");
+      SQL
+      # puts sql
+      execute(sql)
+    end
+
     def write_request(request, args="")
       execute("INSERT INTO request(method, args, timestamp) VALUES(\"#{request}\", \"#{args}\", \"#{Time.now.to_f}\");")
     end
