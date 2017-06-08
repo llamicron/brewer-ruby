@@ -57,7 +57,9 @@ module Brewer
 
     # :nocov:
     def calculate_strike_temp
-      @vars['strike_water_temp'] = @controller.script('get_strike_temp', "#{@vars['water']} #{@vars['grain']} #{@vars['grain_temp']} #{@vars['desired_mash_temp']}").to_f
+      water_to_grain_ratio = @vars['water'] / @vars['grain']
+      strike_water_temp = ((0.2 / water_to_grain_ratio) * (@vars['mash_temp'] - @vars['grain_temp'])) + @vars['mash_temp']
+      return strike_water_temp.round
     end
     # :nocov:
 
