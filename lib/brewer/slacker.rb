@@ -45,7 +45,7 @@ module Brewer
         table = @controller.status_table
 
         before_temp = @controller.pv
-        wait(to_seconds(delay))
+        sleep(to_seconds(delay))
         diff = @controller.pv - before_temp
 
         clear_screen

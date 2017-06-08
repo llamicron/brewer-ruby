@@ -18,11 +18,6 @@ module Brewer
 
     public
 
-    # Runs an adaptibrew script (written in python)
-    def script(script, params=nil)
-      `python #{@base_path}/adaptibrew/#{script}.py #{params}`.chomp
-    end
-
     # Turns the pump on and off, or returns the status if no arg
     # Turning the pump off will turn the pid off too, as it should not be on when the pump is off
     def pump(state="status")
@@ -98,7 +93,7 @@ module Brewer
     # :nocov:
     def watch
       until pv >= sv do
-        wait(2)
+        sleep(2)
       end
       Slacker.new.ping("Temperature is now at #{pv.to_f} F")
       self
@@ -113,7 +108,7 @@ module Brewer
         # it here so it has time to start up, and there's minimal lag between clearing
         # and displaying the table
         table = status_table
-        wait(1)
+        sleep(1)
         clear_screen
         puts table
       end

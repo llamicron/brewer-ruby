@@ -23,14 +23,8 @@ describe Brewer::Controller do
     # This is kind of iffy like the Helpers#time test
     it "can wait for a number of seconds" do
       current_time = Time.now.to_i
-      wait(1)
+      sleep(1)
       expect(current_time + 1).to eq(Time.now.to_i)
-    end
-  end
-
-  describe ".script" do
-    it "can run a python script and get output" do
-      expect(@controller.script('python_tester')).to eq("it worked")
     end
   end
 
