@@ -11,18 +11,27 @@ module Brewer
       @db.results_as_hash = true
     end
 
-    def get_latest_info
-      sql = "SELECT * FROM info WHERE timestamp + id = (SELECT MAX(timestamp + id) FROM info);"
+    def execute(sql)
       begin
-        @db.execute(sql).first
+        @db.execute(sql)
       rescue SQLite3::BusyException
         sleep(0.1)
-        @db.execute(sql).first
+        @db.execute(sql)
       end
     end
 
+    def get_latest_info
+      sql = "SELECT * FROM info WHERE timestamp + id = (SELECT MAX(timestamp + id) FROM info);"
+      execute(sql).first
+    end
+
+    def get_latest_settings
+      sql = "SELECT * FROM setting ORDER BY id DESC;"
+      execute(sql).first
+    end
+
     def write_request(request, args="")
-      @db.execute("INSERT INTO request(method, args, timestamp) VALUES(?, ?, ?)", [request, args, Time.now.to_f])
+      execute("INSERT INTO request(method, args, timestamp) VALUES(\"#{request}\", \"#{args}\", \"#{Time.now.to_f}\");")
     end
 
   end
