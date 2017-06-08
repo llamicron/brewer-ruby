@@ -26,7 +26,7 @@ module Brewer
     # Turns the pump on and off, or returns the status if no arg
     # Turning the pump off will turn the pid off too, as it should not be on when the pump is off
     def pump(state="status")
-      record = @db.get_latest_record
+      record = @db.get_latest_info
       if state == "status"
         # return relay_status($settings['pump'])
         if record['pump'] == 0
@@ -48,7 +48,7 @@ module Brewer
 
     # Turns PID on or off, or gets status if no arg is provided
     def pid(state="status")
-      record = @db.get_latest_record
+      record = @db.get_latest_info
 
       if state == "status"
         return {
@@ -80,12 +80,12 @@ module Brewer
       if temp
         return @db.write_request('set_sv', temp.to_s)
       end
-      @db.get_latest_record['sv'].to_f
+      @db.get_latest_info['sv'].to_f
     end
 
     # Returns the proccess value (this one can't be changed)
     def pv
-      @db.get_latest_record['pv'].to_f
+      @db.get_latest_info['pv'].to_f
     end
 
     # This method will wait until the pv >= sv
@@ -121,7 +121,7 @@ module Brewer
       status_table_rows = [
         ["Current Temp", pv],
         ["Set Value Temp", sv],
-        ["PID is: ", @db.get_latest_record['pid_running'].to_b ? "on" : "off"],
+        ["PID is: ", @db.get_latest_info['pid_running'].to_b ? "on" : "off"],
         ["Pump is: ", pump]
       ]
 
@@ -137,7 +137,7 @@ module Brewer
 
     # Returns the status of a single relay
     def relay_status(relay)
-      record = @db.get_latest_record
+      record = @db.get_latest_info
       if record[$settings['relays'].key(relay)].to_b
         return "on"
       else
@@ -147,7 +147,7 @@ module Brewer
 
     # Returns the status of all relays
     def all_relays_status
-      record = @db.get_latest_record
+      record = @db.get_latest_info
       # Just a bit of regex golf. Matches relay names
       # https://regex101.com/r/uCvT1t/1
       relays = record.select {|key| key.to_s.match(/h|ri|pu/) }
