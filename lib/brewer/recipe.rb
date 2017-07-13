@@ -5,14 +5,14 @@ module Brewer
 
     attr_accessor :vars
 
-    def initialize(recipe: recipe)
+    def initialize(recipe_name: recipe_name)
       @controller = Controller.new
       @db = DB.new
 
       @vars = {}
 
-      if recipe
-        load(recipe)
+      if recipe_name
+        load(recipe_name)
         typecast_vars
       end
     end

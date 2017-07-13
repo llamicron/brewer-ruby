@@ -8,6 +8,10 @@ slack       = Brewer::Slacker.new
 controller  = Brewer::Controller.new
 procedures  = Brewer::Procedures.new
 
+brewer_db = fork do
+  exec "brewer_db"
+end
+
 def reload!
   files = $LOADED_FEATURES.select { |feat| feat =~ /\/brewer\// }
   files.each { |file| load file }
