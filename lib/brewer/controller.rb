@@ -12,6 +12,7 @@ module Brewer
       @base_path = Dir.home + '/.brewer'
       Brewer::load_settings
       @temps = {}
+      @db = DB.new
 
       @info = Info.new
     end
