@@ -13,18 +13,18 @@ module Brewer
       Brewer::load_settings
       @temps = {}
 
-      @db = Brewer::DB.new
+      @info = Info.new
     end
 
     public
 
     # Turns the pump on and off, or returns the status if no arg
     # Turning the pump off will turn the pid off too, as it should not be on when the pump is off
-    def pump(state="status")
-      record = @db.get_latest_info
+    def pump(state = "status")
+      @info.update
       if state == "status"
         # return relay_status($settings['pump'])
-        if record['pump'] == 0
+        if @info.data['pump'] == 0
           return "off"
         else
           return "on"
@@ -35,7 +35,7 @@ module Brewer
         relay($settings['pump'], 1)
         return "pump on"
       else
-        if record['pid_running'].to_b
+        if info.data['pid_running'].to_b
           pid(0)
         end
         relay($settings['pump'], 0)
@@ -45,13 +45,12 @@ module Brewer
 
     # Turns PID on or off, or gets status if no arg is provided
     def pid(state="status")
-      record = @db.get_latest_info
-
+      info.update
       if state == "status"
         return {
-          'pid_running' => record['pid_running'].to_b,
-          'sv_temp' => record['sv'],
-          'pv_temp' => record['pv']
+          'pid_running' => @info.data['pid_running'].to_b,
+          'sv_temp' => @info.data['sv'],
+          'pv_temp' => @info.data['pv']
         }
       end
 
@@ -79,12 +78,14 @@ module Brewer
         @db.write_request('set_sv', temp.to_s)
         return temp.to_f
       end
-      @db.get_latest_info['sv'].to_f
+      @info.update
+      @info.data['sv'].to_f
     end
 
     # Returns the proccess value (this one can't be changed)
     def pv
-      @db.get_latest_info['pv'].to_f
+      @info.update
+      @info.data['pv'].to_f
     end
 
     # This method will wait until the pv >= sv
@@ -117,10 +118,11 @@ module Brewer
 
     # This returns a status table
     def status_table
+      @info.update
       status_table_rows = [
         ["Current Temp", pv],
         ["Set Value Temp", sv],
-        ["PID is: ", @db.get_latest_info['pid_running'].to_b ? "on" : "off"],
+        ["PID is: ", @info.data['pid_running'].to_b ? "on" : "off"],
         ["Pump is: ", pump]
       ]
 
@@ -137,8 +139,8 @@ module Brewer
 
     # Returns the status of a single relay
     def relay_status(relay)
-      record = @db.get_latest_info
-      if record[$settings.key(relay)].to_b
+      @info.update
+      if @info.data[$settings.key(relay)].to_b
         return "on"
       else
         return "off"
@@ -147,8 +149,8 @@ module Brewer
 
     # Returns readable status of relevant relays
     def relays_status
-      info = db.get_latest_info
-      relays = info.select {|k, v| k.to_s.match(/h|ri|pu/) }
+      @info.update
+      relays = @info.data.select {|k, v| k.to_s.match(/h|ri|pu/) }
       relays.each do |k, v|
         if v == 1
           relays[k] = "on"
