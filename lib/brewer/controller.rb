@@ -165,13 +165,16 @@ module Brewer
     # This returns a prettier version of all_relays_status, and only returns the
     # relays in use, being 0-3.
     def relays_status
-      statuses = {}
-      all_relays_status.shift(4).each do |status|
-        relay_num, status = status.match(/relay [0-9+]([0-9]+): (on|off)/).captures
-        relay_names = $settings.select { |key, value| key.to_s.match(/hlt|rims[^A]|pump/) }
-        statuses[relay_names.key(relay_num.to_i)] = status
+      info = db.get_latest_info
+      relays = info.select {|k, v| k.to_s.match(/h|ri|pu/) }
+      relays.each do |k, v|
+        if v == 1
+          relays[k] = "on"
+        else
+          relays[k] = "off"
+        end
       end
-      statuses
+      relays
     end
 
     def relays_status_to_web
