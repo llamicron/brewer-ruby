@@ -16,7 +16,7 @@ module Brewer
         @db.execute(sql)
       rescue SQLite3::BusyException
         sleep(0.1)
-        @db.execute(sql)
+        retry
       end
     end
 

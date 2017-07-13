@@ -86,9 +86,13 @@ module Helpers
     }
   end
 
-  def dd(message="died here")
-    puts message
-    abort
+  # I usually just use this from `rake console`
+  def get_info_loop
+    con = Brewer::Controller.new
+    10000.times do |x|
+      puts x.to_s + ": " + con.relays_status.to_s
+      # sleep 0.1
+    end
   end
 
 end
