@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = %q{A Ruby API for adaptiman/adaptibrew}
   s.email = %q{luke@thesweeneys.org}
   s.files = FileList.new(['lib/*.rb', 'lib/brewer/*.rb', 'bin/*', 'views/*', '[A-Z]*', 'spec/*.rb']).to_a
-  s.executables = ['brewer', 'brewer_db']
+  s.executables = ['brewer', 'brewerd']
   s.bindir = 'bin'
   s.test_files = FileList.new(["spec/*.rb"]).to_a
   s.homepage = %q{https://rubygems.org/gems/brewer}
