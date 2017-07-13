@@ -145,25 +145,7 @@ module Brewer
       end
     end
 
-    # Returns the status of all relays
-    def all_relays_status
-      record = @db.get_latest_info
-      # Just a bit of regex golf. Matches relay names
-      # https://regex101.com/r/uCvT1t/1
-      relays = record.select {|key| key.to_s.match(/h|ri|pu/) }
-      # I hate returning strings... -_-
-      relays.each do |relay_num, status|
-        if status == 1
-          relays[relay_num] = "on"
-        else
-          relays[relay_num] = "off"
-        end
-      end
-      return relays
-    end
-
-    # This returns a prettier version of all_relays_status, and only returns the
-    # relays in use, being 0-3.
+    # Returns readable status of relevant relays
     def relays_status
       info = db.get_latest_info
       relays = info.select {|k, v| k.to_s.match(/h|ri|pu/) }
