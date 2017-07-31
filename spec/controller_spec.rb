@@ -6,10 +6,6 @@ describe Brewer::Controller do
     @controller = Brewer::Controller.new
   end
 
-  before :all do
-    Brewer::Adaptibrew::build
-  end
-
   describe "#new" do
     it "returns a brewer object" do
       expect(Brewer::Controller.new).to be_an_instance_of Brewer::Controller

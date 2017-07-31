@@ -36,7 +36,7 @@ module Brewer
         relay($settings['pump'], 1)
         return "pump on"
       else
-        if info.data['pid_running'].to_b
+        if @info.data['pid_running'].to_b
           pid(0)
         end
         relay($settings['pump'], 0)
@@ -46,7 +46,7 @@ module Brewer
 
     # Turns PID on or off, or gets status if no arg is provided
     def pid(state="status")
-      info.update
+      @info.update
       if state == "status"
         return {
           'pid_running' => @info.data['pid_running'].to_b,

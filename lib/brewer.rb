@@ -5,8 +5,6 @@ require_rel 'brewer/'
 include Helpers
 include Brewer
 
-Brewer::Adaptibrew::build
-
 module Brewer
   def self.load_settings
     db = Brewer::DB.new

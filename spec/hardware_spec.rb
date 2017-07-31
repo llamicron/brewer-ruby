@@ -5,10 +5,6 @@ describe Brewer::Controller do
     @controller = Brewer::Controller.new
   end
 
-  before :all do
-    Brewer::Adaptibrew::build
-  end
-
   after :all do
     # in case something goes wrong, everything needs to be reset
     @controller = Brewer::Controller.new

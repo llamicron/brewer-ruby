@@ -22,8 +22,6 @@ Gem::Specification.new do |s|
   # Runtime dependencies
   s.add_runtime_dependency 'sqlite3'
   s.add_runtime_dependency 'brewer-adaptibrew'
-  s.add_runtime_dependency 'git'
-  s.add_runtime_dependency 'net-ping'
   s.add_runtime_dependency 'wannabe_bool'
   s.add_runtime_dependency 'slack-notifier'
   s.add_runtime_dependency 'require_all'

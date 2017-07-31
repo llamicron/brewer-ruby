@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 require_relative "../lib/brewer"
 
-Brewer::Adaptibrew::build
-
 kitchen     = Brewer::Kitchen.new
 slack       = Brewer::Slacker.new
 controller  = Brewer::Controller.new
