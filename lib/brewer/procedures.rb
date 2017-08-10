@@ -8,19 +8,18 @@ module Brewer
     def initialize
       @controller = Controller.new
       @com = Slacker.new
-      @kitchen = Kitchen.new
     end
 
     def master
-      puts "Enter a recipe name or nothing to make a new one."
-      @kitchen.list_recipes_as_table
-      print ">> "
-      choice = gets.chomp.strip
-      if choice.empty?
-        @kitchen.new_recipe
-      else
-        @kitchen.load(choice)
-      end
+      # puts "Enter a recipe name or nothing to make a new one."
+      # @kitchen.list_recipes_as_table
+      # print ">> "
+      # choice = gets.chomp.strip
+      # if choice.empty?
+      #   @kitchen.new_recipe
+      # else
+      #   @kitchen.load(choice)
+      # end
       boot
       heat_strike_water
       dough_in
@@ -191,6 +190,11 @@ module Brewer
     end
 
     def top_off
+      puts "Do you need to top off? "
+      if !confirm
+        return true
+      end
+
       puts Rainbow("Top off started").green
 
       @controller.relay_config({
@@ -199,7 +203,7 @@ module Brewer
       })
 
       print Rainbow("waiting for intervention to turn off hlt (y): ").yellow
-      confirm ? nil : abort
+      confirm ? nil : nil
 
       @controller.hlt(0)
 

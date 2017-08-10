@@ -1,14 +1,15 @@
 #!/usr/bin/env ruby
 require_relative "../lib/brewer"
 
-kitchen     = Brewer::Kitchen.new
 slack       = Brewer::Slacker.new
 controller  = Brewer::Controller.new
 procedures  = Brewer::Procedures.new
 
-brewer_db = fork do
-  exec "brewer_db"
-end
+# brewerd = fork do
+#   exec "brewerd"
+# end
+
+# sleep(2)
 
 def reload!
   files = $LOADED_FEATURES.select { |feat| feat =~ /\/brewer\// }

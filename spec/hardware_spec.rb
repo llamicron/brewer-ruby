@@ -53,15 +53,20 @@ describe Brewer::Controller do
   end
 
   describe ".pid" do
-    it "turns the pid on" do
+
+    before { @controller.pid(0) }
+
+    it "turns the pid on", :pid => true do
       expect(@controller.pid(1)).to eq("Pump and PID are now on")
+      expect(@controller.pid["pid_running"]).to be true
     end
 
-    it "turns the pid off" do
+    it "turns the pid off", :pid => true do
       expect(@controller.pid(0)).to eq("PID off")
+      expect(@controller.pid["pid_running"]).to be false
     end
 
-    it "returns the pid status" do
+    it "returns the pid status", :pid => true do
       expect(@controller.pid).to be_an_instance_of Hash
     end
   end
